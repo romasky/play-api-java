@@ -1,0 +1,38 @@
+# Maven
+target/
+*.class
+*.jar
+*.war
+*.ear
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# macOS
+.DS_Store
+._*
+.Spotlight-V2
+.Trashes
+*.swp
+
+# Allure
+allure-results/
+allure-report/
+
+# Test reports
+target/cucumber-reports/
+target/surefire-reports/
+
+# Logs
+*.log
+logs/
+
+# Sensitive config (never commit real creds)
+src/test/resources/config.local.properties
+
+# Task documentation (internal, not for repo)
+docs/
