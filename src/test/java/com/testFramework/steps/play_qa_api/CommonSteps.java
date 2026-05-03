@@ -57,6 +57,46 @@ public class CommonSteps {
         ctx.save(varName, Generator.lastName());
     }
 
+    @Given("Generate sender email and save as {string}")
+    public void generateSenderEmail(String varName) {
+        ctx.save(varName, Generator.senderEmail());
+    }
+
+    @Given("Generate message subject and save as {string}")
+    public void generateMessageSubject(String varName) {
+        ctx.save(varName, Generator.messageSubject());
+    }
+
+    @Given("Generate message body and save as {string}")
+    public void generateMessageBody(String varName) {
+        ctx.save(varName, Generator.messageBody());
+    }
+
+    @Given("Generate invalid email and save as {string}")
+    public void generateInvalidEmail(String varName) {
+        ctx.save(varName, Generator.invalidEmail());
+    }
+
+    @Given("Generate short password and save as {string}")
+    public void generateShortPassword(String varName) {
+        ctx.save(varName, Generator.shortPassword());
+    }
+
+    @Given("Generate fake mongo id and save as {string}")
+    public void generateFakeMongoId(String varName) {
+        ctx.save(varName, Generator.fakeMongoId());
+    }
+
+    @Given("Generate fake uuid and save as {string}")
+    public void generateFakeUuid(String varName) {
+        ctx.save(varName, Generator.fakeUuid());
+    }
+
+    @Given("Generate phone number and save as {string}")
+    public void generatePhoneNumber(String varName) {
+        ctx.save(varName, Generator.phoneNumber());
+    }
+
     @Given("Generate string length {int} latin {string} numeric {string} and save as {string}")
     public void generateString(int length, String latin, String numeric, String varName) {
         ctx.save(varName, Generator.string(length, false,

@@ -53,6 +53,34 @@ public class Generator {
         return "+1" + numericString(10);
     }
 
+    public static String senderEmail() {
+        return alphanumericString(8).toLowerCase() + "@example.com";
+    }
+
+    public static String messageSubject() {
+        return "Subject " + alphanumericString(6);
+    }
+
+    public static String messageBody() {
+        return "Body " + alphanumericString(10);
+    }
+
+    public static String invalidEmail() {
+        return "notanemail_" + alphanumericString(4);
+    }
+
+    public static String shortPassword() {
+        return alphanumericString(4);
+    }
+
+    public static String fakeMongoId() {
+        return numericString(24);
+    }
+
+    public static String fakeUuid() {
+        return "00000000-0000-0000-0000-" + numericString(12);
+    }
+
     public static String string(int length, boolean cyrillic, boolean latin, boolean numeric,
                                 boolean spaces, boolean special) {
         StringBuilder pool = new StringBuilder();

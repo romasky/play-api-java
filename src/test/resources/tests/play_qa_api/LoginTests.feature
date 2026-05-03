@@ -58,7 +58,7 @@ Feature: POST /api/v1/login
   Scenario: Login with wrong password returns 401 INVALID_CREDENTIALS
     Given Create minimal user and save response as "createResp"
     And Get and check status code 201 from "createResp"
-    And Save string "WrongPassword999!" as "wrongPass"
+    And Generate password and save as "wrongPass"
     When Login with email "generatedEmail" password "wrongPass" and save raw response as "loginResp"
     Then Get and check status code 401 from "loginResp"
     And Convert error response "loginResp" to ErrorResp and save as "error"
@@ -66,8 +66,8 @@ Feature: POST /api/v1/login
 
   @Run
   Scenario: Login with non-existent email returns 401 INVALID_CREDENTIALS
-    Given Save string "nobody_here@play-qa.com" as "fakeEmail"
-    And Save string "SomePassword123!" as "fakePass"
+    Given Generate sender email and save as "fakeEmail"
+    And Generate password and save as "fakePass"
     When Login with email "fakeEmail" password "fakePass" and save raw response as "loginResp"
     Then Get and check status code 401 from "loginResp"
     And Convert error response "loginResp" to ErrorResp and save as "error"
@@ -75,8 +75,8 @@ Feature: POST /api/v1/login
 
   @Run
   Scenario: Login with invalid email format returns 400 VALIDATION_ERROR
-    Given Save string "notanemail" as "badEmail"
-    And Save string "SomePassword123!" as "fakePass"
+    Given Generate invalid email and save as "badEmail"
+    And Generate password and save as "fakePass"
     When Login with email "badEmail" password "fakePass" and save raw response as "loginResp"
     Then Get and check status code 400 from "loginResp"
     And Convert error response "loginResp" to ErrorResp and save as "error"
@@ -84,8 +84,8 @@ Feature: POST /api/v1/login
 
   @Run
   Scenario: Login with password shorter than 8 chars returns 400 VALIDATION_ERROR
-    Given Save string "test@play-qa.com" as "email"
-    And Save string "short" as "shortPass"
+    Given Generate sender email and save as "email"
+    And Generate short password and save as "shortPass"
     When Login with email "email" password "shortPass" and save raw response as "loginResp"
     Then Get and check status code 400 from "loginResp"
     And Convert error response "loginResp" to ErrorResp and save as "error"
@@ -100,8 +100,8 @@ Feature: POST /api/v1/login
 
   @Run
   Scenario: Login error response contains request_id in body
-    Given Save string "nobody_here@play-qa.com" as "fakeEmail"
-    And Save string "SomePassword123!" as "fakePass"
+    Given Generate sender email and save as "fakeEmail"
+    And Generate password and save as "fakePass"
     When Login with email "fakeEmail" password "fakePass" and save raw response as "loginResp"
     Then Get and check status code 401 from "loginResp"
     And Convert error response "loginResp" to ErrorResp and save as "error"
@@ -109,8 +109,8 @@ Feature: POST /api/v1/login
 
   @Run
   Scenario: Login X-Request-ID is echoed in response header
-    Given Save string "nobody_here@play-qa.com" as "fakeEmail"
-    And Save string "SomePassword123!" as "fakePass"
+    Given Generate sender email and save as "fakeEmail"
+    And Generate password and save as "fakePass"
     When Login with email "fakeEmail" password "fakePass" and save raw response as "loginResp"
     Then Get and check status code 401 from "loginResp"
     And Assert response header "X-Request-ID" is present in "loginResp"
