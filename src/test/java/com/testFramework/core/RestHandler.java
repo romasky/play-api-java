@@ -22,7 +22,10 @@ public class RestHandler {
         if (path.contains("/users/create")) throttleCreateUser();
         if (path.contains("/login")) throttleLogin();
         Response r = buildPostSpec(path, body, headers);
-        if (isNginx404(r)) { sleepForRetry(); return buildPostSpec(path, body, headers); }
+        for (int attempt = 1; isNginx404(r) && attempt <= 3; attempt++) {
+            sleepForRetry(attempt);
+            r = buildPostSpec(path, body, headers);
+        }
         return r;
     }
 
@@ -36,75 +39,98 @@ public class RestHandler {
         return r.getStatusCode() == 404 && r.asString().contains("nginx");
     }
 
-    private void sleepForRetry() {
-        System.out.println("[RestHandler] Rate limit 404 hit — waiting 5s and retrying...");
-        try { Thread.sleep(5000); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+    private void sleepForRetry(int attemptNumber) {
+        long waitMs = 10000L * attemptNumber;
+        System.out.printf("[RestHandler] Rate limit 404 hit (attempt %d) — waiting %ds and retrying...%n",
+                attemptNumber, waitMs / 1000);
+        try { Thread.sleep(waitMs); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
     }
 
     @Step("POST {path} (no body)")
     public Response postNoBody(String path, String... headers) {
         Response r = buildSpec(headers).post(path).then().extract().response();
-        if (isNginx404(r)) { sleepForRetry(); return buildSpec(headers).post(path).then().extract().response(); }
+        for (int attempt = 1; isNginx404(r) && attempt <= 3; attempt++) {
+            sleepForRetry(attempt);
+            r = buildSpec(headers).post(path).then().extract().response();
+        }
         return r;
     }
 
     @Step("GET {path}")
     public Response get(String path, String... headers) {
         Response r = buildSpec(headers).get(path).then().extract().response();
-        if (isNginx404(r)) { sleepForRetry(); return buildSpec(headers).get(path).then().extract().response(); }
+        for (int attempt = 1; isNginx404(r) && attempt <= 3; attempt++) {
+            sleepForRetry(attempt);
+            r = buildSpec(headers).get(path).then().extract().response();
+        }
         return r;
     }
 
     @Step("GET {path} with query params")
     public Response get(String path, String[] queryParams, String... headers) {
+        Response r = buildGetWithParams(path, queryParams, headers);
+        for (int attempt = 1; isNginx404(r) && attempt <= 3; attempt++) {
+            sleepForRetry(attempt);
+            r = buildGetWithParams(path, queryParams, headers);
+        }
+        return r;
+    }
+
+    private Response buildGetWithParams(String path, String[] queryParams, String... headers) {
         RequestSpecification spec = buildSpec(headers);
         for (int i = 0; i < queryParams.length - 1; i += 2) {
             spec.queryParam(queryParams[i], queryParams[i + 1]);
         }
-        Response r = spec.get(path).then().extract().response();
-        if (isNginx404(r)) {
-            sleepForRetry();
-            RequestSpecification retrySpec = buildSpec(headers);
-            for (int i = 0; i < queryParams.length - 1; i += 2) {
-                retrySpec.queryParam(queryParams[i], queryParams[i + 1]);
-            }
-            return retrySpec.get(path).then().extract().response();
-        }
-        return r;
+        return spec.get(path).then().extract().response();
     }
 
     @Step("PUT {path}")
     public Response put(String path, Object body, String... headers) {
         Response r = buildSpec(headers).contentType(ContentType.JSON).body(body).put(path).then().extract().response();
-        if (isNginx404(r)) { sleepForRetry(); return buildSpec(headers).contentType(ContentType.JSON).body(body).put(path).then().extract().response(); }
+        for (int attempt = 1; isNginx404(r) && attempt <= 3; attempt++) {
+            sleepForRetry(attempt);
+            r = buildSpec(headers).contentType(ContentType.JSON).body(body).put(path).then().extract().response();
+        }
         return r;
     }
 
     @Step("PATCH {path}")
     public Response patch(String path, Object body, String... headers) {
         Response r = buildSpec(headers).contentType(ContentType.JSON).body(body).patch(path).then().extract().response();
-        if (isNginx404(r)) { sleepForRetry(); return buildSpec(headers).contentType(ContentType.JSON).body(body).patch(path).then().extract().response(); }
+        for (int attempt = 1; isNginx404(r) && attempt <= 3; attempt++) {
+            sleepForRetry(attempt);
+            r = buildSpec(headers).contentType(ContentType.JSON).body(body).patch(path).then().extract().response();
+        }
         return r;
     }
 
     @Step("DELETE {path}")
     public Response delete(String path, String... headers) {
         Response r = buildSpec(headers).delete(path).then().extract().response();
-        if (isNginx404(r)) { sleepForRetry(); return buildSpec(headers).delete(path).then().extract().response(); }
+        for (int attempt = 1; isNginx404(r) && attempt <= 3; attempt++) {
+            sleepForRetry(attempt);
+            r = buildSpec(headers).delete(path).then().extract().response();
+        }
         return r;
     }
 
     @Step("HEAD {path}")
     public Response head(String path) {
         Response r = given().head(path).then().extract().response();
-        if (isNginx404(r)) { sleepForRetry(); return given().head(path).then().extract().response(); }
+        for (int attempt = 1; isNginx404(r) && attempt <= 3; attempt++) {
+            sleepForRetry(attempt);
+            r = given().head(path).then().extract().response();
+        }
         return r;
     }
 
     @Step("OPTIONS {path}")
     public Response options(String path) {
         Response r = given().options(path).then().extract().response();
-        if (isNginx404(r)) { sleepForRetry(); return given().options(path).then().extract().response(); }
+        for (int attempt = 1; isNginx404(r) && attempt <= 3; attempt++) {
+            sleepForRetry(attempt);
+            r = given().options(path).then().extract().response();
+        }
         return r;
     }
 

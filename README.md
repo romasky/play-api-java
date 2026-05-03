@@ -72,7 +72,7 @@ src/test/
         ├── HealthTests.feature         # GET /health scenarios
         ├── LoginTests.feature          # POST /login scenarios
         ├── MailTests.feature           # Mail API scenarios
-        ├── OptionsTests.feature        # GET /users/options scenarios
+        ├── OptionsTests.feature        # OPTIONS /users/options scenarios
         └── UserCrudTests.feature       # GET/PUT/PATCH/DELETE/HEAD scenarios
 ```
 
@@ -191,5 +191,5 @@ Allure results and Cucumber HTML reports are uploaded as build artifacts after e
 | `/api/v1/users/logout/:id` | POST | ✅ Tested |
 | `/api/v1/health` | GET | ✅ Tested |
 | `/api/v1/auth/basic` | GET | ✅ Tested |
-| `/api/v1/users/options` | GET | ✅ Tested |
+| `/api/v1/users/options` | OPTIONS | ✅ Tested |
 | `/api/v1/mail/*` | various | ✅ Tested |

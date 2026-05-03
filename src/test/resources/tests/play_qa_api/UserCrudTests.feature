@@ -199,20 +199,20 @@ Feature: User CRUD — Get, List, Exists, Update, Patch, Delete, Logout
     And Assert error code is "INVALID_TOKEN" in "error"
 
   @Run
-  Scenario: PUT update non-existent user returns 404 USER_NOT_FOUND
+  Scenario: PUT update non-existent user with another user token returns 401 INVALID_TOKEN
     When Create minimal user and save response as "createResp"
     Then Get and check status code 201 from "createResp"
     And Convert create user response "createResp" to CreateUserResp and save as "created"
     And Save field accessToken from CreateUserResp "created" as "token"
-    And Save string "000000000000000000000000" as "fakeId"
+    And Generate fake mongo id and save as "fakeId"
     And Generate email and save as "newEmail"
     And Generate username and save as "newUsername"
     And Generate first name and save as "newFirst"
     And Generate last name and save as "newLast"
     When Update user "fakeId" token "token" firstName "newFirst" lastName "newLast" email "newEmail" username "newUsername" and save response as "updateResp"
-    Then Get and check status code 404 from "updateResp"
+    Then Get and check status code 401 from "updateResp"
     And Convert error response "updateResp" to ErrorResp and save as "error"
-    And Assert error code is "USER_NOT_FOUND" in "error"
+    And Assert error code is "INVALID_TOKEN" in "error"
 
   @Run
   Scenario: PUT update with invalid email returns 400 VALIDATION_ERROR
