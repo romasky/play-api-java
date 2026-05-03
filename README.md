@@ -1,6 +1,6 @@
 # play-api-java
 
-> **API Test Automation Framework** for [play-qa.com](https://www.play-qa.com) — built with Java 21, Rest Assured, Cucumber 7 (BDD), JUnit 5, Allure Reporting, and Lombok.
+> **API Test Automation Framework** for [play-qa.com](https://www.play-qa.com) — built with Java 17, Rest Assured, Cucumber 7 (BDD), JUnit 5, Allure Reporting, and Lombok.
 
 ---
 
@@ -18,14 +18,14 @@
 
 | Tool | Version | Purpose |
 |---|---|---|
-| Java | 21 | Language |
+| Java | 17 | Language |
 | Maven | 3.9+ | Build & dependency management |
-| Rest Assured | 5.4 | HTTP client for API testing |
-| JUnit 5 | 5.10 | Test runner |
-| Cucumber | 7.15 | BDD framework |
-| Allure | 2.27 | Test reporting |
-| Lombok | 1.18 | Boilerplate reduction |
-| Jackson | 2.17 | JSON serialization |
+| Rest Assured | 5.4.0 | HTTP client for API testing |
+| JUnit 5 | 5.10.2 | Test runner |
+| Cucumber | 7.15.0 | BDD framework |
+| Allure | 2.27.0 | Test reporting |
+| Lombok | 1.18.38 | Boilerplate reduction |
+| Jackson | 2.17.0 | JSON serialization |
 
 ---
 
@@ -45,22 +45,34 @@ src/test/
 │   │   ├── ApiPaths.java               # All API endpoint paths
 │   │   ├── Constants.java              # Shared constants (enums, timeouts)
 │   │   └── models/
+│   │       ├── basicauth/              # BasicAuthResp, BasicAuthErrorResp
 │   │       ├── createUser/             # Request DTOs: CreateUserReq, ProfileReq, ...
 │   │       │   └── response/           # Response DTOs: CreateUserResp, UserResp, ...
+│   │       ├── error/                  # ErrorResp, ErrorDetailResp, ValidationErrorResp
+│   │       ├── health/                 # HealthResp
 │   │       ├── login/                  # LoginReq, LoginResp
 │   │       ├── mail/                   # CreateMailboxReq/Resp, MessageResp, ...
-│   │       └── error/                  # ErrorResp, ErrorDetailResp, ValidationErrorResp
+│   │       └── options/                # UserOptionsResp
 │   └── steps/play_qa_api/
 │       ├── ScenarioContext.java        # Global and local scenario variable storage
-│       ├── BaseSteps.java              # Common steps (save/get/assert, generators)
-│       └── AccountsSteps.java          # User & auth step definitions
+│       ├── BaseSteps.java              # Shared context helpers (save/get/assert)
+│       ├── AccountsSteps.java          # User & auth step definitions
+│       ├── BasicAuthSteps.java         # Basic auth step definitions
+│       ├── CommonSteps.java            # Generic reusable steps (generate data, assert)
+│       ├── HealthSteps.java            # Health endpoint step definitions
+│       ├── MailSteps.java              # Mail API step definitions
+│       └── OptionsSteps.java           # User options step definitions
 └── resources/
     ├── config.properties               # Base URL, timeouts, run mode
     ├── cucumber.properties             # Cucumber publish settings
     ├── junit-platform.properties       # Cucumber plugin and glue config
     └── tests/play_qa_api/
+        ├── BasicAuthTests.feature      # GET /auth/basic scenarios
         ├── CreateUserTests.feature     # POST /users/create scenarios
+        ├── HealthTests.feature         # GET /health scenarios
         ├── LoginTests.feature          # POST /login scenarios
+        ├── MailTests.feature           # Mail API scenarios
+        ├── OptionsTests.feature        # GET /users/options scenarios
         └── UserCrudTests.feature       # GET/PUT/PATCH/DELETE/HEAD scenarios
 ```
 
@@ -70,7 +82,7 @@ src/test/
 
 ### Prerequisites
 
-- Java 21+
+- Java 17+
 - Maven 3.9+
 
 ### Run all tests
@@ -160,7 +172,7 @@ Tests run automatically on:
 - Daily at 08:00 UTC (cron)
 - Manual trigger via GitHub Actions UI
 
-Allure reports are published to GitHub Pages after each `main` run.
+Allure results and Cucumber HTML reports are uploaded as build artifacts after each run.
 
 ---
 
@@ -177,6 +189,7 @@ Allure reports are published to GitHub Pages after each `main` run.
 | `/api/v1/users/patch/:id` | PATCH | ✅ Tested |
 | `/api/v1/users/delete/:id` | DELETE | ✅ Tested |
 | `/api/v1/users/logout/:id` | POST | ✅ Tested |
-| `/api/v1/health` | GET | — |
-| `/api/v1/auth/basic` | GET | — |
-| `/api/v1/mail/*` | various | ✅ Used in TempMailHandler |
+| `/api/v1/health` | GET | ✅ Tested |
+| `/api/v1/auth/basic` | GET | ✅ Tested |
+| `/api/v1/users/options` | GET | ✅ Tested |
+| `/api/v1/mail/*` | various | ✅ Tested |
