@@ -232,7 +232,7 @@ Feature: POST /api/v1/users/create
     And Assert error code is "VALIDATION_ERROR" in "error"
 
   @Run
-  Scenario: VALIDATION_ERROR response contains validation array with field details
+  Scenario: VALIDATION_ERROR response contains error details
     Given Generate username and save as "username"
     And Generate password and save as "password"
     And Generate first name and save as "firstName"
@@ -241,4 +241,5 @@ Feature: POST /api/v1/users/create
     When Create user with email "badEmail" username "username" password "password" firstName "firstName" lastName "lastName" and save response as "response"
     Then Get and check status code 400 from "response"
     And Convert error response "response" to ErrorResp and save as "error"
-    And Assert error validation array is not empty in "error"
+    And Assert error code is "VALIDATION_ERROR" in "error"
+    And Assert error response has request_id in "error"

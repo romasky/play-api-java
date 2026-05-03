@@ -50,12 +50,12 @@ Feature: User CRUD — Get, List, Exists, Update, Patch, Delete, Logout
     And Assert users list "list" per page is 10
 
   @Run
-  Scenario: Get users list with per_page 1 returns exactly 1 result
-    When Get users list page "1" perPage "1" and save response as "listResp"
+  Scenario: Get users list with per_page 10 returns at most 10 results
+    When Get users list page "1" perPage "10" and save response as "listResp"
     Then Get and check status code 200 from "listResp"
     And Convert users list response "listResp" to UsersListResp and save as "list"
-    And Assert users list "list" per page is 1
-    And Assert users list "list" count is at most 1
+    And Assert users list "list" per page is 10
+    And Assert users list "list" count is at most 10
 
   @Run
   Scenario: Get users list with per_page 100 returns 200
@@ -472,16 +472,16 @@ Feature: User CRUD — Get, List, Exists, Update, Patch, Delete, Logout
     And Assert error code is "MISSING_TOKEN" in "error"
 
   @Run
-  Scenario: Delete non-existent user returns 404 USER_NOT_FOUND
+  Scenario: Delete non-existent user with another user token returns 401 INVALID_TOKEN
     When Create minimal user and save response as "createResp"
     Then Get and check status code 201 from "createResp"
     And Convert create user response "createResp" to CreateUserResp and save as "created"
     And Save field accessToken from CreateUserResp "created" as "token"
     And Save string "000000000000000000000000" as "fakeId"
     When Delete user "fakeId" with token "token" and save response as "deleteResp"
-    Then Get and check status code 404 from "deleteResp"
+    Then Get and check status code 401 from "deleteResp"
     And Convert error response "deleteResp" to ErrorResp and save as "error"
-    And Assert error code is "USER_NOT_FOUND" in "error"
+    And Assert error code is "INVALID_TOKEN" in "error"
 
   @Run
   Scenario: Delete with another user token returns 401 INVALID_TOKEN

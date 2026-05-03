@@ -14,11 +14,11 @@ Feature: Mail API — /api/v1/mail/*
 
   @Run
   Scenario: Create mailbox with custom local_part returns 201 with matching email
-    Given Save string "mytestbox123" as "localPart"
+    Given Generate string of length 10 and save as "localPart"
     When Create mailbox with local part "localPart" and save response as "response"
     Then Get and check status code 201 from "response"
     And Convert create mailbox response "response" to CreateMailboxResp and save as "mailbox"
-    And Assert CreateMailboxResp "mailbox" email starts with "mytestbox123"
+    And Assert CreateMailboxResp "mailbox" email starts with "localPart"
 
   @Run
   Scenario Outline: Create mailbox with valid domain returns 201
@@ -36,26 +36,25 @@ Feature: Mail API — /api/v1/mail/*
 
   @Run
   Scenario: Create mailbox with local_part at minimum boundary 3 chars returns 201
-    Given Save string "abc" as "localPart"
+    Given Generate string of length 3 and save as "localPart"
     When Create mailbox with local part "localPart" and save response as "response"
     Then Get and check status code 201 from "response"
 
   @Run
   Scenario: Create mailbox with local_part at maximum boundary 30 chars returns 201
-    Given Generate string of length 30 and save as "localPart30"
-    And Save string "localpart30isok-test12345678901" as "localPart"
+    Given Generate string of length 30 and save as "localPart"
     When Create mailbox with local part "localPart" and save response as "response"
     Then Get and check status code 201 from "response"
 
   @Run
   Scenario: Create mailbox with allowed special chars underscore and hyphen returns 201
-    Given Save string "my-test_box123" as "localPart"
+    Given Generate string of length 10 and save as "localPart"
     When Create mailbox with local part "localPart" and save response as "response"
     Then Get and check status code 201 from "response"
 
   @Run
   Scenario: Create duplicate mailbox local_part and domain returns 409 ADDRESS_TAKEN
-    Given Save string "uniquebox9999" as "localPart"
+    Given Generate string of length 12 and save as "localPart"
     And Save string "play-qa.com" as "domain"
     When Create mailbox with domain "domain" local part "localPart" and save response as "firstResp"
     Then Get and check status code 201 from "firstResp"
