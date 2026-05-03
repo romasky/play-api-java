@@ -26,7 +26,7 @@ public class PropertyHandler {
         String fromFile = props.getProperty(key);
 
         String result;
-        if (systemPriority < filePriority) {
+        if (systemPriority > filePriority) {
             result = fromSystem != null ? fromSystem : fromFile;
         } else {
             result = fromFile != null ? fromFile : fromSystem;

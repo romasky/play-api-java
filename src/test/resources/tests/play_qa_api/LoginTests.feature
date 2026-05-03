@@ -1,49 +1,72 @@
 #language: en
 @AllTests @Auth @Login
-Feature: POST /api/v1/login — Login scenarios
-
-  Background:
-    Given Create minimal user and save response as "setupResp"
-    And Convert create user response "setupResp" to CreateUserResp and save as "setupUser"
-    And Save field id from CreateUserResp "setupUser" as "userId_g"
-    And Save field accessToken from CreateUserResp "setupUser" as "userToken_g"
+Feature: POST /api/v1/login
 
   # ─────────────────── POSITIVE ───────────────────
 
-  @Run
+  @Run @Smoke
   Scenario: Login with valid credentials returns 200 and token
-    Given Generate email and save as "email_g"
-    And Generate username and save as "username"
-    And Generate password and save as "password_g"
-    And Generate first name and save as "firstName"
-    And Generate last name and save as "lastName"
-    When Create user with email "email_g" username "username" password "password_g" firstName "firstName" lastName "lastName" and save response as "createResp"
-    Then Get and check status code 201 from "createResp"
-    When Login with email "email_g" password "password_g" and save raw response as "loginResp"
+    Given Create minimal user and save response as "createResp"
+    And Get and check status code 201 from "createResp"
+    And Convert create user response "createResp" to CreateUserResp and save as "created"
+    And Save field id from CreateUserResp "created" as "userId"
+    And Save field accessToken from CreateUserResp "created" as "token"
+    And Login with email "generatedEmail" password "generatedPassword" and save raw response as "loginResp"
+    Then Get and check status code 200 from "loginResp"
+
+  @Run
+  Scenario: Login response contains all required fields
+    Given Create minimal user and save response as "createResp"
+    And Get and check status code 201 from "createResp"
+    And Login with email "generatedEmail" password "generatedPassword" and save raw response as "loginResp"
     Then Get and check status code 200 from "loginResp"
     And Convert login response "loginResp" to LoginResp and save as "login"
-    And Assert "login" not null
+    And Assert login response "login" has all required fields
+
+  @Run
+  Scenario: Login invalidates previous token — old token returns 401 on PATCH
+    Given Create minimal user and save response as "createResp"
+    And Get and check status code 201 from "createResp"
+    And Convert create user response "createResp" to CreateUserResp and save as "created"
+    And Save field id from CreateUserResp "created" as "userId"
+    And Save field accessToken from CreateUserResp "created" as "oldToken"
+    When Login with email "generatedEmail" password "generatedPassword" and save raw response as "loginResp"
+    Then Get and check status code 200 from "loginResp"
+    And Generate first name and save as "newFirst"
+    When Patch user "userId" token "oldToken" firstName "newFirst" and save response as "patchResp"
+    Then Get and check status code 401 from "patchResp"
+    And Convert error response "patchResp" to ErrorResp and save as "error"
+    And Assert error code is "INVALID_TOKEN" in "error"
+
+  @Run
+  Scenario: Login after logout succeeds and issues new token
+    Given Create minimal user and save response as "createResp"
+    And Get and check status code 201 from "createResp"
+    And Convert create user response "createResp" to CreateUserResp and save as "created"
+    And Save field id from CreateUserResp "created" as "userId"
+    And Save field accessToken from CreateUserResp "created" as "token"
+    When Logout user "userId" with token "token" and save response as "logoutResp"
+    Then Get and check status code 200 from "logoutResp"
+    When Login with email "generatedEmail" password "generatedPassword" and save raw response as "loginResp"
+    Then Get and check status code 200 from "loginResp"
+    And Convert login response "loginResp" to LoginResp and save as "login"
+    And Assert login response "login" has all required fields
 
   # ─────────────────── NEGATIVE ───────────────────
 
   @Run
   Scenario: Login with wrong password returns 401 INVALID_CREDENTIALS
-    Given Generate email and save as "email"
-    And Generate username and save as "username"
-    And Generate password and save as "password"
-    And Generate first name and save as "firstName"
-    And Generate last name and save as "lastName"
-    When Create user with email "email" username "username" password "password" firstName "firstName" lastName "lastName" and save response as "createResp"
-    Then Get and check status code 201 from "createResp"
-    And Save string "wrongpassword123" as "wrongPass"
-    When Login with email "email" password "wrongPass" and save raw response as "loginResp"
+    Given Create minimal user and save response as "createResp"
+    And Get and check status code 201 from "createResp"
+    And Save string "WrongPassword999!" as "wrongPass"
+    When Login with email "generatedEmail" password "wrongPass" and save raw response as "loginResp"
     Then Get and check status code 401 from "loginResp"
     And Convert error response "loginResp" to ErrorResp and save as "error"
     And Assert error code is "INVALID_CREDENTIALS" in "error"
 
   @Run
   Scenario: Login with non-existent email returns 401 INVALID_CREDENTIALS
-    Given Save string "nonexistent@play-qa.com" as "fakeEmail"
+    Given Save string "nobody_here@play-qa.com" as "fakeEmail"
     And Save string "SomePassword123!" as "fakePass"
     When Login with email "fakeEmail" password "fakePass" and save raw response as "loginResp"
     Then Get and check status code 401 from "loginResp"
@@ -58,3 +81,36 @@ Feature: POST /api/v1/login — Login scenarios
     Then Get and check status code 400 from "loginResp"
     And Convert error response "loginResp" to ErrorResp and save as "error"
     And Assert error code is "VALIDATION_ERROR" in "error"
+
+  @Run
+  Scenario: Login with password shorter than 8 chars returns 400 VALIDATION_ERROR
+    Given Save string "test@play-qa.com" as "email"
+    And Save string "short" as "shortPass"
+    When Login with email "email" password "shortPass" and save raw response as "loginResp"
+    Then Get and check status code 400 from "loginResp"
+    And Convert error response "loginResp" to ErrorResp and save as "error"
+    And Assert error code is "VALIDATION_ERROR" in "error"
+
+  @Run
+  Scenario: Login with empty body returns 400 VALIDATION_ERROR
+    When Login with no body and save response as "loginResp"
+    Then Get and check status code 400 from "loginResp"
+    And Convert error response "loginResp" to ErrorResp and save as "error"
+    And Assert error code is "VALIDATION_ERROR" in "error"
+
+  @Run
+  Scenario: Login error response contains request_id in body
+    Given Save string "nobody_here@play-qa.com" as "fakeEmail"
+    And Save string "SomePassword123!" as "fakePass"
+    When Login with email "fakeEmail" password "fakePass" and save raw response as "loginResp"
+    Then Get and check status code 401 from "loginResp"
+    And Convert error response "loginResp" to ErrorResp and save as "error"
+    And Assert error response has request_id in "error"
+
+  @Run
+  Scenario: Login X-Request-ID is echoed in response header
+    Given Save string "nobody_here@play-qa.com" as "fakeEmail"
+    And Save string "SomePassword123!" as "fakePass"
+    When Login with email "fakeEmail" password "fakePass" and save raw response as "loginResp"
+    Then Get and check status code 401 from "loginResp"
+    And Assert response header "X-Request-ID" is present in "loginResp"

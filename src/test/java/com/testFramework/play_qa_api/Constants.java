@@ -3,7 +3,6 @@ package com.testFramework.play_qa_api;
 public class Constants {
 
     public static final String BASE_URL = "https://www.play-qa.com";
-    public static final String BASE_URL_RU = "https://www.play-qa.ru";
 
     public static final String BASIC_AUTH_USER = "admin";
     public static final String BASIC_AUTH_PASS = "admin";

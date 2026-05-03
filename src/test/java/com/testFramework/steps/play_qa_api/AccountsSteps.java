@@ -2,7 +2,6 @@ package com.testFramework.steps.play_qa_api;
 
 import com.testFramework.core.Generator;
 import com.testFramework.core.RestHandler;
-import com.testFramework.core.TempMailHandler;
 import com.testFramework.play_qa_api.ApiPaths;
 import com.testFramework.play_qa_api.models.createUser.*;
 import com.testFramework.play_qa_api.models.createUser.response.CreateUserResp;
@@ -11,7 +10,6 @@ import com.testFramework.play_qa_api.models.createUser.response.UsersListResp;
 import com.testFramework.play_qa_api.models.error.ErrorResp;
 import com.testFramework.play_qa_api.models.login.LoginReq;
 import com.testFramework.play_qa_api.models.login.LoginResp;
-import com.testFramework.play_qa_api.models.mail.CreateMailboxResp;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
 import io.cucumber.java.en.Given;
@@ -21,129 +19,33 @@ import io.qameta.allure.Step;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Assertions;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.List;
 
-/**
- * Step definitions for User / Auth / Mail flows.
- * Composition over inheritance — BaseSteps is used as a helper, not a parent.
- */
 public class AccountsSteps {
 
     private final BaseSteps ctx = new BaseSteps();
     private final RestHandler rest = new RestHandler();
-    private final TempMailHandler mailHandler = new TempMailHandler();
 
     @Before
-    public void before(Scenario scenario) {
-        ctx.before(scenario);
-    }
+    public void before(Scenario scenario) { ctx.before(scenario); }
 
-    // ────────────────────── Common utility steps ──────────────────────
-
-    @Given("Save string {string} as {string}")
-    public void saveString(String value, String varName) {
-        ctx.save(varName, value);
-    }
-
-    @Given("Generate email and save as {string}")
-    public void generateEmail(String varName) {
-        ctx.save(varName, Generator.email());
-    }
-
-    @Given("Generate email with domain {string} and save as {string}")
-    public void generateEmailWithDomain(String domain, String varName) {
-        ctx.save(varName, Generator.email(domain));
-    }
-
-    @Given("Generate username and save as {string}")
-    public void generateUsername(String varName) {
-        ctx.save(varName, Generator.username());
-    }
-
-    @Given("Generate password and save as {string}")
-    public void generatePassword(String varName) {
-        ctx.save(varName, Generator.password());
-    }
-
-    @Given("Generate first name and save as {string}")
-    public void generateFirstName(String varName) {
-        ctx.save(varName, Generator.firstName());
-    }
-
-    @Given("Generate last name and save as {string}")
-    public void generateLastName(String varName) {
-        ctx.save(varName, Generator.lastName());
-    }
-
-    @Given("Generate string length {int} latin {string} numeric {string} and save as {string}")
-    public void generateString(int length, String latin, String numeric, String varName) {
-        ctx.save(varName, Generator.string(length, false,
-                Boolean.parseBoolean(latin),
-                Boolean.parseBoolean(numeric),
-                false, false));
-    }
-
-    @Given("Get current date and save as {string}")
-    public void saveCurrentDate(String varName) {
-        ctx.save(varName, new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-    }
-
-    @When("Get and check status code {int} from {string}")
-    @Step("Assert status code {expectedCode} from '{varName}'")
-    public void assertStatusCode(int expectedCode, String varName) {
-        ctx.assertStatusCode(expectedCode, varName);
-    }
-
-    @Then("Print response {string}")
-    public void printResponse(String varName) {
-        Object value = ctx.get(varName, true);
-        if (value instanceof Response r) {
-            System.out.printf("%n[%s] HTTP %d%n%s%n%n", varName, r.getStatusCode(), r.asString());
-        } else {
-            System.out.printf("%n[%s] = %s%n%n", varName, value);
-        }
-    }
-
-    @Then("Assert {string} contains {string}")
-    public void assertContains(String varName, String expected) {
-        String actual = ctx.str(varName);
-        Assertions.assertTrue(actual.contains(expected),
-                "Expected '" + actual + "' to contain '" + expected + "'");
-    }
-
-    @Then("Assert {string} equals {string}")
-    public void assertEquals(String varName, String expected) {
-        Assertions.assertEquals(expected, ctx.str(varName));
-    }
-
-    @Then("Assert {string} not null")
-    public void assertNotNull(String varName) {
-        Object value = ctx.get(varName, true);
-        Assertions.assertNotNull(value, varName + " should not be null");
-        Assertions.assertNotEquals("null", String.valueOf(value), varName + " should not be null");
-    }
-
-    // ────────────────────── Auth ──────────────────────
+    // ── Login ────────────────────────────────────────────────────────
 
     @Given("Login with email {string} password {string} and save token as {string}")
-    @Step("Login and save token as '{tokenVar}'")
+    @Step("POST /login → save token")
     public void loginAndSaveToken(String emailVar, String passwordVar, String tokenVar) {
         LoginReq req = LoginReq.builder()
                 .email(ctx.str(emailVar))
                 .password(ctx.str(passwordVar))
                 .build();
-
         Response response = rest.post(ApiPaths.LOGIN, req);
         Assertions.assertEquals(200, response.getStatusCode(),
                 "Login failed: " + response.asString());
-
-        LoginResp resp = response.as(LoginResp.class);
-        ctx.save(tokenVar, resp.getAccessToken());
+        ctx.save(tokenVar, response.as(LoginResp.class).getAccessToken());
     }
 
     @Given("Login with email {string} password {string} and save raw response as {string}")
-    @Step("Login raw to '{varName}'")
+    @Step("POST /login → save raw")
     public void loginAndSaveResponse(String emailVar, String passwordVar, String varName) {
         LoginReq req = LoginReq.builder()
                 .email(ctx.str(emailVar))
@@ -152,19 +54,46 @@ public class AccountsSteps {
         ctx.save(varName, rest.post(ApiPaths.LOGIN, req));
     }
 
-    @Then("Convert login response {string} to LoginResp and save as {string}")
-    public void convertLoginResponse(String rawVar, String saveAs) {
-        Response resp = (Response) ctx.get(rawVar, true);
-        ctx.save(saveAs, resp.as(LoginResp.class));
+    @Given("Login with no body and save response as {string}")
+    @Step("POST /login empty body")
+    public void loginEmptyBody(String varName) {
+        ctx.save(varName, rest.post(ApiPaths.LOGIN, "{}"));
     }
 
-    // ────────────────────── Create user ──────────────────────
+    @Then("Convert login response {string} to LoginResp and save as {string}")
+    public void convertLoginResponse(String rawVar, String saveAs) {
+        ctx.save(saveAs, ((Response) ctx.get(rawVar, true)).as(LoginResp.class));
+    }
+
+    @Then("Assert login response {string} has all required fields")
+    @Step("Assert login response fields")
+    public void assertLoginResponseFields(String varName) {
+        LoginResp resp = (LoginResp) ctx.get(varName, true);
+        Assertions.assertNotNull(resp.getAccessToken(), "access_token is null");
+        Assertions.assertFalse(resp.getAccessToken().isBlank());
+        Assertions.assertNotNull(resp.getUserId(), "user_id is null");
+        Assertions.assertNotNull(resp.getEmail(), "email is null");
+        Assertions.assertNotNull(resp.getUsername(), "username is null");
+        Assertions.assertNotNull(resp.getExpiresAt(), "expires_at is null");
+    }
+
+    @Then("Save field accessToken from LoginResp {string} as {string}")
+    public void saveTokenFromLoginResp(String varName, String saveAs) {
+        ctx.save(saveAs, ((LoginResp) ctx.get(varName, true)).getAccessToken());
+    }
+
+    @Then("Save field userId from LoginResp {string} as {string}")
+    public void saveUserIdFromLoginResp(String varName, String saveAs) {
+        ctx.save(saveAs, ((LoginResp) ctx.get(varName, true)).getUserId());
+    }
+
+    // ── Create user ──────────────────────────────────────────────────
 
     @When("Create user with email {string} username {string} password {string} firstName {string} lastName {string} and save response as {string}")
-    @Step("POST /users/create")
+    @Step("POST /users/create (minimal)")
     public void createUser(String emailVar, String usernameVar, String passwordVar,
                            String firstNameVar, String lastNameVar, String varName) {
-        CreateUserReq req = CreateUserReq.builder()
+        ctx.save(varName, rest.post(ApiPaths.USERS_CREATE, CreateUserReq.builder()
                 .email(ctx.str(emailVar))
                 .username(ctx.str(usernameVar))
                 .password(ctx.str(passwordVar))
@@ -172,36 +101,142 @@ public class AccountsSteps {
                         .firstName(ctx.str(firstNameVar))
                         .lastName(ctx.str(lastNameVar))
                         .build())
-                .build();
-        ctx.save(varName, rest.post(ApiPaths.USERS_CREATE, req));
+                .build()));
+    }
+
+    @When("Create user with email {string} username {string} password {string} firstName {string} lastName {string} gender {string} and save response as {string}")
+    @Step("POST /users/create with gender")
+    public void createUserWithGender(String emailVar, String usernameVar, String passwordVar,
+                                     String firstNameVar, String lastNameVar, String genderVar, String varName) {
+        ctx.save(varName, rest.post(ApiPaths.USERS_CREATE, CreateUserReq.builder()
+                .email(ctx.str(emailVar))
+                .username(ctx.str(usernameVar))
+                .password(ctx.str(passwordVar))
+                .profile(ProfileReq.builder()
+                        .firstName(ctx.str(firstNameVar))
+                        .lastName(ctx.str(lastNameVar))
+                        .gender(ctx.str(genderVar))
+                        .build())
+                .build()));
+    }
+
+    @When("Create user with employment status {string} and save response as {string}")
+    @Step("POST /users/create with employment status")
+    public void createUserWithEmploymentStatus(String statusVar, String varName) {
+        ctx.save(varName, rest.post(ApiPaths.USERS_CREATE, CreateUserReq.builder()
+                .email(Generator.email())
+                .username(Generator.username())
+                .password(Generator.password())
+                .profile(ProfileReq.builder()
+                        .firstName(Generator.firstName())
+                        .lastName(Generator.lastName())
+                        .build())
+                .employment(EmploymentReq.builder()
+                        .status(ctx.str(statusVar))
+                        .build())
+                .build()));
+    }
+
+    @When("Create user with theme {string} and save response as {string}")
+    @Step("POST /users/create with theme")
+    public void createUserWithTheme(String themeVar, String varName) {
+        ctx.save(varName, rest.post(ApiPaths.USERS_CREATE, CreateUserReq.builder()
+                .email(Generator.email())
+                .username(Generator.username())
+                .password(Generator.password())
+                .profile(ProfileReq.builder()
+                        .firstName(Generator.firstName())
+                        .lastName(Generator.lastName())
+                        .build())
+                .settings(SettingsReq.builder()
+                        .theme(ctx.str(themeVar))
+                        .build())
+                .build()));
+    }
+
+    @When("Create user with username length {int} and save response as {string}")
+    @Step("POST /users/create username length {length}")
+    public void createUserWithUsernameLength(int length, String varName) {
+        ctx.save(varName, rest.post(ApiPaths.USERS_CREATE, CreateUserReq.builder()
+                .email(Generator.email())
+                .username(Generator.alphanumericString(length).toLowerCase())
+                .password(Generator.password())
+                .profile(ProfileReq.builder()
+                        .firstName(Generator.firstName())
+                        .lastName(Generator.lastName())
+                        .build())
+                .build()));
+    }
+
+    @When("Create user with interests {string} and save response as {string}")
+    @Step("POST /users/create with interests")
+    public void createUserWithInterests(String interestsVar, String varName) {
+        String raw = ctx.str(interestsVar);
+        List<String> interests = raw.isBlank() ? List.of() : List.of(raw.split(","));
+        ctx.save(varName, rest.post(ApiPaths.USERS_CREATE, CreateUserReq.builder()
+                .email(Generator.email())
+                .username(Generator.username())
+                .password(Generator.password())
+                .profile(ProfileReq.builder()
+                        .firstName(Generator.firstName())
+                        .lastName(Generator.lastName())
+                        .interests(interests)
+                        .build())
+                .build()));
+    }
+
+    @When("Create user with bio of length {int} and save response as {string}")
+    @Step("POST /users/create bio length {length}")
+    public void createUserWithBioLength(int length, String varName) {
+        ctx.save(varName, rest.post(ApiPaths.USERS_CREATE, CreateUserReq.builder()
+                .email(Generator.email())
+                .username(Generator.username())
+                .password(Generator.password())
+                .profile(ProfileReq.builder()
+                        .firstName(Generator.firstName())
+                        .lastName(Generator.lastName())
+                        .bio(Generator.alphanumericString(length))
+                        .build())
+                .build()));
+    }
+
+    @When("Create user with firstName length {int} and save response as {string}")
+    @Step("POST /users/create firstName length {length}")
+    public void createUserWithFirstNameLength(int length, String varName) {
+        String name = length > 0 ? Generator.alphanumericString(length) : "";
+        ctx.save(varName, rest.post(ApiPaths.USERS_CREATE, CreateUserReq.builder()
+                .email(Generator.email())
+                .username(Generator.username())
+                .password(Generator.password())
+                .profile(ProfileReq.builder()
+                        .firstName(name)
+                        .lastName(Generator.lastName())
+                        .build())
+                .build()));
     }
 
     @When("Create minimal user and save response as {string}")
-    @Step("Create minimal user (generated data)")
+    @Step("POST /users/create (generated)")
     public void createMinimalUser(String varName) {
         String email = Generator.email();
-        String username = Generator.username();
         String password = Generator.password();
-
-        CreateUserReq req = CreateUserReq.builder()
+        ctx.save("generatedEmail", email);
+        ctx.save("generatedPassword", password);
+        ctx.save(varName, rest.post(ApiPaths.USERS_CREATE, CreateUserReq.builder()
                 .email(email)
-                .username(username)
+                .username(Generator.username())
                 .password(password)
                 .profile(ProfileReq.builder()
                         .firstName(Generator.firstName())
                         .lastName(Generator.lastName())
                         .build())
-                .build();
-
-        ctx.save("generatedEmail", email);
-        ctx.save("generatedPassword", password);
-        ctx.save(varName, rest.post(ApiPaths.USERS_CREATE, req));
+                .build()));
     }
 
     @When("Create full user with all fields and save response as {string}")
-    @Step("Create full user with all optional fields")
+    @Step("POST /users/create (all fields)")
     public void createFullUser(String varName) {
-        CreateUserReq req = CreateUserReq.builder()
+        ctx.save(varName, rest.post(ApiPaths.USERS_CREATE, CreateUserReq.builder()
                 .email(Generator.email())
                 .username(Generator.username())
                 .password(Generator.password())
@@ -209,7 +244,7 @@ public class AccountsSteps {
                         .firstName(Generator.firstName())
                         .lastName(Generator.lastName())
                         .gender("male")
-                        .bio("Test automation framework user")
+                        .bio("Test user bio")
                         .build())
                 .contacts(ContactsReq.builder()
                         .phone(Generator.phoneNumber())
@@ -222,7 +257,6 @@ public class AccountsSteps {
                 .employment(EmploymentReq.builder()
                         .status("employed")
                         .company("Test Corp")
-                        .position("QA Engineer")
                         .build())
                 .settings(SettingsReq.builder()
                         .language("en")
@@ -230,18 +264,63 @@ public class AccountsSteps {
                         .theme("dark")
                         .notificationsEnabled(true)
                         .build())
-                .build();
-
-        ctx.save(varName, rest.post(ApiPaths.USERS_CREATE, req));
+                .build()));
     }
 
     @Then("Convert create user response {string} to CreateUserResp and save as {string}")
     public void convertCreateUserResponse(String rawVar, String saveAs) {
-        Response resp = (Response) ctx.get(rawVar, true);
-        ctx.save(saveAs, resp.as(CreateUserResp.class));
+        ctx.save(saveAs, ((Response) ctx.get(rawVar, true)).as(CreateUserResp.class));
     }
 
-    // ────────────────────── Get user ──────────────────────
+    @Then("Assert CreateUserResp {string} has email {string}")
+    public void assertCreateUserRespEmail(String varName, String expected) {
+        Assertions.assertEquals(ctx.str(expected),
+                ((CreateUserResp) ctx.get(varName, true)).getEmail());
+    }
+
+    @Then("Assert CreateUserResp {string} has username {string}")
+    public void assertCreateUserRespUsername(String varName, String expected) {
+        Assertions.assertEquals(ctx.str(expected),
+                ((CreateUserResp) ctx.get(varName, true)).getUsername());
+    }
+
+    @Then("Assert CreateUserResp {string} has access token not null")
+    public void assertCreateUserRespHasToken(String varName) {
+        String token = ((CreateUserResp) ctx.get(varName, true)).getAccessToken();
+        Assertions.assertNotNull(token);
+        Assertions.assertFalse(token.isBlank());
+    }
+
+    @Then("Assert CreateUserResp {string} metadata is_active is true")
+    public void assertMetadataIsActive(String varName) {
+        CreateUserResp resp = (CreateUserResp) ctx.get(varName, true);
+        Assertions.assertNotNull(resp.getMetadata());
+        Assertions.assertTrue(resp.getMetadata().getIsActive());
+    }
+
+    @Then("Assert CreateUserResp {string} metadata is_verified is false")
+    public void assertMetadataIsVerified(String varName) {
+        CreateUserResp resp = (CreateUserResp) ctx.get(varName, true);
+        Assertions.assertEquals(Boolean.FALSE, resp.getMetadata().getIsVerified());
+    }
+
+    @Then("Assert CreateUserResp {string} metadata login_count is 0")
+    public void assertMetadataLoginCount(String varName) {
+        CreateUserResp resp = (CreateUserResp) ctx.get(varName, true);
+        Assertions.assertEquals(0, resp.getMetadata().getLoginCount());
+    }
+
+    @Then("Save field id from CreateUserResp {string} as {string}")
+    public void saveIdFromCreateUserResp(String varName, String saveAs) {
+        ctx.save(saveAs, ((CreateUserResp) ctx.get(varName, true)).getId());
+    }
+
+    @Then("Save field accessToken from CreateUserResp {string} as {string}")
+    public void saveTokenFromCreateUserResp(String varName, String saveAs) {
+        ctx.save(saveAs, ((CreateUserResp) ctx.get(varName, true)).getAccessToken());
+    }
+
+    // ── Get / List users ─────────────────────────────────────────────
 
     @When("Get user by id {string} and save response as {string}")
     @Step("GET /users/get/{idVar}")
@@ -249,26 +328,58 @@ public class AccountsSteps {
         ctx.save(varName, rest.get(ApiPaths.usersGet(ctx.str(idVar))));
     }
 
+    @When("Get users list and save response as {string}")
+    @Step("GET /users/list (default params)")
+    public void getUsersList(String varName) {
+        ctx.save(varName, rest.get(ApiPaths.USERS_LIST));
+    }
+
     @When("Get users list page {string} perPage {string} and save response as {string}")
-    @Step("GET /users/list")
-    public void getUsersList(String pageVar, String perPageVar, String varName) {
+    @Step("GET /users/list page={pageVar} perPage={perPageVar}")
+    public void getUsersListPaged(String pageVar, String perPageVar, String varName) {
         ctx.save(varName, rest.get(ApiPaths.USERS_LIST,
                 new String[]{"page", ctx.str(pageVar), "per_page", ctx.str(perPageVar)}));
     }
 
     @Then("Convert get user response {string} to UserResp and save as {string}")
     public void convertUserResponse(String rawVar, String saveAs) {
-        Response resp = (Response) ctx.get(rawVar, true);
-        ctx.save(saveAs, resp.as(UserResp.class));
+        ctx.save(saveAs, ((Response) ctx.get(rawVar, true)).as(UserResp.class));
     }
 
     @Then("Convert users list response {string} to UsersListResp and save as {string}")
     public void convertUsersListResponse(String rawVar, String saveAs) {
-        Response resp = (Response) ctx.get(rawVar, true);
-        ctx.save(saveAs, resp.as(UsersListResp.class));
+        ctx.save(saveAs, ((Response) ctx.get(rawVar, true)).as(UsersListResp.class));
     }
 
-    // ────────────────────── Check exists ──────────────────────
+    @Then("Assert users list {string} has pagination fields")
+    @Step("Assert users list pagination fields present")
+    public void assertUserListPaginationFields(String varName) {
+        UsersListResp resp = (UsersListResp) ctx.get(varName, true);
+        Assertions.assertNotNull(resp.getPage(), "page is null");
+        Assertions.assertNotNull(resp.getPerPage(), "per_page is null");
+        Assertions.assertNotNull(resp.getTotalPages(), "total_pages is null");
+    }
+
+    @Then("Assert users list {string} per page is {int}")
+    public void assertUsersListPerPage(String varName, int expected) {
+        Assertions.assertEquals(expected,
+                ((UsersListResp) ctx.get(varName, true)).getPerPage());
+    }
+
+    @Then("Assert users list {string} page is {int}")
+    public void assertUsersListPage(String varName, int expected) {
+        Assertions.assertEquals(expected,
+                ((UsersListResp) ctx.get(varName, true)).getPage());
+    }
+
+    @Then("Assert users list {string} count is at most {int}")
+    public void assertUsersListCountAtMost(String varName, int max) {
+        UsersListResp resp = (UsersListResp) ctx.get(varName, true);
+        Assertions.assertTrue(resp.getUsers().size() <= max,
+                "Expected at most " + max + " users, got " + resp.getUsers().size());
+    }
+
+    // ── Check exists ─────────────────────────────────────────────────
 
     @When("Check user exists by id {string} and save response as {string}")
     @Step("HEAD /users/exists/{idVar}")
@@ -276,56 +387,129 @@ public class AccountsSteps {
         ctx.save(varName, rest.head(ApiPaths.usersExists(ctx.str(idVar))));
     }
 
+    @When("Check user exists GET by id {string} and save response as {string}")
+    @Step("GET /users/exists/{idVar}")
+    public void checkUserExistsGet(String idVar, String varName) {
+        ctx.save(varName, rest.get(ApiPaths.usersExists(ctx.str(idVar))));
+    }
+
     @Then("Assert user exists header is {string} in response {string}")
     @Step("Assert X-User-Exists = '{expected}'")
     public void assertUserExistsHeader(String expected, String varName) {
-        Response response = (Response) ctx.get(varName, true);
-        String header = response.getHeader("X-User-Exists");
+        String header = ((Response) ctx.get(varName, true)).getHeader("X-User-Exists");
         Assertions.assertEquals(expected, header, "X-User-Exists header mismatch");
     }
 
-    // ────────────────────── Update ──────────────────────
+    // ── Update / Patch ───────────────────────────────────────────────
 
     @When("Update user {string} token {string} firstName {string} lastName {string} email {string} username {string} and save response as {string}")
     @Step("PUT /users/update/{idVar}")
     public void updateUser(String idVar, String tokenVar,
                            String firstNameVar, String lastNameVar,
                            String emailVar, String usernameVar, String varName) {
-        CreateUserReq req = CreateUserReq.builder()
-                .email(ctx.str(emailVar))
-                .username(ctx.str(usernameVar))
-                .profile(ProfileReq.builder()
-                        .firstName(ctx.str(firstNameVar))
-                        .lastName(ctx.str(lastNameVar))
-                        .build())
-                .build();
+        ctx.save(varName, rest.put(ApiPaths.usersUpdate(ctx.str(idVar)),
+                CreateUserReq.builder()
+                        .email(ctx.str(emailVar))
+                        .username(ctx.str(usernameVar))
+                        .profile(ProfileReq.builder()
+                                .firstName(ctx.str(firstNameVar))
+                                .lastName(ctx.str(lastNameVar))
+                                .build())
+                        .build(),
+                "Authorization", RestHandler.bearerHeader(ctx.str(tokenVar))));
+    }
 
-        ctx.save(varName, rest.put(ApiPaths.usersUpdate(ctx.str(idVar)), req,
+    @When("Update user {string} with no auth header and save response as {string}")
+    @Step("PUT /users/update/{idVar} (no auth)")
+    public void updateUserNoAuth(String idVar, String varName) {
+        ctx.save(varName, rest.put(ApiPaths.usersUpdate(ctx.str(idVar)),
+                CreateUserReq.builder()
+                        .email(Generator.email())
+                        .username(Generator.username())
+                        .profile(ProfileReq.builder()
+                                .firstName(Generator.firstName())
+                                .lastName(Generator.lastName())
+                                .build())
+                        .build()));
+    }
+
+    @When("Update user {string} with token {string} and invalid email and save response as {string}")
+    @Step("PUT /users/update with invalid email")
+    public void updateUserInvalidEmail(String idVar, String tokenVar, String varName) {
+        ctx.save(varName, rest.put(ApiPaths.usersUpdate(ctx.str(idVar)),
+                CreateUserReq.builder()
+                        .email("notanemail")
+                        .username(Generator.username())
+                        .profile(ProfileReq.builder()
+                                .firstName(Generator.firstName())
+                                .lastName(Generator.lastName())
+                                .build())
+                        .build(),
                 "Authorization", RestHandler.bearerHeader(ctx.str(tokenVar))));
     }
 
     @When("Patch user {string} token {string} firstName {string} and save response as {string}")
     @Step("PATCH /users/patch/{idVar}")
     public void patchUser(String idVar, String tokenVar, String firstNameVar, String varName) {
-        // API requires at minimum first_name + last_name when profile object is present
-        CreateUserReq req = CreateUserReq.builder()
-                .profile(ProfileReq.builder()
-                        .firstName(ctx.str(firstNameVar))
-                        .lastName("PatchedLastName")
-                        .build())
-                .build();
-
-        ctx.save(varName, rest.patch(ApiPaths.usersPatch(ctx.str(idVar)), req,
+        ctx.save(varName, rest.patch(ApiPaths.usersPatch(ctx.str(idVar)),
+                CreateUserReq.builder()
+                        .profile(ProfileReq.builder()
+                                .firstName(ctx.str(firstNameVar))
+                                .lastName("PatchedLastName")
+                                .build())
+                        .build(),
                 "Authorization", RestHandler.bearerHeader(ctx.str(tokenVar))));
     }
 
-    // ────────────────────── Delete / logout ──────────────────────
+    @When("Patch user {string} token {string} email {string} and save response as {string}")
+    @Step("PATCH /users/patch/{idVar} email only")
+    public void patchUserEmail(String idVar, String tokenVar, String emailVar, String varName) {
+        ctx.save(varName, rest.patch(ApiPaths.usersPatch(ctx.str(idVar)),
+                CreateUserReq.builder().email(ctx.str(emailVar)).build(),
+                "Authorization", RestHandler.bearerHeader(ctx.str(tokenVar))));
+    }
+
+    @When("Patch user {string} token {string} username {string} and save response as {string}")
+    @Step("PATCH /users/patch/{idVar} username only")
+    public void patchUserUsername(String idVar, String tokenVar, String usernameVar, String varName) {
+        ctx.save(varName, rest.patch(ApiPaths.usersPatch(ctx.str(idVar)),
+                CreateUserReq.builder().username(ctx.str(usernameVar)).build(),
+                "Authorization", RestHandler.bearerHeader(ctx.str(tokenVar))));
+    }
+
+    @When("Patch user {string} with no auth header and save response as {string}")
+    @Step("PATCH /users/patch/{idVar} (no auth)")
+    public void patchUserNoAuth(String idVar, String varName) {
+        ctx.save(varName, rest.patch(ApiPaths.usersPatch(ctx.str(idVar)),
+                CreateUserReq.builder()
+                        .profile(ProfileReq.builder()
+                                .firstName(Generator.firstName())
+                                .lastName(Generator.lastName())
+                                .build())
+                        .build()));
+    }
+
+    @When("Patch user {string} with empty body token {string} and save response as {string}")
+    @Step("PATCH /users/patch/{idVar} empty body")
+    public void patchUserEmptyBody(String idVar, String tokenVar, String varName) {
+        ctx.save(varName, rest.patch(ApiPaths.usersPatch(ctx.str(idVar)),
+                CreateUserReq.builder().build(),
+                "Authorization", RestHandler.bearerHeader(ctx.str(tokenVar))));
+    }
+
+    // ── Delete / Logout ──────────────────────────────────────────────
 
     @When("Delete user {string} with token {string} and save response as {string}")
     @Step("DELETE /users/delete/{idVar}")
     public void deleteUser(String idVar, String tokenVar, String varName) {
         ctx.save(varName, rest.delete(ApiPaths.usersDelete(ctx.str(idVar)),
                 "Authorization", RestHandler.bearerHeader(ctx.str(tokenVar))));
+    }
+
+    @When("Delete user {string} with no auth header and save response as {string}")
+    @Step("DELETE /users/delete/{idVar} (no auth)")
+    public void deleteUserNoAuth(String idVar, String varName) {
+        ctx.save(varName, rest.delete(ApiPaths.usersDelete(ctx.str(idVar))));
     }
 
     @When("Logout user {string} with token {string} and save response as {string}")
@@ -335,12 +519,17 @@ public class AccountsSteps {
                 "Authorization", RestHandler.bearerHeader(ctx.str(tokenVar))));
     }
 
-    // ────────────────────── Error assertions ──────────────────────
+    @When("Logout user {string} with no auth header and save response as {string}")
+    @Step("POST /users/logout/{idVar} (no auth)")
+    public void logoutUserNoAuth(String idVar, String varName) {
+        ctx.save(varName, rest.postNoBody(ApiPaths.usersLogout(ctx.str(idVar))));
+    }
+
+    // ── Error assertions ─────────────────────────────────────────────
 
     @Then("Convert error response {string} to ErrorResp and save as {string}")
     public void convertErrorResponse(String rawVar, String saveAs) {
-        Response resp = (Response) ctx.get(rawVar, true);
-        ctx.save(saveAs, resp.as(ErrorResp.class));
+        ctx.save(saveAs, ((Response) ctx.get(rawVar, true)).as(ErrorResp.class));
     }
 
     @Then("Assert error code is {string} in {string}")
@@ -352,67 +541,27 @@ public class AccountsSteps {
     }
 
     @Then("Assert error message contains {string} in {string}")
-    @Step("Assert error message contains '{expected}'")
     public void assertErrorMessageContains(String expected, String varName) {
         ErrorResp error = (ErrorResp) ctx.get(varName, true);
         Assertions.assertTrue(error.getError().getMessage().contains(expected),
                 "Error message '" + error.getError().getMessage() + "' does not contain '" + expected + "'");
     }
 
-    // ────────────────────── DTO field extraction ──────────────────────
-
-    @Then("Assert CreateUserResp {string} has email {string}")
-    public void assertCreateUserRespEmail(String varName, String expected) {
-        CreateUserResp resp = (CreateUserResp) ctx.get(varName, true);
-        Assertions.assertEquals(ctx.str(expected), resp.getEmail());
+    @Then("Assert error response has request_id in {string}")
+    @Step("Assert error envelope has request_id")
+    public void assertErrorHasRequestId(String varName) {
+        ErrorResp error = (ErrorResp) ctx.get(varName, true);
+        Assertions.assertNotNull(error.getRequestId(), "request_id should not be null");
+        Assertions.assertFalse(error.getRequestId().isBlank());
     }
 
-    @Then("Assert CreateUserResp {string} has username {string}")
-    public void assertCreateUserRespUsername(String varName, String expected) {
-        CreateUserResp resp = (CreateUserResp) ctx.get(varName, true);
-        Assertions.assertEquals(ctx.str(expected), resp.getUsername());
-    }
-
-    @Then("Assert CreateUserResp {string} has access token not null")
-    public void assertCreateUserRespHasToken(String varName) {
-        CreateUserResp resp = (CreateUserResp) ctx.get(varName, true);
-        Assertions.assertNotNull(resp.getAccessToken(), "access_token should not be null");
-        Assertions.assertFalse(resp.getAccessToken().isBlank(), "access_token should not be blank");
-    }
-
-    @Then("Save field id from CreateUserResp {string} as {string}")
-    public void saveIdFromCreateUserResp(String varName, String saveAs) {
-        CreateUserResp resp = (CreateUserResp) ctx.get(varName, true);
-        ctx.save(saveAs, resp.getId());
-    }
-
-    @Then("Save field accessToken from CreateUserResp {string} as {string}")
-    public void saveTokenFromCreateUserResp(String varName, String saveAs) {
-        CreateUserResp resp = (CreateUserResp) ctx.get(varName, true);
-        ctx.save(saveAs, resp.getAccessToken());
-    }
-
-    @Then("Save field userId from LoginResp {string} as {string}")
-    public void saveUserIdFromLoginResp(String varName, String saveAs) {
-        LoginResp resp = (LoginResp) ctx.get(varName, true);
-        ctx.save(saveAs, resp.getUserId());
-    }
-
-    // ────────────────────── Temp mail ──────────────────────
-
-    @Given("Create temp mailbox and save token as {string} email as {string}")
-    @Step("Create temp mailbox")
-    public void createMailboxAndSave(String tokenVar, String emailVar) {
-        CreateMailboxResp mailbox = mailHandler.createMailbox();
-        ctx.save(tokenVar, mailbox.getToken());
-        ctx.save(emailVar, mailbox.getEmailAddress());
-    }
-
-    @Then("Assert mail received in mailbox {string} within {int} seconds and save body as {string}")
-    @Step("Wait for email in mailbox '{mailTokenVar}'")
-    public void waitForMailAndSaveBody(String mailTokenVar, int timeoutSec, String bodyVar) {
-        String token = ctx.str(mailTokenVar);
-        var message = mailHandler.waitForMessage(token, timeoutSec);
-        ctx.save(bodyVar, message.getBody() != null ? message.getBody() : message.getBodyPreview());
+    @Then("Assert error validation array is not empty in {string}")
+    @Step("Assert error.validation array populated")
+    public void assertValidationArrayNotEmpty(String varName) {
+        ErrorResp error = (ErrorResp) ctx.get(varName, true);
+        Assertions.assertNotNull(error.getError().getValidation(),
+                "validation array is null");
+        Assertions.assertFalse(error.getError().getValidation().isEmpty(),
+                "validation array is empty");
     }
 }

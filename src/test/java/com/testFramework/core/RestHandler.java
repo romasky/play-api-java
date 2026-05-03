@@ -22,6 +22,9 @@ public class RestHandler {
         if (path.contains("/users/create")) {
             throttleCreateUser();
         }
+        if (path.contains("/login")) {
+            throttleLogin();
+        }
         RequestSpecification spec = buildSpec(headers).contentType(ContentType.JSON);
         if (body != null && !body.toString().isEmpty()) {
             spec.body(body);
@@ -117,6 +120,23 @@ public class RestHandler {
     /** Respect the server rate limit of ~100 user creations/min (1 per 600ms). */
     private static volatile long lastCreateRequestMs = 0;
     private static final long CREATE_USER_DELAY_MS = 700;
+
+    /** Respect login rate limit of 5 req/min (1 per 12s). */
+    private static volatile long lastLoginRequestMs = 0;
+    private static final long LOGIN_DELAY_MS = 13000;
+
+    private void throttleLogin() {
+        long now = System.currentTimeMillis();
+        long elapsed = now - lastLoginRequestMs;
+        if (elapsed < LOGIN_DELAY_MS) {
+            try {
+                Thread.sleep(LOGIN_DELAY_MS - elapsed);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+        lastLoginRequestMs = System.currentTimeMillis();
+    }
 
     private void throttleCreateUser() {
         long now = System.currentTimeMillis();
