@@ -1,0 +1,10 @@
+{
+    "success": false,
+    "error": {
+        "code": "VALIDATION_ERROR",
+        "message": "Invalid request body",
+        "details": "subject is required"
+    },
+    "timestamp": "2026-05-04T13:03:09.185716477Z",
+    "request_id": "5c0673b0-cf04-4cf6-9b18-ebfed3fb5b41"
+}

@@ -1,0 +1,10 @@
+{
+    "success": false,
+    "error": {
+        "code": "USER_NOT_FOUND",
+        "message": "User not found",
+        "details": "invalid user ID"
+    },
+    "timestamp": "2026-05-04T13:00:10.748629241Z",
+    "request_id": "7c4372d4-54ce-49c6-881f-b1614d44e85c"
+}
