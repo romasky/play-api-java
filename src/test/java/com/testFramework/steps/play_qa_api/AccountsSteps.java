@@ -29,6 +29,12 @@ public class AccountsSteps {
     @Before
     public void before(Scenario scenario) { ctx.before(scenario); }
 
+    // API allows 5 login attempts per minute — pace login scenarios to avoid 429.
+    @Before("@Login")
+    public void paceLoginScenarios() throws InterruptedException {
+        Thread.sleep(13_000);
+    }
+
     // ── Login ────────────────────────────────────────────────────────
 
     @Given("Login with email {string} password {string} and save token as {string}")
