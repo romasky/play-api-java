@@ -1,0 +1,8 @@
+"Epic","Feature","Story","FAILED","BROKEN","PASSED","SKIPPED","UNKNOWN"
+"","POST /api/v1/users/create","Create user with minimal required fields returns 201 with token","0","1","0","0","0"
+"","POST /api/v1/users/create","access_token format matches usr_{timestamp}_{hex} pattern","0","1","0","0","0"
+"","POST /api/v1/users/create","Create user with all optional fields returns 201","0","1","0","0","0"
+"","POST /api/v1/users/create","Create user with username at maximum length 30 chars returns 201","0","1","0","0","0"
+"","POST /api/v1/users/create","Create user with username at minimum length 3 chars returns 201","0","1","0","0","0"
+"","POST /api/v1/users/create","Response body never contains password field","0","1","0","0","0"
+"","POST /api/v1/users/create","Create user metadata fields are correct on creation","0","1","0","0","0"
