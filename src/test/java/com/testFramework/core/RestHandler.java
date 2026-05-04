@@ -1,5 +1,6 @@
 package com.testFramework.core;
 
+import io.qameta.allure.Allure;
 import io.qameta.allure.Step;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -19,7 +20,9 @@ public class RestHandler {
 
     @Step("POST {path}")
     public Response post(String path, Object body, String... headers) {
-        return buildPostSpec(path, body, headers);
+        Response r = buildPostSpec(path, body, headers);
+        attachResponse(r);
+        return r;
     }
 
     private Response buildPostSpec(String path, Object body, String... headers) {
@@ -30,17 +33,23 @@ public class RestHandler {
 
     @Step("POST {path} (no body)")
     public Response postNoBody(String path, String... headers) {
-        return buildSpec(headers).post(path).then().extract().response();
+        Response r = buildSpec(headers).post(path).then().extract().response();
+        attachResponse(r);
+        return r;
     }
 
     @Step("GET {path}")
     public Response get(String path, String... headers) {
-        return buildSpec(headers).get(path).then().extract().response();
+        Response r = buildSpec(headers).get(path).then().extract().response();
+        attachResponse(r);
+        return r;
     }
 
-    @Step("GET {path} with query params")
+    @Step("GET {path}")
     public Response get(String path, String[] queryParams, String... headers) {
-        return buildGetWithParams(path, queryParams, headers);
+        Response r = buildGetWithParams(path, queryParams, headers);
+        attachResponse(r);
+        return r;
     }
 
     private Response buildGetWithParams(String path, String[] queryParams, String... headers) {
@@ -53,27 +62,46 @@ public class RestHandler {
 
     @Step("PUT {path}")
     public Response put(String path, Object body, String... headers) {
-        return buildSpec(headers).contentType(ContentType.JSON).body(body).put(path).then().extract().response();
+        Response r = buildSpec(headers).contentType(ContentType.JSON).body(body).put(path).then().extract().response();
+        attachResponse(r);
+        return r;
     }
 
     @Step("PATCH {path}")
     public Response patch(String path, Object body, String... headers) {
-        return buildSpec(headers).contentType(ContentType.JSON).body(body).patch(path).then().extract().response();
+        Response r = buildSpec(headers).contentType(ContentType.JSON).body(body).patch(path).then().extract().response();
+        attachResponse(r);
+        return r;
     }
 
     @Step("DELETE {path}")
     public Response delete(String path, String... headers) {
-        return buildSpec(headers).delete(path).then().extract().response();
+        Response r = buildSpec(headers).delete(path).then().extract().response();
+        attachResponse(r);
+        return r;
     }
 
     @Step("HEAD {path}")
     public Response head(String path) {
-        return given().head(path).then().extract().response();
+        Response r = given().head(path).then().extract().response();
+        Allure.parameter("status", r.getStatusCode());
+        return r;
     }
 
     @Step("OPTIONS {path}")
     public Response options(String path) {
-        return given().options(path).then().extract().response();
+        Response r = given().options(path).then().extract().response();
+        attachResponse(r);
+        return r;
+    }
+
+    private static void attachResponse(Response r) {
+        int status = r.getStatusCode();
+        String body = r.getBody().asPrettyString();
+        Allure.parameter("status", status);
+        if (!body.isBlank()) {
+            Allure.addAttachment("Response " + status, "application/json", body, ".json");
+        }
     }
 
     private RequestSpecification buildSpec(String... headers) {

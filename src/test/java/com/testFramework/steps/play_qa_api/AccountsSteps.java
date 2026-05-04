@@ -15,6 +15,7 @@ import io.cucumber.java.Scenario;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.qameta.allure.Allure;
 import io.qameta.allure.Step;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Assertions;
@@ -44,12 +45,13 @@ public class AccountsSteps {
     // ── Login ────────────────────────────────────────────────────────
 
     @Given("Login with email {string} password {string} and save token as {string}")
-    @Step("POST /login → save token")
+    @Step("POST /login")
     public void loginAndSaveToken(String emailVar, String passwordVar, String tokenVar) {
-        LoginReq req = LoginReq.builder()
-                .email(ctx.str(emailVar))
-                .password(ctx.str(passwordVar))
-                .build();
+        String email = ctx.str(emailVar);
+        String password = ctx.str(passwordVar);
+        Allure.parameter("email", email);
+        Allure.parameter("password", password);
+        LoginReq req = LoginReq.builder().email(email).password(password).build();
         Response response = rest.post(ApiPaths.LOGIN, req);
         Assertions.assertEquals(200, response.getStatusCode(),
                 "Login failed: " + response.asString());
@@ -57,12 +59,13 @@ public class AccountsSteps {
     }
 
     @Given("Login with email {string} password {string} and save raw response as {string}")
-    @Step("POST /login → save raw")
+    @Step("POST /login (save raw response)")
     public void loginAndSaveResponse(String emailVar, String passwordVar, String varName) {
-        LoginReq req = LoginReq.builder()
-                .email(ctx.str(emailVar))
-                .password(ctx.str(passwordVar))
-                .build();
+        String email = ctx.str(emailVar);
+        String password = ctx.str(passwordVar);
+        Allure.parameter("email", email);
+        Allure.parameter("password", password);
+        LoginReq req = LoginReq.builder().email(email).password(password).build();
         ctx.save(varName, rest.post(ApiPaths.LOGIN, req));
     }
 
@@ -335,9 +338,11 @@ public class AccountsSteps {
     // ── Get / List users ─────────────────────────────────────────────
 
     @When("Get user by id {string} and save response as {string}")
-    @Step("GET /users/get/{idVar}")
+    @Step("GET /users/get/:id")
     public void getUserById(String idVar, String varName) {
-        ctx.save(varName, rest.get(ApiPaths.usersGet(ctx.str(idVar))));
+        String id = ctx.str(idVar);
+        Allure.parameter("id", id);
+        ctx.save(varName, rest.get(ApiPaths.usersGet(id)));
     }
 
     @When("Get users list and save response as {string}")
@@ -394,15 +399,19 @@ public class AccountsSteps {
     // ── Check exists ─────────────────────────────────────────────────
 
     @When("Check user exists by id {string} and save response as {string}")
-    @Step("HEAD /users/exists/{idVar}")
+    @Step("HEAD /users/exists/:id")
     public void checkUserExists(String idVar, String varName) {
-        ctx.save(varName, rest.head(ApiPaths.usersExists(ctx.str(idVar))));
+        String id = ctx.str(idVar);
+        Allure.parameter("id", id);
+        ctx.save(varName, rest.head(ApiPaths.usersExists(id)));
     }
 
     @When("Check user exists GET by id {string} and save response as {string}")
-    @Step("GET /users/exists/{idVar}")
+    @Step("GET /users/exists/:id")
     public void checkUserExistsGet(String idVar, String varName) {
-        ctx.save(varName, rest.get(ApiPaths.usersExists(ctx.str(idVar))));
+        String id = ctx.str(idVar);
+        Allure.parameter("id", id);
+        ctx.save(varName, rest.get(ApiPaths.usersExists(id)));
     }
 
     @Then("Assert user exists header is {string} in response {string}")
@@ -415,14 +424,20 @@ public class AccountsSteps {
     // ── Update / Patch ───────────────────────────────────────────────
 
     @When("Update user {string} token {string} firstName {string} lastName {string} email {string} username {string} and save response as {string}")
-    @Step("PUT /users/update/{idVar}")
+    @Step("PUT /users/update/:id")
     public void updateUser(String idVar, String tokenVar,
                            String firstNameVar, String lastNameVar,
                            String emailVar, String usernameVar, String varName) {
-        ctx.save(varName, rest.put(ApiPaths.usersUpdate(ctx.str(idVar)),
+        String id = ctx.str(idVar);
+        String email = ctx.str(emailVar);
+        String username = ctx.str(usernameVar);
+        Allure.parameter("id", id);
+        Allure.parameter("email", email);
+        Allure.parameter("username", username);
+        ctx.save(varName, rest.put(ApiPaths.usersUpdate(id),
                 CreateUserReq.builder()
-                        .email(ctx.str(emailVar))
-                        .username(ctx.str(usernameVar))
+                        .email(email)
+                        .username(username)
                         .profile(ProfileReq.builder()
                                 .firstName(ctx.str(firstNameVar))
                                 .lastName(ctx.str(lastNameVar))
@@ -432,8 +447,9 @@ public class AccountsSteps {
     }
 
     @When("Update user {string} with no auth header and save response as {string}")
-    @Step("PUT /users/update/{idVar} (no auth)")
+    @Step("PUT /users/update/:id (no auth)")
     public void updateUserNoAuth(String idVar, String varName) {
+        Allure.parameter("id", ctx.str(idVar));
         ctx.save(varName, rest.put(ApiPaths.usersUpdate(ctx.str(idVar)),
                 CreateUserReq.builder()
                         .email(Generator.email())
@@ -446,8 +462,9 @@ public class AccountsSteps {
     }
 
     @When("Update user {string} with token {string} and invalid email and save response as {string}")
-    @Step("PUT /users/update with invalid email")
+    @Step("PUT /users/update/:id (invalid email)")
     public void updateUserInvalidEmail(String idVar, String tokenVar, String varName) {
+        Allure.parameter("id", ctx.str(idVar));
         ctx.save(varName, rest.put(ApiPaths.usersUpdate(ctx.str(idVar)),
                 CreateUserReq.builder()
                         .email("notanemail")
@@ -461,9 +478,12 @@ public class AccountsSteps {
     }
 
     @When("Patch user {string} token {string} firstName {string} and save response as {string}")
-    @Step("PATCH /users/patch/{idVar}")
+    @Step("PATCH /users/patch/:id")
     public void patchUser(String idVar, String tokenVar, String firstNameVar, String varName) {
-        ctx.save(varName, rest.patch(ApiPaths.usersPatch(ctx.str(idVar)),
+        String id = ctx.str(idVar);
+        Allure.parameter("id", id);
+        Allure.parameter("firstName", ctx.str(firstNameVar));
+        ctx.save(varName, rest.patch(ApiPaths.usersPatch(id),
                 CreateUserReq.builder()
                         .profile(ProfileReq.builder()
                                 .firstName(ctx.str(firstNameVar))
@@ -474,24 +494,33 @@ public class AccountsSteps {
     }
 
     @When("Patch user {string} token {string} email {string} and save response as {string}")
-    @Step("PATCH /users/patch/{idVar} email only")
+    @Step("PATCH /users/patch/:id (email only)")
     public void patchUserEmail(String idVar, String tokenVar, String emailVar, String varName) {
-        ctx.save(varName, rest.patch(ApiPaths.usersPatch(ctx.str(idVar)),
-                CreateUserReq.builder().email(ctx.str(emailVar)).build(),
+        String id = ctx.str(idVar);
+        String email = ctx.str(emailVar);
+        Allure.parameter("id", id);
+        Allure.parameter("email", email);
+        ctx.save(varName, rest.patch(ApiPaths.usersPatch(id),
+                CreateUserReq.builder().email(email).build(),
                 "Authorization", RestHandler.bearerHeader(ctx.str(tokenVar))));
     }
 
     @When("Patch user {string} token {string} username {string} and save response as {string}")
-    @Step("PATCH /users/patch/{idVar} username only")
+    @Step("PATCH /users/patch/:id (username only)")
     public void patchUserUsername(String idVar, String tokenVar, String usernameVar, String varName) {
-        ctx.save(varName, rest.patch(ApiPaths.usersPatch(ctx.str(idVar)),
-                CreateUserReq.builder().username(ctx.str(usernameVar)).build(),
+        String id = ctx.str(idVar);
+        String username = ctx.str(usernameVar);
+        Allure.parameter("id", id);
+        Allure.parameter("username", username);
+        ctx.save(varName, rest.patch(ApiPaths.usersPatch(id),
+                CreateUserReq.builder().username(username).build(),
                 "Authorization", RestHandler.bearerHeader(ctx.str(tokenVar))));
     }
 
     @When("Patch user {string} with no auth header and save response as {string}")
-    @Step("PATCH /users/patch/{idVar} (no auth)")
+    @Step("PATCH /users/patch/:id (no auth)")
     public void patchUserNoAuth(String idVar, String varName) {
+        Allure.parameter("id", ctx.str(idVar));
         ctx.save(varName, rest.patch(ApiPaths.usersPatch(ctx.str(idVar)),
                 CreateUserReq.builder()
                         .profile(ProfileReq.builder()
@@ -502,8 +531,9 @@ public class AccountsSteps {
     }
 
     @When("Patch user {string} with empty body token {string} and save response as {string}")
-    @Step("PATCH /users/patch/{idVar} empty body")
+    @Step("PATCH /users/patch/:id (empty body)")
     public void patchUserEmptyBody(String idVar, String tokenVar, String varName) {
+        Allure.parameter("id", ctx.str(idVar));
         ctx.save(varName, rest.patch(ApiPaths.usersPatch(ctx.str(idVar)),
                 CreateUserReq.builder().build(),
                 "Authorization", RestHandler.bearerHeader(ctx.str(tokenVar))));
@@ -512,28 +542,32 @@ public class AccountsSteps {
     // ── Delete / Logout ──────────────────────────────────────────────
 
     @When("Delete user {string} with token {string} and save response as {string}")
-    @Step("DELETE /users/delete/{idVar}")
+    @Step("DELETE /users/delete/:id")
     public void deleteUser(String idVar, String tokenVar, String varName) {
+        Allure.parameter("id", ctx.str(idVar));
         ctx.save(varName, rest.delete(ApiPaths.usersDelete(ctx.str(idVar)),
                 "Authorization", RestHandler.bearerHeader(ctx.str(tokenVar))));
     }
 
     @When("Delete user {string} with no auth header and save response as {string}")
-    @Step("DELETE /users/delete/{idVar} (no auth)")
+    @Step("DELETE /users/delete/:id (no auth)")
     public void deleteUserNoAuth(String idVar, String varName) {
+        Allure.parameter("id", ctx.str(idVar));
         ctx.save(varName, rest.delete(ApiPaths.usersDelete(ctx.str(idVar))));
     }
 
     @When("Logout user {string} with token {string} and save response as {string}")
-    @Step("POST /users/logout/{idVar}")
+    @Step("POST /users/logout/:id")
     public void logoutUser(String idVar, String tokenVar, String varName) {
+        Allure.parameter("id", ctx.str(idVar));
         ctx.save(varName, rest.postNoBody(ApiPaths.usersLogout(ctx.str(idVar)),
                 "Authorization", RestHandler.bearerHeader(ctx.str(tokenVar))));
     }
 
     @When("Logout user {string} with no auth header and save response as {string}")
-    @Step("POST /users/logout/{idVar} (no auth)")
+    @Step("POST /users/logout/:id (no auth)")
     public void logoutUserNoAuth(String idVar, String varName) {
+        Allure.parameter("id", ctx.str(idVar));
         ctx.save(varName, rest.postNoBody(ApiPaths.usersLogout(ctx.str(idVar))));
     }
 

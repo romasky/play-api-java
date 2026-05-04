@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Product Defects",
+    "matchedStatuses": ["failed"],
+    "messageRegex": ".*AssertionError.*|.*expected.*but was.*|.*Expected.*"
+  },
+  {
+    "name": "Test Defects",
+    "matchedStatuses": ["broken"],
+    "messageRegex": ".*NullPointerException.*|.*ClassCastException.*|.*Context variable.*not found.*"
+  },
+  {
+    "name": "Rate Limit Errors",
+    "matchedStatuses": ["broken", "failed"],
+    "messageRegex": ".*429.*|.*RATE_LIMIT_EXCEEDED.*|.*Too Many Requests.*"
+  },
+  {
+    "name": "Infrastructure Problems",
+    "matchedStatuses": ["broken"],
+    "messageRegex": ".*Connection.*refused.*|.*SocketTimeout.*|.*ConnectException.*|.*UnknownHost.*"
+  },
+  {
+    "name": "Skipped Tests",
+    "matchedStatuses": ["skipped"]
+  }
+]

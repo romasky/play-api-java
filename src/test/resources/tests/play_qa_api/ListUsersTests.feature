@@ -1,8 +1,8 @@
 #language: en
-@AllTests @Users @CRUD @ListUsers
+@AllTests @Users @CRUD @ListUsers @allure.label.feature=Users @allure.label.story=List_Users
 Feature: GET /api/v1/users/list
 
-  @Run @Smoke
+  @Run @Smoke @allure.label.severity=critical
   Scenario: Get users list returns 200 with pagination fields
     When Get users list and save response as "listResp"
     Then Get and check status code 200 from "listResp"

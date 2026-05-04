@@ -1,10 +1,10 @@
 #language: en
-@AllTests @Auth @Login
+@AllTests @Auth @Login @allure.label.feature=Auth @allure.label.story=Login
 Feature: POST /api/v1/login
 
   # ─────────────────── POSITIVE ───────────────────
 
-  @Run @Smoke
+  @Run @Smoke @allure.label.severity=critical
   Scenario: Login with valid credentials returns 200 and token
     Given Create minimal user and save response as "createResp"
     And Get and check status code 201 from "createResp"

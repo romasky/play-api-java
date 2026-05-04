@@ -1,8 +1,8 @@
 #language: en
-@AllTests @Users @CRUD @GetUser
+@AllTests @Users @CRUD @GetUser @allure.label.feature=Users @allure.label.story=Get_User
 Feature: GET /api/v1/users/get/:id
 
-  @Run @Smoke
+  @Run @Smoke @allure.label.severity=critical
   Scenario: Get user by ID returns 200 with expected fields
     When Create minimal user and save response as "createResp"
     Then Get and check status code 201 from "createResp"

@@ -1,15 +1,15 @@
 #language: en
-@AllTests @Health
+@AllTests @Health @allure.label.feature=Health @allure.label.story=Availability
 Feature: GET /api/v1/health
 
-  @Run @Smoke
+  @Run @Smoke @allure.label.severity=critical
   Scenario: Health endpoint returns 200 with status ok and timestamp
     When Get health and save response as "response"
     Then Get and check status code 200 from "response"
     And Convert health response "response" to HealthResp and save as "health"
     And Assert health status is ok in "health"
 
-  @Run @Smoke
+  @Run @Smoke @allure.label.severity=critical
   Scenario: Health response includes X-Request-ID header auto-generated
     When Get health and save response as "response"
     Then Get and check status code 200 from "response"

@@ -7,6 +7,7 @@ import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.qameta.allure.Allure;
 import io.qameta.allure.Step;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Assertions;
@@ -107,9 +108,11 @@ public class MailSteps {
     // ── Get mailbox ──────────────────────────────────────────────────
 
     @When("Get mailbox by token {string} and save response as {string}")
-    @Step("GET /mail/{tokenVar}")
+    @Step("GET /mail/:token")
     public void getMailbox(String tokenVar, String varName) {
-        ctx.save(varName, rest.get(ApiPaths.mailGet(ctx.str(tokenVar))));
+        String token = ctx.str(tokenVar);
+        Allure.parameter("token", token);
+        ctx.save(varName, rest.get(ApiPaths.mailGet(token)));
     }
 
     @Then("Convert get mailbox response {string} to CreateMailboxResp and save as {string}")
@@ -126,9 +129,11 @@ public class MailSteps {
     // ── Get messages ─────────────────────────────────────────────────
 
     @When("Get messages for mailbox {string} and save response as {string}")
-    @Step("GET /mail/{tokenVar}/messages")
+    @Step("GET /mail/:token/messages")
     public void getMessages(String tokenVar, String varName) {
-        ctx.save(varName, rest.get(ApiPaths.mailMessages(ctx.str(tokenVar))));
+        String token = ctx.str(tokenVar);
+        Allure.parameter("token", token);
+        ctx.save(varName, rest.get(ApiPaths.mailMessages(token)));
     }
 
     @Then("Convert messages list response {string} to MessagesListResp and save as {string}")
@@ -176,9 +181,13 @@ public class MailSteps {
     // ── Get single message ───────────────────────────────────────────
 
     @When("Get message {string} from mailbox {string} and save response as {string}")
-    @Step("GET /mail/{tokenVar}/messages/{msgIdVar}")
+    @Step("GET /mail/:token/messages/:id")
     public void getMessage(String msgIdVar, String tokenVar, String varName) {
-        ctx.save(varName, rest.get(ApiPaths.mailMessage(ctx.str(tokenVar), ctx.str(msgIdVar))));
+        String token = ctx.str(tokenVar);
+        String msgId = ctx.str(msgIdVar);
+        Allure.parameter("token", token);
+        Allure.parameter("messageId", msgId);
+        ctx.save(varName, rest.get(ApiPaths.mailMessage(token, msgId)));
     }
 
     @Then("Convert message response {string} to MessageResp and save as {string}")
@@ -208,8 +217,10 @@ public class MailSteps {
     // ── Send message ─────────────────────────────────────────────────
 
     @When("Send message to mailbox {string} from {string} subject {string} body {string} and save response as {string}")
-    @Step("POST /mail/{tokenVar}/send")
+    @Step("POST /mail/:token/send")
     public void sendMessage(String tokenVar, String fromVar, String subjectVar, String bodyVar, String varName) {
+        Allure.parameter("from", ctx.str(fromVar));
+        Allure.parameter("subject", ctx.str(subjectVar));
         ctx.save(varName, rest.post(ApiPaths.mailSend(ctx.str(tokenVar)),
                 SendMessageReq.builder()
                         .from(ctx.str(fromVar))
@@ -219,7 +230,7 @@ public class MailSteps {
     }
 
     @When("Send message with html to mailbox {string} from {string} subject {string} body {string} htmlBody {string} and save response as {string}")
-    @Step("POST /mail/{tokenVar}/send (with HTML)")
+    @Step("POST /mail/:token/send (with HTML)")
     public void sendMessageWithHtml(String tokenVar, String fromVar, String subjectVar,
                                     String bodyVar, String htmlBodyVar, String varName) {
         ctx.save(varName, rest.post(ApiPaths.mailSend(ctx.str(tokenVar)),
@@ -232,8 +243,9 @@ public class MailSteps {
     }
 
     @When("Send message with missing field {string} to mailbox {string} and save response as {string}")
-    @Step("POST /mail/{tokenVar}/send missing {missingField}")
+    @Step("POST /mail/:token/send (missing field)")
     public void sendMessageMissingField(String missingField, String tokenVar, String varName) {
+        Allure.parameter("missingField", missingField);
         SendMessageReq.SendMessageReqBuilder req = SendMessageReq.builder();
         if (!missingField.equals("from"))    req.from("sender@test.com");
         if (!missingField.equals("subject")) req.subject("Test Subject");
@@ -254,8 +266,10 @@ public class MailSteps {
     // ── Delete mailbox ───────────────────────────────────────────────
 
     @When("Delete mailbox {string} and save response as {string}")
-    @Step("DELETE /mail/{tokenVar}")
+    @Step("DELETE /mail/:token")
     public void deleteMailbox(String tokenVar, String varName) {
-        ctx.save(varName, rest.delete(ApiPaths.mailDelete(ctx.str(tokenVar))));
+        String token = ctx.str(tokenVar);
+        Allure.parameter("token", token);
+        ctx.save(varName, rest.delete(ApiPaths.mailDelete(token)));
     }
 }

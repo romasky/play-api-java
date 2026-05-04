@@ -1,8 +1,8 @@
 #language: en
-@AllTests @Users @CRUD @DeleteUser
+@AllTests @Users @CRUD @DeleteUser @allure.label.feature=Users @allure.label.story=Delete_User
 Feature: DELETE /api/v1/users/delete/:id
 
-  @Run @Smoke
+  @Run @Smoke @allure.label.severity=critical
   Scenario: Delete user with valid token returns 204 and subsequent GET returns 404
     When Create minimal user and save response as "createResp"
     Then Get and check status code 201 from "createResp"

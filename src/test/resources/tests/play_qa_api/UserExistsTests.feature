@@ -1,8 +1,8 @@
 #language: en
-@AllTests @Users @CRUD @UserExists
+@AllTests @Users @CRUD @UserExists @allure.label.feature=Users @allure.label.story=User_Exists
 Feature: HEAD /api/v1/users/exists/:id
 
-  @Run @Smoke
+  @Run @Smoke @allure.label.severity=critical
   Scenario: HEAD existing user returns 200 with X-User-Exists true
     When Create minimal user and save response as "createResp"
     Then Get and check status code 201 from "createResp"

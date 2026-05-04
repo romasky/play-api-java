@@ -1,8 +1,8 @@
 #language: en
-@AllTests @Users @CRUD @PatchUser
+@AllTests @Users @CRUD @PatchUser @allure.label.feature=Users @allure.label.story=Patch_User
 Feature: PATCH /api/v1/users/patch/:id
 
-  @Run @Smoke
+  @Run @Smoke @allure.label.severity=critical
   Scenario: Partial update firstName returns 200
     When Create minimal user and save response as "createResp"
     Then Get and check status code 201 from "createResp"
