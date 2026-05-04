@@ -29,89 +29,89 @@ public class CommonSteps {
     // ── Data generation ──────────────────────────────────────────────
 
     @Given("Save string {string} as {string}")
-    public void saveString(String value, String saveAs) {
-        ctx.save(saveAs, value);
+    public void saveString(String value, String contextKey) {
+        ctx.save(contextKey, value);
     }
 
     @Given("Generate email and save as {string}")
-    public void generateEmail(String saveAs) {
-        ctx.save(saveAs, Generator.email());
+    public void generateEmail(String generatedEmail) {
+        ctx.save(generatedEmail, Generator.email());
     }
 
     @Given("Generate username and save as {string}")
-    public void generateUsername(String saveAs) {
-        ctx.save(saveAs, Generator.username());
+    public void generateUsername(String generatedUsername) {
+        ctx.save(generatedUsername, Generator.username());
     }
 
     @Given("Generate password and save as {string}")
-    public void generatePassword(String saveAs) {
-        ctx.save(saveAs, Generator.password());
+    public void generatePassword(String generatedPassword) {
+        ctx.save(generatedPassword, Generator.password());
     }
 
     @Given("Generate first name and save as {string}")
-    public void generateFirstName(String saveAs) {
-        ctx.save(saveAs, Generator.firstName());
+    public void generateFirstName(String generatedFirstName) {
+        ctx.save(generatedFirstName, Generator.firstName());
     }
 
     @Given("Generate last name and save as {string}")
-    public void generateLastName(String saveAs) {
-        ctx.save(saveAs, Generator.lastName());
+    public void generateLastName(String generatedLastName) {
+        ctx.save(generatedLastName, Generator.lastName());
     }
 
     @Given("Generate sender email and save as {string}")
-    public void generateSenderEmail(String saveAs) {
-        ctx.save(saveAs, Generator.senderEmail());
+    public void generateSenderEmail(String generatedSenderEmail) {
+        ctx.save(generatedSenderEmail, Generator.senderEmail());
     }
 
     @Given("Generate message subject and save as {string}")
-    public void generateMessageSubject(String saveAs) {
-        ctx.save(saveAs, Generator.messageSubject());
+    public void generateMessageSubject(String generatedSubject) {
+        ctx.save(generatedSubject, Generator.messageSubject());
     }
 
     @Given("Generate message body and save as {string}")
-    public void generateMessageBody(String saveAs) {
-        ctx.save(saveAs, Generator.messageBody());
+    public void generateMessageBody(String generatedBody) {
+        ctx.save(generatedBody, Generator.messageBody());
     }
 
     @Given("Generate invalid email and save as {string}")
-    public void generateInvalidEmail(String saveAs) {
-        ctx.save(saveAs, Generator.invalidEmail());
+    public void generateInvalidEmail(String generatedInvalidEmail) {
+        ctx.save(generatedInvalidEmail, Generator.invalidEmail());
     }
 
     @Given("Generate short password and save as {string}")
-    public void generateShortPassword(String saveAs) {
-        ctx.save(saveAs, Generator.shortPassword());
+    public void generateShortPassword(String generatedShortPassword) {
+        ctx.save(generatedShortPassword, Generator.shortPassword());
     }
 
     @Given("Generate fake mongo id and save as {string}")
-    public void generateFakeMongoId(String saveAs) {
-        ctx.save(saveAs, Generator.fakeMongoId());
+    public void generateFakeMongoId(String generatedMongoId) {
+        ctx.save(generatedMongoId, Generator.fakeMongoId());
     }
 
     @Given("Generate fake uuid and save as {string}")
-    public void generateFakeUuid(String saveAs) {
-        ctx.save(saveAs, Generator.fakeUuid());
+    public void generateFakeUuid(String generatedUuid) {
+        ctx.save(generatedUuid, Generator.fakeUuid());
     }
 
     @Given("Generate phone number and save as {string}")
-    public void generatePhoneNumber(String saveAs) {
-        ctx.save(saveAs, Generator.phoneNumber());
+    public void generatePhoneNumber(String generatedPhone) {
+        ctx.save(generatedPhone, Generator.phoneNumber());
     }
 
     @Given("Generate string length {int} latin {string} numeric {string} and save as {string}")
-    public void generateString(int length, String latin, String numeric, String saveAs) {
-        ctx.save(saveAs, Generator.string(length, false,
+    public void generateString(int length, String latin, String numeric, String generatedString) {
+        ctx.save(generatedString, Generator.string(length, false,
                 Boolean.parseBoolean(latin), Boolean.parseBoolean(numeric), false, false));
     }
 
     @Given("Generate string of length {int} and save as {string}")
-    public void generateStringOfLength(int length, String saveAs) {
-        ctx.save(saveAs, Generator.alphanumericString(length));
+    public void generateStringOfLength(int length, String generatedString) {
+        ctx.save(generatedString, Generator.alphanumericString(length));
     }
 
     @Given("Get current date and save as {string}")
-    public void saveCurrentDate(String saveAs) {
-        ctx.save(saveAs, new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+    public void saveCurrentDate(String currentDate) {
+        ctx.save(currentDate, new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
     }
 
     // ── Status code assertions ────────────────────────────────────────
