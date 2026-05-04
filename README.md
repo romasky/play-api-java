@@ -45,7 +45,6 @@ src/test/
 │   │   ├── ApiPaths.java               # All API endpoint paths
 │   │   ├── Constants.java              # Shared constants (enums, timeouts)
 │   │   └── models/
-│   │       ├── basicauth/              # BasicAuthResp, BasicAuthErrorResp
 │   │       ├── createUser/             # Request DTOs: CreateUserReq, ProfileReq, ...
 │   │       │   └── response/           # Response DTOs: CreateUserResp, UserResp, ...
 │   │       ├── error/                  # ErrorResp, ErrorDetailResp, ValidationErrorResp
@@ -57,7 +56,6 @@ src/test/
 │       ├── ScenarioContext.java        # Global and local scenario variable storage
 │       ├── BaseSteps.java              # Shared context helpers (save/get/assert)
 │       ├── AccountsSteps.java          # User & auth step definitions
-│       ├── BasicAuthSteps.java         # Basic auth step definitions
 │       ├── CommonSteps.java            # Generic reusable steps (generate data, assert)
 │       ├── HealthSteps.java            # Health endpoint step definitions
 │       ├── MailSteps.java              # Mail API step definitions
@@ -67,13 +65,18 @@ src/test/
     ├── cucumber.properties             # Cucumber publish settings
     ├── junit-platform.properties       # Cucumber plugin and glue config
     └── tests/play_qa_api/
-        ├── BasicAuthTests.feature      # GET /auth/basic scenarios
         ├── CreateUserTests.feature     # POST /users/create scenarios
+        ├── DeleteUserTests.feature     # DELETE /users/delete/:id scenarios
+        ├── GetUserTests.feature        # GET /users/get/:id scenarios
         ├── HealthTests.feature         # GET /health scenarios
+        ├── ListUsersTests.feature      # GET /users/list scenarios
         ├── LoginTests.feature          # POST /login scenarios
+        ├── LogoutTests.feature         # POST /users/logout/:id scenarios
         ├── MailTests.feature           # Mail API scenarios
         ├── OptionsTests.feature        # OPTIONS /users/options scenarios
-        └── UserCrudTests.feature       # GET/PUT/PATCH/DELETE/HEAD scenarios
+        ├── PatchUserTests.feature      # PATCH /users/patch/:id scenarios
+        ├── UpdateUserTests.feature     # PUT /users/update/:id scenarios
+        └── UserExistsTests.feature     # HEAD /users/exists/:id scenarios
 ```
 
 ---
@@ -190,6 +193,5 @@ Allure results and Cucumber HTML reports are uploaded as build artifacts after e
 | `/api/v1/users/delete/:id` | DELETE | ✅ Tested |
 | `/api/v1/users/logout/:id` | POST | ✅ Tested |
 | `/api/v1/health` | GET | ✅ Tested |
-| `/api/v1/auth/basic` | GET | ✅ Tested |
 | `/api/v1/users/options` | OPTIONS | ✅ Tested |
 | `/api/v1/mail/*` | various | ✅ Tested |

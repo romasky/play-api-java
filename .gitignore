@@ -35,4 +35,4 @@ logs/
 src/test/resources/config.local.properties
 
 # Task documentation (internal, not for repo)
-docs/
+docs/task*.md

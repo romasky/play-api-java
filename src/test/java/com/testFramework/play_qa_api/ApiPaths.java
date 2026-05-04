@@ -6,7 +6,6 @@ public class ApiPaths {
 
     public static final String HEALTH         = BASE + "/health";
     public static final String LOGIN          = BASE + "/login";
-    public static final String AUTH_BASIC     = BASE + "/auth/basic";
     public static final String VERIFY_RECAPTCHA = BASE + "/verify-recaptcha";
 
     public static final String USERS_CREATE   = BASE + "/users/create";
