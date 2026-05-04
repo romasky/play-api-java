@@ -29,7 +29,13 @@ public class AccountsSteps {
     @Before
     public void before(Scenario scenario) { ctx.before(scenario); }
 
-    // API allows 5 login attempts per minute — pace login scenarios to avoid 429.
+    // Nginx create_user zone: 30r/min, burst=10. Pace to stay within the window.
+    @Before("@Users")
+    public void paceCreateUserScenarios() throws InterruptedException {
+        Thread.sleep(2_000);
+    }
+
+    // Go LoginRateLimiter: 5r/min. Pace login scenarios to avoid 429.
     @Before("@Login")
     public void paceLoginScenarios() throws InterruptedException {
         Thread.sleep(13_000);
