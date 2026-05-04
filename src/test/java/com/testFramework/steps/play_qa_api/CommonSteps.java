@@ -6,6 +6,7 @@ import io.cucumber.java.Scenario;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.qameta.allure.Allure;
 import io.qameta.allure.Step;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Assertions;
@@ -28,105 +29,106 @@ public class CommonSteps {
     // ── Data generation ──────────────────────────────────────────────
 
     @Given("Save string {string} as {string}")
-    public void saveString(String value, String varName) {
-        ctx.save(varName, value);
+    public void saveString(String value, String saveAs) {
+        ctx.save(saveAs, value);
     }
 
     @Given("Generate email and save as {string}")
-    public void generateEmail(String varName) {
-        ctx.save(varName, Generator.email());
+    public void generateEmail(String saveAs) {
+        ctx.save(saveAs, Generator.email());
     }
 
     @Given("Generate username and save as {string}")
-    public void generateUsername(String varName) {
-        ctx.save(varName, Generator.username());
+    public void generateUsername(String saveAs) {
+        ctx.save(saveAs, Generator.username());
     }
 
     @Given("Generate password and save as {string}")
-    public void generatePassword(String varName) {
-        ctx.save(varName, Generator.password());
+    public void generatePassword(String saveAs) {
+        ctx.save(saveAs, Generator.password());
     }
 
     @Given("Generate first name and save as {string}")
-    public void generateFirstName(String varName) {
-        ctx.save(varName, Generator.firstName());
+    public void generateFirstName(String saveAs) {
+        ctx.save(saveAs, Generator.firstName());
     }
 
     @Given("Generate last name and save as {string}")
-    public void generateLastName(String varName) {
-        ctx.save(varName, Generator.lastName());
+    public void generateLastName(String saveAs) {
+        ctx.save(saveAs, Generator.lastName());
     }
 
     @Given("Generate sender email and save as {string}")
-    public void generateSenderEmail(String varName) {
-        ctx.save(varName, Generator.senderEmail());
+    public void generateSenderEmail(String saveAs) {
+        ctx.save(saveAs, Generator.senderEmail());
     }
 
     @Given("Generate message subject and save as {string}")
-    public void generateMessageSubject(String varName) {
-        ctx.save(varName, Generator.messageSubject());
+    public void generateMessageSubject(String saveAs) {
+        ctx.save(saveAs, Generator.messageSubject());
     }
 
     @Given("Generate message body and save as {string}")
-    public void generateMessageBody(String varName) {
-        ctx.save(varName, Generator.messageBody());
+    public void generateMessageBody(String saveAs) {
+        ctx.save(saveAs, Generator.messageBody());
     }
 
     @Given("Generate invalid email and save as {string}")
-    public void generateInvalidEmail(String varName) {
-        ctx.save(varName, Generator.invalidEmail());
+    public void generateInvalidEmail(String saveAs) {
+        ctx.save(saveAs, Generator.invalidEmail());
     }
 
     @Given("Generate short password and save as {string}")
-    public void generateShortPassword(String varName) {
-        ctx.save(varName, Generator.shortPassword());
+    public void generateShortPassword(String saveAs) {
+        ctx.save(saveAs, Generator.shortPassword());
     }
 
     @Given("Generate fake mongo id and save as {string}")
-    public void generateFakeMongoId(String varName) {
-        ctx.save(varName, Generator.fakeMongoId());
+    public void generateFakeMongoId(String saveAs) {
+        ctx.save(saveAs, Generator.fakeMongoId());
     }
 
     @Given("Generate fake uuid and save as {string}")
-    public void generateFakeUuid(String varName) {
-        ctx.save(varName, Generator.fakeUuid());
+    public void generateFakeUuid(String saveAs) {
+        ctx.save(saveAs, Generator.fakeUuid());
     }
 
     @Given("Generate phone number and save as {string}")
-    public void generatePhoneNumber(String varName) {
-        ctx.save(varName, Generator.phoneNumber());
+    public void generatePhoneNumber(String saveAs) {
+        ctx.save(saveAs, Generator.phoneNumber());
     }
 
     @Given("Generate string length {int} latin {string} numeric {string} and save as {string}")
-    public void generateString(int length, String latin, String numeric, String varName) {
-        ctx.save(varName, Generator.string(length, false,
+    public void generateString(int length, String latin, String numeric, String saveAs) {
+        ctx.save(saveAs, Generator.string(length, false,
                 Boolean.parseBoolean(latin), Boolean.parseBoolean(numeric), false, false));
     }
 
     @Given("Generate string of length {int} and save as {string}")
-    public void generateStringOfLength(int length, String varName) {
-        ctx.save(varName, Generator.alphanumericString(length));
+    public void generateStringOfLength(int length, String saveAs) {
+        ctx.save(saveAs, Generator.alphanumericString(length));
     }
 
     @Given("Get current date and save as {string}")
-    public void saveCurrentDate(String varName) {
-        ctx.save(varName, new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+    public void saveCurrentDate(String saveAs) {
+        ctx.save(saveAs, new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
     }
 
     // ── Status code assertions ────────────────────────────────────────
 
     @When("Get and check status code {int} from {string}")
-    @Step("Assert status {expectedCode} from '{varName}'")
-    public void assertStatusCode(int expectedCode, String varName) {
-        ctx.assertStatusCode(expectedCode, varName);
+    @Step("Assert status {expectedCode}")
+    public void assertStatusCode(int expectedCode, String responseVar) {
+        Allure.parameter("response", responseVar);
+        ctx.assertStatusCode(expectedCode, responseVar);
     }
 
     // ── Response header assertions ────────────────────────────────────
 
     @Then("Assert response header {string} equals {string} in {string}")
     @Step("Assert header '{header}' = '{expected}'")
-    public void assertHeaderEquals(String header, String expected, String varName) {
-        Response response = (Response) ctx.get(varName, true);
+    public void assertHeaderEquals(String header, String expected, String responseVar) {
+        Response response = (Response) ctx.get(responseVar, true);
         String actual = response.getHeader(header);
         Assertions.assertEquals(expected, actual,
                 "Header '" + header + "' mismatch. Response: " + response.asString());
@@ -134,8 +136,8 @@ public class CommonSteps {
 
     @Then("Assert response header {string} contains {string} in {string}")
     @Step("Assert header '{header}' contains '{expected}'")
-    public void assertHeaderContains(String header, String expected, String varName) {
-        Response response = (Response) ctx.get(varName, true);
+    public void assertHeaderContains(String header, String expected, String responseVar) {
+        Response response = (Response) ctx.get(responseVar, true);
         String actual = response.getHeader(header);
         Assertions.assertNotNull(actual, "Header '" + header + "' is missing");
         Assertions.assertTrue(actual.contains(expected),
@@ -144,8 +146,8 @@ public class CommonSteps {
 
     @Then("Assert response header {string} is present in {string}")
     @Step("Assert header '{header}' is present")
-    public void assertHeaderPresent(String header, String varName) {
-        Response response = (Response) ctx.get(varName, true);
+    public void assertHeaderPresent(String header, String responseVar) {
+        Response response = (Response) ctx.get(responseVar, true);
         String actual = response.getHeader(header);
         Assertions.assertNotNull(actual, "Header '" + header + "' is missing in response");
         Assertions.assertFalse(actual.isBlank(), "Header '" + header + "' is blank");
@@ -155,55 +157,56 @@ public class CommonSteps {
 
     @Then("Assert response body contains {string} in {string}")
     @Step("Assert body contains '{expected}'")
-    public void assertBodyContains(String expected, String varName) {
-        // Resolve the expected value from context if it was saved as a variable
+    public void assertBodyContains(String expected, String responseVar) {
         String resolved = ctx.str(expected);
-        Response response = (Response) ctx.get(varName, true);
+        Allure.parameter("value", resolved);
+        Response response = (Response) ctx.get(responseVar, true);
         Assertions.assertTrue(response.asString().contains(resolved),
                 "Body does not contain '" + resolved + "'. Body: " + response.asString());
     }
 
     @Then("Assert response body does not contain {string} in {string}")
     @Step("Assert body does NOT contain '{unexpected}'")
-    public void assertBodyNotContains(String unexpected, String varName) {
-        Response response = (Response) ctx.get(varName, true);
+    public void assertBodyNotContains(String unexpected, String responseVar) {
+        Response response = (Response) ctx.get(responseVar, true);
         Assertions.assertFalse(response.asString().contains(unexpected),
                 "Body should NOT contain '" + unexpected + "'. Body: " + response.asString());
     }
 
     @Then("Assert {string} not null")
-    public void assertNotNull(String varName) {
-        Object value = ctx.get(varName, true);
-        Assertions.assertNotNull(value, varName + " should not be null");
+    public void assertNotNull(String contextKey) {
+        Object value = ctx.get(contextKey, true);
+        Assertions.assertNotNull(value, contextKey + " should not be null");
         Assertions.assertNotEquals("null", String.valueOf(value));
     }
 
     @Then("Assert {string} equals {string}")
-    public void assertEquals(String varName, String expected) {
-        Assertions.assertEquals(expected, ctx.str(varName));
+    public void assertEquals(String contextKey, String expected) {
+        Assertions.assertEquals(expected, ctx.str(contextKey));
     }
 
     @Then("Assert {string} contains {string}")
-    public void assertContains(String varName, String expected) {
-        Assertions.assertTrue(ctx.str(varName).contains(expected),
-                "'" + ctx.str(varName) + "' does not contain '" + expected + "'");
+    public void assertContains(String contextKey, String expected) {
+        Assertions.assertTrue(ctx.str(contextKey).contains(expected),
+                "'" + ctx.str(contextKey) + "' does not contain '" + expected + "'");
     }
 
     @Then("Assert {string} matches regex {string}")
-    @Step("Assert '{varName}' matches regex")
-    public void assertMatchesRegex(String varName, String regex) {
-        String value = ctx.str(varName);
+    @Step("Assert value matches regex '{regex}'")
+    public void assertMatchesRegex(String contextKey, String regex) {
+        String value = ctx.str(contextKey);
+        Allure.parameter("value", value);
         Assertions.assertTrue(value.matches(regex),
                 "'" + value + "' does not match regex '" + regex + "'");
     }
 
     @Then("Print response {string}")
-    public void printResponse(String varName) {
-        Object value = ctx.get(varName, true);
+    public void printResponse(String responseVar) {
+        Object value = ctx.get(responseVar, true);
         if (value instanceof Response r) {
-            System.out.printf("%n[%s] HTTP %d%n%s%n%n", varName, r.getStatusCode(), r.asString());
+            System.out.printf("%n[%s] HTTP %d%n%s%n%n", responseVar, r.getStatusCode(), r.asString());
         } else {
-            System.out.printf("%n[%s] = %s%n%n", varName, value);
+            System.out.printf("%n[%s] = %s%n%n", responseVar, value);
         }
     }
 }
