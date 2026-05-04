@@ -2,6 +2,8 @@
 
 > **API Test Automation Framework** for [play-qa.com](https://www.play-qa.com) — built with Java 17, Rest Assured, Cucumber 7 (BDD), JUnit 5, Allure Reporting, and Lombok.
 
+**[Allure Report →](https://romasky.github.io/play-api-java/latest/)**
+
 ---
 
 ## Features
