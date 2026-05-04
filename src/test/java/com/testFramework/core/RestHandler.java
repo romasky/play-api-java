@@ -83,9 +83,7 @@ public class RestHandler {
 
     @Step("HEAD {path}")
     public Response head(String path) {
-        Response r = given().head(path).then().extract().response();
-        Allure.parameter("status", r.getStatusCode());
-        return r;
+        return given().head(path).then().extract().response();
     }
 
     @Step("OPTIONS {path}")
@@ -98,7 +96,6 @@ public class RestHandler {
     private static void attachResponse(Response r) {
         int status = r.getStatusCode();
         String body = r.getBody().asPrettyString();
-        Allure.parameter("status", status);
         if (!body.isBlank()) {
             Allure.addAttachment("Response " + status, "application/json", body, ".json");
         }
