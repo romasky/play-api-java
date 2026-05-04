@@ -10,20 +10,9 @@ public class ApiPaths {
 
     public static final String USERS_CREATE   = BASE + "/users/create";
     public static final String USERS_LIST     = BASE + "/users/list";
-    public static final String USERS_GET      = BASE + "/users/get/{id}";
-    public static final String USERS_EXISTS   = BASE + "/users/exists/{id}";
     public static final String USERS_OPTIONS  = BASE + "/users/options";
-    public static final String USERS_UPDATE   = BASE + "/users/update/{id}";
-    public static final String USERS_PATCH    = BASE + "/users/patch/{id}";
-    public static final String USERS_DELETE   = BASE + "/users/delete/{id}";
-    public static final String USERS_LOGOUT   = BASE + "/users/logout/{id}";
 
     public static final String MAIL_CREATE    = BASE + "/mail/create";
-    public static final String MAIL_GET       = BASE + "/mail/{token}";
-    public static final String MAIL_MESSAGES  = BASE + "/mail/{token}/messages";
-    public static final String MAIL_MESSAGE   = BASE + "/mail/{token}/messages/{id}";
-    public static final String MAIL_SEND      = BASE + "/mail/{token}/send";
-    public static final String MAIL_DELETE    = BASE + "/mail/{token}";
 
     public static String usersGet(String id)    { return BASE + "/users/get/" + id; }
     public static String usersExists(String id) { return BASE + "/users/exists/" + id; }
