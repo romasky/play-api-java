@@ -34,5 +34,5 @@ logs/
 # Sensitive config (never commit real creds)
 src/test/resources/config.local.properties
 
-# Task documentation (internal, not for repo)
-docs/task*.md
+# Internal documentation (not for repo)
+docs/
