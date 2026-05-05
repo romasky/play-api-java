@@ -122,7 +122,6 @@ public class CommonSteps {
     // ── Response header assertions ────────────────────────────────────
 
     @Then("Assert response header {string} equals {string} in {string}")
-    @Step("Assert header '{header}' = '{expected}'")
     public void assertHeaderEquals(String header, String expected, String responseVar) {
         Response response = (Response) ctx.get(responseVar, true);
         String actual = response.getHeader(header);
@@ -131,7 +130,6 @@ public class CommonSteps {
     }
 
     @Then("Assert response header {string} contains {string} in {string}")
-    @Step("Assert header '{header}' contains '{expected}'")
     public void assertHeaderContains(String header, String expected, String responseVar) {
         Response response = (Response) ctx.get(responseVar, true);
         String actual = response.getHeader(header);
@@ -141,7 +139,6 @@ public class CommonSteps {
     }
 
     @Then("Assert response header {string} is present in {string}")
-    @Step("Assert header '{header}' is present")
     public void assertHeaderPresent(String header, String responseVar) {
         Response response = (Response) ctx.get(responseVar, true);
         String actual = response.getHeader(header);
@@ -160,7 +157,6 @@ public class CommonSteps {
     }
 
     @Then("Assert response body does not contain {string} in {string}")
-    @Step("Assert body does NOT contain '{unexpected}'")
     public void assertBodyNotContains(String unexpected, String responseVar) {
         Response response = (Response) ctx.get(responseVar, true);
         Assertions.assertFalse(response.asString().contains(unexpected),
