@@ -1,5 +1,5 @@
 #language: en
-@AllTests @Auth @Login @allure.label.feature:Auth @allure.label.story:Login
+@AllTests @Auth @Login @allure.label.suite:Authentication @allure.label.feature:Auth @allure.label.story:Login
 Feature: POST /api/v1/login
 
   # ─────────────────── POSITIVE ───────────────────

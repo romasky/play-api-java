@@ -1,5 +1,5 @@
 #language: en
-@AllTests @Users @CRUD @Logout @allure.label.feature:Auth @allure.label.story:Logout
+@AllTests @Users @CRUD @Logout @allure.label.suite:Authentication @allure.label.feature:Auth @allure.label.story:Logout
 Feature: POST /api/v1/users/logout/:id
 
   @Run @Smoke @allure.label.severity:critical

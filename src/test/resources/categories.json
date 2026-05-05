@@ -1,26 +1,20 @@
 [
   {
-    "name": "Product Defects",
+    "name": "API Defects",
+    "description": "API returned an unexpected response — wrong status code, error code, or missing field",
     "matchedStatuses": ["failed"],
-    "messageRegex": ".*AssertionError.*|.*expected.*but was.*|.*Expected.*"
+    "messageRegex": ".*AssertionError.*|.*expected.*but was.*|.*Expected.*|.*should.*|.*mismatch.*"
   },
   {
-    "name": "Test Defects",
+    "name": "Test Infrastructure Errors",
+    "description": "Test framework or environment failure — not caused by the API under test",
     "matchedStatuses": ["broken"],
-    "messageRegex": ".*NullPointerException.*|.*ClassCastException.*|.*Context variable.*not found.*"
+    "messageRegex": ".*"
   },
   {
-    "name": "Rate Limit Errors",
+    "name": "Network & Connectivity Issues",
+    "description": "Test could not reach the API — connection refused, timeout, or DNS failure",
     "matchedStatuses": ["broken", "failed"],
-    "messageRegex": ".*429.*|.*RATE_LIMIT_EXCEEDED.*|.*Too Many Requests.*"
-  },
-  {
-    "name": "Infrastructure Problems",
-    "matchedStatuses": ["broken"],
-    "messageRegex": ".*Connection.*refused.*|.*SocketTimeout.*|.*ConnectException.*|.*UnknownHost.*"
-  },
-  {
-    "name": "Skipped Tests",
-    "matchedStatuses": ["skipped"]
+    "messageRegex": ".*Connection.*refused.*|.*SocketTimeout.*|.*ConnectException.*|.*UnknownHost.*|.*Read timed out.*|.*429.*|.*RATE_LIMIT_EXCEEDED.*"
   }
 ]

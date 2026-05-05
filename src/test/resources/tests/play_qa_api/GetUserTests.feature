@@ -1,5 +1,5 @@
 #language: en
-@AllTests @Users @CRUD @GetUser @allure.label.feature:Users @allure.label.story:Get_User
+@AllTests @Users @CRUD @GetUser @allure.label.suite:User Management @allure.label.feature:Users @allure.label.story:Get_User
 Feature: GET /api/v1/users/get/:id
 
   @Run @Smoke @allure.label.severity:critical

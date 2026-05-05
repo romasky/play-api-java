@@ -1,5 +1,5 @@
 #language: en
-@AllTests @Users @CRUD @PatchUser @allure.label.feature:Users @allure.label.story:Patch_User
+@AllTests @Users @CRUD @PatchUser @allure.label.suite:User Management @allure.label.feature:Users @allure.label.story:Patch_User
 Feature: PATCH /api/v1/users/patch/:id
 
   @Run @Smoke @allure.label.severity:critical

@@ -1,5 +1,5 @@
 #language: en
-@AllTests @Mail @allure.label.feature:Mail @allure.label.story:Mailbox
+@AllTests @Mail @allure.label.suite:Mail Service @allure.label.feature:Mail @allure.label.story:Mailbox
 Feature: Mail API — /api/v1/mail/*
 
   # ════════════════════ CREATE MAILBOX ════════════════════
