@@ -1,8 +1,8 @@
 #language: en
-@AllTests @Users @CRUD @PatchUser @allure.label.suite:User_Management @allure.label.feature:Users @allure.label.story:Patch_User
+@allure.label.suite:User_Management @allure.label.feature:Users @allure.label.story:Patch_User
 Feature: PATCH /api/v1/users/patch/:id
 
-  @Run @Smoke @allure.label.severity:critical
+  @Run @Smoke @Positive @allure.label.severity:critical
   Scenario: Partial update firstName returns 200
     When Create minimal user and save response as "createResp"
     Then Get and check status code 201 from "createResp"
@@ -14,7 +14,7 @@ Feature: PATCH /api/v1/users/patch/:id
     Then Get and check status code 200 from "patchResp"
     And Assert response body does not contain "\"access_token\"" in "patchResp"
 
-  @Run
+  @Run @Positive
   Scenario: Patch only email — other fields remain unchanged
     When Create minimal user and save response as "createResp"
     Then Get and check status code 201 from "createResp"
@@ -26,7 +26,7 @@ Feature: PATCH /api/v1/users/patch/:id
     Then Get and check status code 200 from "patchResp"
     And Assert response body contains "newEmail" in "patchResp"
 
-  @Run
+  @Run @Positive
   Scenario: Patch only username returns 200
     When Create minimal user and save response as "createResp"
     Then Get and check status code 201 from "createResp"
@@ -37,7 +37,7 @@ Feature: PATCH /api/v1/users/patch/:id
     When Patch user "userId" token "token" username "newUsername" and save response as "patchResp"
     Then Get and check status code 200 from "patchResp"
 
-  @Run
+  @Run @Positive
   Scenario: Patch with empty body returns 200 with no changes
     When Create minimal user and save response as "createResp"
     Then Get and check status code 201 from "createResp"
@@ -47,7 +47,7 @@ Feature: PATCH /api/v1/users/patch/:id
     When Patch user "userId" with empty body token "token" and save response as "patchResp"
     Then Get and check status code 200 from "patchResp"
 
-  @Run
+  @Run @Negative
   Scenario: Patch with no auth header returns 401 MISSING_TOKEN
     When Create minimal user and save response as "createResp"
     Then Get and check status code 201 from "createResp"
@@ -58,7 +58,7 @@ Feature: PATCH /api/v1/users/patch/:id
     And Convert error response "patchResp" to ErrorResp and save as "error"
     And Assert error code is "MISSING_TOKEN" in "error"
 
-  @Run
+  @Run @Negative
   Scenario: Patch with another user token returns 401 INVALID_TOKEN
     When Create minimal user and save response as "userAResp"
     Then Get and check status code 201 from "userAResp"
@@ -74,7 +74,7 @@ Feature: PATCH /api/v1/users/patch/:id
     And Convert error response "patchResp" to ErrorResp and save as "error"
     And Assert error code is "INVALID_TOKEN" in "error"
 
-  @Run
+  @Run @Flow
   Scenario: Patch after logout returns 401 INVALID_TOKEN
     When Create minimal user and save response as "createResp"
     Then Get and check status code 201 from "createResp"

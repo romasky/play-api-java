@@ -1,8 +1,8 @@
 #language: en
-@AllTests @Users @CRUD @DeleteUser @allure.label.suite:User_Management @allure.label.feature:Users @allure.label.story:Delete_User
+@allure.label.suite:User_Management @allure.label.feature:Users @allure.label.story:Delete_User
 Feature: DELETE /api/v1/users/delete/:id
 
-  @Run @Smoke @allure.label.severity:critical
+  @Run @Smoke @Positive @allure.label.severity:critical
   Scenario: Delete user with valid token returns 204 and subsequent GET returns 404
     When Create minimal user and save response as "createResp"
     Then Get and check status code 201 from "createResp"
@@ -11,12 +11,12 @@ Feature: DELETE /api/v1/users/delete/:id
     And Save field accessToken from CreateUserResp "created" as "token"
     When Delete user "userId" with token "token" and save response as "deleteResp"
     Then Get and check status code 204 from "deleteResp"
-    When Get user by id "userId" and save response as "getAfterDelete"
-    Then Get and check status code 404 from "getAfterDelete"
-    And Convert error response "getAfterDelete" to ErrorResp and save as "error"
+    When Get user by id "userId" and save response as "getResp"
+    Then Get and check status code 404 from "getResp"
+    And Convert error response "getResp" to ErrorResp and save as "error"
     And Assert error code is "USER_NOT_FOUND" in "error"
 
-  @Run
+  @Run @Positive
   Scenario: Delete returns 204 with empty body
     When Create minimal user and save response as "createResp"
     Then Get and check status code 201 from "createResp"
@@ -25,9 +25,9 @@ Feature: DELETE /api/v1/users/delete/:id
     And Save field accessToken from CreateUserResp "created" as "token"
     When Delete user "userId" with token "token" and save response as "deleteResp"
     Then Get and check status code 204 from "deleteResp"
-    And Assert response body does not contain "error" in "deleteResp"
+    And Assert response body does not contain "\"error\"" in "deleteResp"
 
-  @Run
+  @Run @Negative
   Scenario: Delete with no Authorization header returns 401 MISSING_TOKEN
     When Create minimal user and save response as "createResp"
     Then Get and check status code 201 from "createResp"
@@ -38,19 +38,19 @@ Feature: DELETE /api/v1/users/delete/:id
     And Convert error response "deleteResp" to ErrorResp and save as "error"
     And Assert error code is "MISSING_TOKEN" in "error"
 
-  @Run
+  @Run @Negative
   Scenario: Delete non-existent user with another user token returns 401 INVALID_TOKEN
     When Create minimal user and save response as "createResp"
     Then Get and check status code 201 from "createResp"
     And Convert create user response "createResp" to CreateUserResp and save as "created"
     And Save field accessToken from CreateUserResp "created" as "token"
-    And Save string "000000000000000000000000" as "fakeId"
+    And Generate fake mongo id and save as "fakeId"
     When Delete user "fakeId" with token "token" and save response as "deleteResp"
     Then Get and check status code 401 from "deleteResp"
     And Convert error response "deleteResp" to ErrorResp and save as "error"
     And Assert error code is "INVALID_TOKEN" in "error"
 
-  @Run
+  @Run @Negative
   Scenario: Delete with another user token returns 401 INVALID_TOKEN
     When Create minimal user and save response as "userAResp"
     Then Get and check status code 201 from "userAResp"
@@ -65,7 +65,7 @@ Feature: DELETE /api/v1/users/delete/:id
     And Convert error response "deleteResp" to ErrorResp and save as "error"
     And Assert error code is "INVALID_TOKEN" in "error"
 
-  @Run
+  @Run @Flow
   Scenario: Delete same user twice — second delete returns 404
     When Create minimal user and save response as "createResp"
     Then Get and check status code 201 from "createResp"

@@ -1,8 +1,8 @@
 #language: en
-@AllTests @Users @CRUD @Logout @allure.label.suite:Authentication @allure.label.feature:Auth @allure.label.story:Logout
+@allure.label.suite:Authentication @allure.label.feature:Auth @allure.label.story:Logout
 Feature: POST /api/v1/users/logout/:id
 
-  @Run @Smoke @allure.label.severity:critical
+  @Run @Smoke @Positive @allure.label.severity:critical
   Scenario: Logout returns 200 with success true message
     When Create minimal user and save response as "createResp"
     Then Get and check status code 201 from "createResp"
@@ -14,7 +14,9 @@ Feature: POST /api/v1/users/logout/:id
     And Assert response body contains "true" in "logoutResp"
     And Assert response body contains "revoked" in "logoutResp"
 
-  @Run
+  # ─────────────────── FLOW ───────────────────
+
+  @Run @Flow
   Scenario: Logout revoked token — PATCH returns 401
     When Create minimal user and save response as "createResp"
     Then Get and check status code 201 from "createResp"
@@ -24,12 +26,12 @@ Feature: POST /api/v1/users/logout/:id
     When Logout user "userId" with token "token" and save response as "logoutResp"
     Then Get and check status code 200 from "logoutResp"
     And Generate first name and save as "newFirst"
-    When Patch user "userId" token "token" firstName "newFirst" and save response as "afterLogout"
-    Then Get and check status code 401 from "afterLogout"
-    And Convert error response "afterLogout" to ErrorResp and save as "error"
+    When Patch user "userId" token "token" firstName "newFirst" and save response as "patchResp"
+    Then Get and check status code 401 from "patchResp"
+    And Convert error response "patchResp" to ErrorResp and save as "error"
     And Assert error code is "INVALID_TOKEN" in "error"
 
-  @Run
+  @Run @Flow
   Scenario: Logout revoked token — PUT also returns 401
     When Create minimal user and save response as "createResp"
     Then Get and check status code 201 from "createResp"
@@ -42,12 +44,12 @@ Feature: POST /api/v1/users/logout/:id
     And Generate username and save as "newUsername"
     And Generate first name and save as "newFirst"
     And Generate last name and save as "newLast"
-    When Update user "userId" token "token" firstName "newFirst" lastName "newLast" email "newEmail" username "newUsername" and save response as "afterLogout"
-    Then Get and check status code 401 from "afterLogout"
-    And Convert error response "afterLogout" to ErrorResp and save as "error"
+    When Update user "userId" token "token" firstName "newFirst" lastName "newLast" email "newEmail" username "newUsername" and save response as "updateResp"
+    Then Get and check status code 401 from "updateResp"
+    And Convert error response "updateResp" to ErrorResp and save as "error"
     And Assert error code is "INVALID_TOKEN" in "error"
 
-  @Run
+  @Run @Flow
   Scenario: Logout revoked token — DELETE also returns 401
     When Create minimal user and save response as "createResp"
     Then Get and check status code 201 from "createResp"
@@ -56,12 +58,12 @@ Feature: POST /api/v1/users/logout/:id
     And Save field accessToken from CreateUserResp "created" as "token"
     When Logout user "userId" with token "token" and save response as "logoutResp"
     Then Get and check status code 200 from "logoutResp"
-    When Delete user "userId" with token "token" and save response as "deleteAfterLogout"
-    Then Get and check status code 401 from "deleteAfterLogout"
-    And Convert error response "deleteAfterLogout" to ErrorResp and save as "error"
+    When Delete user "userId" with token "token" and save response as "deleteResp"
+    Then Get and check status code 401 from "deleteResp"
+    And Convert error response "deleteResp" to ErrorResp and save as "error"
     And Assert error code is "INVALID_TOKEN" in "error"
 
-  @Run
+  @Run @Flow
   Scenario: Double logout — second attempt returns 401 INVALID_TOKEN
     When Create minimal user and save response as "createResp"
     Then Get and check status code 201 from "createResp"
@@ -75,7 +77,9 @@ Feature: POST /api/v1/users/logout/:id
     And Convert error response "secondLogout" to ErrorResp and save as "error"
     And Assert error code is "INVALID_TOKEN" in "error"
 
-  @Run
+  # ─────────────────── NEGATIVE ───────────────────
+
+  @Run @Negative
   Scenario: Logout with no auth header returns 401 MISSING_TOKEN
     When Create minimal user and save response as "createResp"
     Then Get and check status code 201 from "createResp"
@@ -86,7 +90,7 @@ Feature: POST /api/v1/users/logout/:id
     And Convert error response "logoutResp" to ErrorResp and save as "error"
     And Assert error code is "MISSING_TOKEN" in "error"
 
-  @Run
+  @Run @Flow
   Scenario: User can re-login after logout and receives new valid token
     When Create minimal user and save response as "createResp"
     Then Get and check status code 201 from "createResp"
