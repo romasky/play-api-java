@@ -1,0 +1,10 @@
+{
+    "success": false,
+    "error": {
+        "code": "RATE_LIMIT_EXCEEDED",
+        "message": "Too many login attempts. Please wait before trying again.",
+        "details": "Maximum 5 login attempts per minute allowed"
+    },
+    "timestamp": "2026-05-05T06:11:15.707277772Z",
+    "request_id": "0ca9f3c7-35ec-4ff8-a43a-9c40c361bf21"
+}
