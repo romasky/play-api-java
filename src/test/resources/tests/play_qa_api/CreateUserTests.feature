@@ -1,10 +1,10 @@
 #language: en
-@AllTests @Users @CreateUser @allure.label.feature=Users @allure.label.story=Create_User
+@AllTests @Users @CreateUser @allure.label.feature:Users @allure.label.story:Create_User
 Feature: POST /api/v1/users/create
 
   # ─────────────────── POSITIVE ───────────────────
 
-  @Run @Smoke @allure.label.severity=critical
+  @Run @Smoke @allure.label.severity:critical
   Scenario: Create user with minimal required fields returns 201 with token
     Given Generate email and save as "email"
     And Generate username and save as "username"
@@ -70,7 +70,7 @@ Feature: POST /api/v1/users/create
     When Create user with interests "interests" and save response as "response"
     Then Get and check status code 201 from "response"
 
-  @Run @Smoke @allure.label.severity=critical
+  @Run @Smoke @allure.label.severity:critical
   Scenario Outline: Create user with valid gender enum returns 201
     Given Generate email and save as "email"
     And Generate username and save as "username"

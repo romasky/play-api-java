@@ -1,8 +1,8 @@
 #language: en
-@AllTests @Users @CRUD @Logout @allure.label.feature=Auth @allure.label.story=Logout
+@AllTests @Users @CRUD @Logout @allure.label.feature:Auth @allure.label.story:Logout
 Feature: POST /api/v1/users/logout/:id
 
-  @Run @Smoke @allure.label.severity=critical
+  @Run @Smoke @allure.label.severity:critical
   Scenario: Logout returns 200 with success true message
     When Create minimal user and save response as "createResp"
     Then Get and check status code 201 from "createResp"

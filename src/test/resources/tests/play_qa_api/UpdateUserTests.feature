@@ -1,8 +1,8 @@
 #language: en
-@AllTests @Users @CRUD @UpdateUser @allure.label.feature=Users @allure.label.story=Update_User
+@AllTests @Users @CRUD @UpdateUser @allure.label.feature:Users @allure.label.story:Update_User
 Feature: PUT /api/v1/users/update/:id
 
-  @Run @Smoke @allure.label.severity=critical
+  @Run @Smoke @allure.label.severity:critical
   Scenario: Full update user with valid token returns 200
     When Create minimal user and save response as "createResp"
     Then Get and check status code 201 from "createResp"

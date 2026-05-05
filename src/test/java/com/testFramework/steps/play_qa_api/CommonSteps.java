@@ -6,8 +6,6 @@ import io.cucumber.java.Scenario;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.qameta.allure.Allure;
-import io.qameta.allure.Step;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Assertions;
 
@@ -117,9 +115,7 @@ public class CommonSteps {
     // ── Status code assertions ────────────────────────────────────────
 
     @When("Get and check status code {int} from {string}")
-    @Step("Assert status {expectedCode}")
     public void assertStatusCode(int expectedCode, String responseVar) {
-        Allure.parameter("response", responseVar);
         ctx.assertStatusCode(expectedCode, responseVar);
     }
 
@@ -156,10 +152,8 @@ public class CommonSteps {
     // ── Response body assertions ──────────────────────────────────────
 
     @Then("Assert response body contains {string} in {string}")
-    @Step("Assert body contains '{expected}'")
     public void assertBodyContains(String expected, String responseVar) {
         String resolved = ctx.str(expected);
-        Allure.parameter("value", resolved);
         Response response = (Response) ctx.get(responseVar, true);
         Assertions.assertTrue(response.asString().contains(resolved),
                 "Body does not contain '" + resolved + "'. Body: " + response.asString());
@@ -192,10 +186,8 @@ public class CommonSteps {
     }
 
     @Then("Assert {string} matches regex {string}")
-    @Step("Assert value matches regex '{regex}'")
     public void assertMatchesRegex(String contextKey, String regex) {
         String value = ctx.str(contextKey);
-        Allure.parameter("value", value);
         Assertions.assertTrue(value.matches(regex),
                 "'" + value + "' does not match regex '" + regex + "'");
     }

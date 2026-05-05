@@ -1,10 +1,10 @@
 #language: en
-@AllTests @Mail @allure.label.feature=Mail @allure.label.story=Mailbox
+@AllTests @Mail @allure.label.feature:Mail @allure.label.story:Mailbox
 Feature: Mail API — /api/v1/mail/*
 
   # ════════════════════ CREATE MAILBOX ════════════════════
 
-  @Run @Smoke @allure.label.severity=critical
+  @Run @Smoke @allure.label.severity:critical
   Scenario: Create mailbox with empty body returns 201 with all required fields
     When Create mailbox with empty body and save response as "response"
     Then Get and check status code 201 from "response"
@@ -105,7 +105,7 @@ Feature: Mail API — /api/v1/mail/*
 
   # ════════════════════ GET MAILBOX ════════════════════
 
-  @Run @Smoke @allure.label.severity=critical
+  @Run @Smoke @allure.label.severity:critical
   Scenario: Get mailbox by token returns 200 with all expected fields
     When Create mailbox with empty body and save response as "createResp"
     Then Get and check status code 201 from "createResp"
@@ -135,7 +135,7 @@ Feature: Mail API — /api/v1/mail/*
 
   # ════════════════════ GET MESSAGES ════════════════════
 
-  @Run @Smoke @allure.label.severity=critical
+  @Run @Smoke @allure.label.severity:critical
   Scenario: Get messages for new mailbox returns 200 with count 0
     When Create mailbox with empty body and save response as "createResp"
     Then Get and check status code 201 from "createResp"
@@ -187,7 +187,7 @@ Feature: Mail API — /api/v1/mail/*
 
   # ════════════════════ GET SINGLE MESSAGE ════════════════════
 
-  @Run @Smoke @allure.label.severity=critical
+  @Run @Smoke @allure.label.severity:critical
   Scenario: Get message by ID returns 200 with full body and html_body
     When Create mailbox with empty body and save response as "createResp"
     Then Get and check status code 201 from "createResp"
@@ -253,7 +253,7 @@ Feature: Mail API — /api/v1/mail/*
 
   # ════════════════════ SEND MESSAGE ════════════════════
 
-  @Run @Smoke @allure.label.severity=critical
+  @Run @Smoke @allure.label.severity:critical
   Scenario: Send message returns 201 with full message object
     When Create mailbox with empty body and save response as "createResp"
     Then Get and check status code 201 from "createResp"
@@ -341,7 +341,7 @@ Feature: Mail API — /api/v1/mail/*
 
   # ════════════════════ DELETE MAILBOX ════════════════════
 
-  @Run @Smoke @allure.label.severity=critical
+  @Run @Smoke @allure.label.severity:critical
   Scenario: Delete mailbox returns 204 and subsequent GET returns 404
     When Create mailbox with empty body and save response as "createResp"
     Then Get and check status code 201 from "createResp"
