@@ -1,6 +1,6 @@
 #language: en
 @allure.label.epic:System @allure.label.suite:Health_Check @allure.label.subSuite:Availability
-Feature: GET /api/v1/health
+Feature: Health Check
 
   @Run @Smoke @Positive @allure.label.severity:critical @allure.label.story:Positive_Scenario
   Scenario: Health endpoint returns 200 with status ok and timestamp

@@ -1,6 +1,6 @@
 #language: en
 @allure.label.epic:Authentication @allure.label.suite:Authentication @allure.label.subSuite:Logout
-Feature: POST /api/v1/users/logout/:id
+Feature: Logout
 
   @Run @Smoke @Positive @allure.label.severity:critical @allure.label.story:Positive_Scenario
   Scenario: Logout returns 200 with success true message

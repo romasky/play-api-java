@@ -1,6 +1,6 @@
 #language: en
 @allure.label.epic:Mail_Service @allure.label.suite:Mail_Service @allure.label.subSuite:Mailbox_Create
-Feature: POST /api/v1/mail/create
+Feature: Mailbox Create
 
   # ─────────────────── POSITIVE ───────────────────
 

@@ -1,6 +1,6 @@
 #language: en
 @allure.label.epic:User_Lifecycle @allure.label.suite:User_Management @allure.label.subSuite:Create_User
-Feature: POST /api/v1/users/create
+Feature: Create User
 
   # ─────────────────── POSITIVE ───────────────────
 

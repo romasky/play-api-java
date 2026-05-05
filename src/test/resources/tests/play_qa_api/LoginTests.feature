@@ -1,6 +1,6 @@
 #language: en
 @allure.label.epic:Authentication @allure.label.suite:Authentication @allure.label.subSuite:Login
-Feature: POST /api/v1/login
+Feature: Login
 
   # ─────────────────── POSITIVE ───────────────────
 

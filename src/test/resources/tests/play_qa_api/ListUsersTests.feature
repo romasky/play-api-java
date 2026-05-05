@@ -1,6 +1,6 @@
 #language: en
 @allure.label.epic:User_Lifecycle @allure.label.suite:User_Management @allure.label.subSuite:List_Users
-Feature: GET /api/v1/users/list
+Feature: List Users
 
   @Run @Smoke @Positive @allure.label.severity:critical @allure.label.story:Positive_Scenario
   Scenario: Get users list returns 200 with pagination fields

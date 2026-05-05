@@ -1,6 +1,6 @@
 #language: en
 @allure.label.epic:Mail_Service @allure.label.suite:Mail_Service @allure.label.subSuite:Mail_Messages
-Feature: GET /api/v1/mail/:token/messages
+Feature: Mail Messages
 
   # ─────────────────── GET MESSAGES LIST ───────────────────
 

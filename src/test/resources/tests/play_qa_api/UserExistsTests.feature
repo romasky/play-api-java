@@ -1,6 +1,6 @@
 #language: en
 @allure.label.epic:User_Lifecycle @allure.label.suite:User_Management @allure.label.subSuite:User_Exists
-Feature: HEAD /api/v1/users/exists/:id
+Feature: User Exists
 
   @Run @Smoke @Positive @allure.label.severity:critical @allure.label.story:Positive_Scenario
   Scenario: HEAD existing user returns 200 with X-User-Exists true

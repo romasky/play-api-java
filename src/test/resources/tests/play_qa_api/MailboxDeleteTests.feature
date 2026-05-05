@@ -1,6 +1,6 @@
 #language: en
 @allure.label.epic:Mail_Service @allure.label.suite:Mail_Service @allure.label.subSuite:Mailbox_Delete
-Feature: DELETE /api/v1/mail/:token
+Feature: Mailbox Delete
 
   @Run @Smoke @Positive @allure.label.severity:critical @allure.label.story:Positive_Scenario
   Scenario: Delete mailbox returns 204 and subsequent GET returns 404

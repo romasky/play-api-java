@@ -1,6 +1,6 @@
 #language: en
 @allure.label.epic:User_Lifecycle @allure.label.suite:User_Management @allure.label.subSuite:Patch_User
-Feature: PATCH /api/v1/users/patch/:id
+Feature: Patch User
 
   @Run @Smoke @Positive @allure.label.severity:critical @allure.label.story:Positive_Scenario
   Scenario: Partial update firstName returns 200

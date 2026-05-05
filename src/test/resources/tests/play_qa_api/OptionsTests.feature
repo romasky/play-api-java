@@ -1,6 +1,6 @@
 #language: en
 @allure.label.epic:User_Lifecycle @allure.label.suite:User_Management @allure.label.subSuite:Options
-Feature: OPTIONS /api/v1/users/options
+Feature: Options
 
   @Run @Smoke @Positive @allure.label.severity:critical @allure.label.story:Positive_Scenario
   Scenario: OPTIONS returns 204

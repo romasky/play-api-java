@@ -1,6 +1,6 @@
 #language: en
 @allure.label.epic:User_Lifecycle @allure.label.suite:User_Management @allure.label.subSuite:Delete_User
-Feature: DELETE /api/v1/users/delete/:id
+Feature: Delete User
 
   @Run @Smoke @Positive @allure.label.severity:critical @allure.label.story:Positive_Scenario
   Scenario: Delete user with valid token returns 204 and subsequent GET returns 404

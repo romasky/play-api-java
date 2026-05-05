@@ -1,6 +1,6 @@
 #language: en
 @allure.label.epic:Mail_Service @allure.label.suite:Mail_Service @allure.label.subSuite:Mailbox_Get
-Feature: GET /api/v1/mail/:token
+Feature: Mailbox Get
 
   @Run @Smoke @Positive @allure.label.severity:critical @allure.label.story:Positive_Scenario
   Scenario: Get mailbox by token returns 200 with all expected fields

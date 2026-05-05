@@ -1,6 +1,6 @@
 #language: en
 @allure.label.epic:Mail_Service @allure.label.suite:Mail_Service @allure.label.subSuite:Mail_Send
-Feature: POST /api/v1/mail/:token/send
+Feature: Mail Send
 
   # ─────────────────── POSITIVE ───────────────────
 
