@@ -1,10 +1,10 @@
 #language: en
-@allure.label.suite:Mail_Service @allure.label.feature:Mail @allure.label.story:Mail_Messages
+@allure.label.epic:Mail_Service @allure.label.suite:Mail_Service @allure.label.subSuite:Mail_Messages
 Feature: GET /api/v1/mail/:token/messages
 
   # ─────────────────── GET MESSAGES LIST ───────────────────
 
-  @Run @Smoke @Positive @allure.label.severity:critical
+  @Run @Smoke @Positive @allure.label.severity:critical @allure.label.story:Positive_Scenario
   Scenario: Get messages for new mailbox returns 200 with count 0
     When Create mailbox with empty body and save response as "createResp"
     Then Get and check status code 201 from "createResp"
@@ -15,7 +15,7 @@ Feature: GET /api/v1/mail/:token/messages
     And Convert messages list response "messagesResp" to MessagesListResp and save as "messages"
     And Assert messages list "messages" count is 0
 
-  @Run @Positive
+  @Run @Positive @allure.label.story:Positive_Scenario
   Scenario: Messages list does not contain html_body field
     When Create mailbox with empty body and save response as "createResp"
     Then Get and check status code 201 from "createResp"
@@ -30,7 +30,7 @@ Feature: GET /api/v1/mail/:token/messages
     Then Get and check status code 200 from "messagesResp"
     And Assert messages list "messagesResp" items have no body field
 
-  @Run @Flow
+  @Run @Flow @allure.label.story:End_to_End_Flow
   Scenario: After sending message count is 1
     When Create mailbox with empty body and save response as "createResp"
     Then Get and check status code 201 from "createResp"
@@ -46,7 +46,7 @@ Feature: GET /api/v1/mail/:token/messages
     And Convert messages list response "messagesResp" to MessagesListResp and save as "messages"
     And Assert messages list "messages" count is 1
 
-  @Run @Negative
+  @Run @Negative @allure.label.story:Negative_Scenario
   Scenario: Get messages for non-existent mailbox returns 404 MAILBOX_NOT_FOUND
     Given Save string "00000000-0000-0000-0000-000000000000" as "fakeToken"
     When Get messages for mailbox "fakeToken" and save response as "messagesResp"
@@ -56,7 +56,7 @@ Feature: GET /api/v1/mail/:token/messages
 
   # ─────────────────── GET SINGLE MESSAGE ───────────────────
 
-  @Run @Smoke @Positive @allure.label.severity:critical
+  @Run @Smoke @Positive @allure.label.severity:critical @allure.label.story:Positive_Scenario
   Scenario: Get message by ID returns 200 with full body and html_body
     When Create mailbox with empty body and save response as "createResp"
     Then Get and check status code 201 from "createResp"
@@ -77,7 +77,7 @@ Feature: GET /api/v1/mail/:token/messages
     And Assert message "msg" has subject "subject"
     And Assert message "msg" has from "from"
 
-  @Run @Negative
+  @Run @Negative @allure.label.story:Negative_Scenario
   Scenario: Get message with non-existent message ID returns 404 MESSAGE_NOT_FOUND
     When Create mailbox with empty body and save response as "createResp"
     Then Get and check status code 201 from "createResp"
@@ -89,7 +89,7 @@ Feature: GET /api/v1/mail/:token/messages
     And Convert error response "getResp" to ErrorResp and save as "error"
     And Assert error code is "MESSAGE_NOT_FOUND" in "error"
 
-  @Run @Negative
+  @Run @Negative @allure.label.story:Negative_Scenario
   Scenario: Get message with non-existent mailbox token returns 404 MAILBOX_NOT_FOUND
     Given Save string "00000000-0000-0000-0000-000000000000" as "fakeToken"
     And Save string "000000000000000000000000" as "fakeId"
@@ -98,7 +98,7 @@ Feature: GET /api/v1/mail/:token/messages
     And Convert error response "getResp" to ErrorResp and save as "error"
     And Assert error code is "MAILBOX_NOT_FOUND" in "error"
 
-  @Run @Negative
+  @Run @Negative @allure.label.story:Negative_Scenario
   Scenario: Cross-mailbox message access returns 404 MESSAGE_NOT_FOUND
     When Create mailbox with empty body and save response as "mailboxAResp"
     Then Get and check status code 201 from "mailboxAResp"

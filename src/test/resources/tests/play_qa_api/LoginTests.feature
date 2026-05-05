@@ -1,10 +1,10 @@
 #language: en
-@allure.label.suite:Authentication @allure.label.feature:Auth @allure.label.story:Login
+@allure.label.epic:Authentication @allure.label.suite:Authentication @allure.label.subSuite:Login
 Feature: POST /api/v1/login
 
   # ─────────────────── POSITIVE ───────────────────
 
-  @Run @Smoke @Positive @allure.label.severity:critical
+  @Run @Smoke @Positive @allure.label.severity:critical @allure.label.story:Positive_Scenario
   Scenario: Login with valid credentials returns 200 and token
     Given Create minimal user and save response as "createResp"
     And Get and check status code 201 from "createResp"
@@ -14,7 +14,7 @@ Feature: POST /api/v1/login
     And Login with email "generatedEmail" password "generatedPassword" and save raw response as "loginResp"
     Then Get and check status code 200 from "loginResp"
 
-  @Run @Positive
+  @Run @Positive @allure.label.story:Positive_Scenario
   Scenario: Login response contains all required fields
     Given Create minimal user and save response as "createResp"
     And Get and check status code 201 from "createResp"
@@ -25,7 +25,7 @@ Feature: POST /api/v1/login
 
   # ─────────────────── FLOW ───────────────────
 
-  @Run @Flow
+  @Run @Flow @allure.label.story:End_to_End_Flow
   Scenario: Login invalidates previous token — old token returns 401 on PATCH
     Given Create minimal user and save response as "createResp"
     And Get and check status code 201 from "createResp"
@@ -40,7 +40,7 @@ Feature: POST /api/v1/login
     And Convert error response "patchResp" to ErrorResp and save as "error"
     And Assert error code is "INVALID_TOKEN" in "error"
 
-  @Run @Flow
+  @Run @Flow @allure.label.story:End_to_End_Flow
   Scenario: Login after logout succeeds and issues new token
     Given Create minimal user and save response as "createResp"
     And Get and check status code 201 from "createResp"
@@ -56,7 +56,7 @@ Feature: POST /api/v1/login
 
   # ─────────────────── NEGATIVE ───────────────────
 
-  @Run @Negative
+  @Run @Negative @allure.label.story:Negative_Scenario
   Scenario: Login with wrong password returns 401 INVALID_CREDENTIALS
     Given Create minimal user and save response as "createResp"
     And Get and check status code 201 from "createResp"
@@ -66,7 +66,7 @@ Feature: POST /api/v1/login
     And Convert error response "loginResp" to ErrorResp and save as "error"
     And Assert error code is "INVALID_CREDENTIALS" in "error"
 
-  @Run @Negative
+  @Run @Negative @allure.label.story:Negative_Scenario
   Scenario: Login with non-existent email returns 401 INVALID_CREDENTIALS
     Given Generate sender email and save as "fakeEmail"
     And Generate password and save as "fakePass"
@@ -75,7 +75,7 @@ Feature: POST /api/v1/login
     And Convert error response "loginResp" to ErrorResp and save as "error"
     And Assert error code is "INVALID_CREDENTIALS" in "error"
 
-  @Run @Negative
+  @Run @Negative @allure.label.story:Negative_Scenario
   Scenario: Login with invalid email format returns 400 VALIDATION_ERROR
     Given Generate invalid email and save as "badEmail"
     And Generate password and save as "fakePass"
@@ -84,7 +84,7 @@ Feature: POST /api/v1/login
     And Convert error response "loginResp" to ErrorResp and save as "error"
     And Assert error code is "VALIDATION_ERROR" in "error"
 
-  @Run @Negative
+  @Run @Negative @allure.label.story:Negative_Scenario
   Scenario: Login with password shorter than 8 chars returns 400 VALIDATION_ERROR
     Given Generate sender email and save as "email"
     And Generate short password and save as "shortPass"
@@ -93,14 +93,14 @@ Feature: POST /api/v1/login
     And Convert error response "loginResp" to ErrorResp and save as "error"
     And Assert error code is "VALIDATION_ERROR" in "error"
 
-  @Run @Negative
+  @Run @Negative @allure.label.story:Negative_Scenario
   Scenario: Login with empty body returns 400 VALIDATION_ERROR
     When Login with no body and save response as "loginResp"
     Then Get and check status code 400 from "loginResp"
     And Convert error response "loginResp" to ErrorResp and save as "error"
     And Assert error code is "VALIDATION_ERROR" in "error"
 
-  @Run @Negative
+  @Run @Negative @allure.label.story:Negative_Scenario
   Scenario: Login error response contains request_id in body
     Given Generate sender email and save as "fakeEmail"
     And Generate password and save as "fakePass"
@@ -109,7 +109,7 @@ Feature: POST /api/v1/login
     And Convert error response "loginResp" to ErrorResp and save as "error"
     And Assert error response has request_id in "error"
 
-  @Run @Negative
+  @Run @Negative @allure.label.story:Negative_Scenario
   Scenario: Login X-Request-ID is echoed in response header
     Given Generate sender email and save as "fakeEmail"
     And Generate password and save as "fakePass"

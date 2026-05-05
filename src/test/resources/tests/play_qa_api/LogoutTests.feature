@@ -1,8 +1,8 @@
 #language: en
-@allure.label.suite:Authentication @allure.label.feature:Auth @allure.label.story:Logout
+@allure.label.epic:Authentication @allure.label.suite:Authentication @allure.label.subSuite:Logout
 Feature: POST /api/v1/users/logout/:id
 
-  @Run @Smoke @Positive @allure.label.severity:critical
+  @Run @Smoke @Positive @allure.label.severity:critical @allure.label.story:Positive_Scenario
   Scenario: Logout returns 200 with success true message
     When Create minimal user and save response as "createResp"
     Then Get and check status code 201 from "createResp"
@@ -16,7 +16,7 @@ Feature: POST /api/v1/users/logout/:id
 
   # ─────────────────── FLOW ───────────────────
 
-  @Run @Flow
+  @Run @Flow @allure.label.story:End_to_End_Flow
   Scenario: Logout revoked token — PATCH returns 401
     When Create minimal user and save response as "createResp"
     Then Get and check status code 201 from "createResp"
@@ -31,7 +31,7 @@ Feature: POST /api/v1/users/logout/:id
     And Convert error response "patchResp" to ErrorResp and save as "error"
     And Assert error code is "INVALID_TOKEN" in "error"
 
-  @Run @Flow
+  @Run @Flow @allure.label.story:End_to_End_Flow
   Scenario: Logout revoked token — PUT also returns 401
     When Create minimal user and save response as "createResp"
     Then Get and check status code 201 from "createResp"
@@ -49,7 +49,7 @@ Feature: POST /api/v1/users/logout/:id
     And Convert error response "updateResp" to ErrorResp and save as "error"
     And Assert error code is "INVALID_TOKEN" in "error"
 
-  @Run @Flow
+  @Run @Flow @allure.label.story:End_to_End_Flow
   Scenario: Logout revoked token — DELETE also returns 401
     When Create minimal user and save response as "createResp"
     Then Get and check status code 201 from "createResp"
@@ -63,7 +63,7 @@ Feature: POST /api/v1/users/logout/:id
     And Convert error response "deleteResp" to ErrorResp and save as "error"
     And Assert error code is "INVALID_TOKEN" in "error"
 
-  @Run @Flow
+  @Run @Flow @allure.label.story:End_to_End_Flow
   Scenario: Double logout — second attempt returns 401 INVALID_TOKEN
     When Create minimal user and save response as "createResp"
     Then Get and check status code 201 from "createResp"
@@ -79,7 +79,7 @@ Feature: POST /api/v1/users/logout/:id
 
   # ─────────────────── NEGATIVE ───────────────────
 
-  @Run @Negative
+  @Run @Negative @allure.label.story:Negative_Scenario
   Scenario: Logout with no auth header returns 401 MISSING_TOKEN
     When Create minimal user and save response as "createResp"
     Then Get and check status code 201 from "createResp"
@@ -90,7 +90,7 @@ Feature: POST /api/v1/users/logout/:id
     And Convert error response "logoutResp" to ErrorResp and save as "error"
     And Assert error code is "MISSING_TOKEN" in "error"
 
-  @Run @Flow
+  @Run @Flow @allure.label.story:End_to_End_Flow
   Scenario: User can re-login after logout and receives new valid token
     When Create minimal user and save response as "createResp"
     Then Get and check status code 201 from "createResp"

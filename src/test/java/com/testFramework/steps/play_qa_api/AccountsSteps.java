@@ -35,7 +35,7 @@ public class AccountsSteps {
     }
 
     // Go LoginRateLimiter: 5r/min. Pace login scenarios to avoid 429.
-    @Before("@allure.label.story:Login")
+    @Before("@allure.label.subSuite:Login")
     public void paceLoginScenarios() throws InterruptedException {
         Thread.sleep(13_000);
     }

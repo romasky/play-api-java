@@ -1,10 +1,10 @@
 #language: en
-@allure.label.suite:Mail_Service @allure.label.feature:Mail @allure.label.story:Mail_Send
+@allure.label.epic:Mail_Service @allure.label.suite:Mail_Service @allure.label.subSuite:Mail_Send
 Feature: POST /api/v1/mail/:token/send
 
   # ─────────────────── POSITIVE ───────────────────
 
-  @Run @Smoke @Positive @allure.label.severity:critical
+  @Run @Smoke @Positive @allure.label.severity:critical @allure.label.story:Positive_Scenario
   Scenario: Send message returns 201 with full message object
     When Create mailbox with empty body and save response as "createResp"
     Then Get and check status code 201 from "createResp"
@@ -19,7 +19,7 @@ Feature: POST /api/v1/mail/:token/send
     And Assert message "msg" has subject "subject"
     And Assert message "msg" has from "from"
 
-  @Run @Positive
+  @Run @Positive @allure.label.story:Positive_Scenario
   Scenario: Send message without html_body returns 201
     When Create mailbox with empty body and save response as "createResp"
     Then Get and check status code 201 from "createResp"
@@ -33,7 +33,7 @@ Feature: POST /api/v1/mail/:token/send
 
   # ─────────────────── FLOW ───────────────────
 
-  @Run @Flow
+  @Run @Flow @allure.label.story:End_to_End_Flow
   Scenario: Sent message appears in GET messages list
     When Create mailbox with empty body and save response as "createResp"
     Then Get and check status code 201 from "createResp"
@@ -48,7 +48,7 @@ Feature: POST /api/v1/mail/:token/send
     Then Get and check status code 200 from "listResp"
     And Assert response body contains "subject" in "listResp"
 
-  @Run @Flow
+  @Run @Flow @allure.label.story:End_to_End_Flow
   Scenario: Sent message is retrievable via GET messages ID
     When Create mailbox with empty body and save response as "createResp"
     Then Get and check status code 201 from "createResp"
@@ -67,7 +67,7 @@ Feature: POST /api/v1/mail/:token/send
 
   # ─────────────────── NEGATIVE ───────────────────
 
-  @Run @Negative
+  @Run @Negative @allure.label.story:Negative_Scenario
   Scenario Outline: Send message missing required field <field> returns 400 VALIDATION_ERROR
     When Create mailbox with empty body and save response as "createResp"
     Then Get and check status code 201 from "createResp"
@@ -83,7 +83,7 @@ Feature: POST /api/v1/mail/:token/send
       | subject |
       | body    |
 
-  @Run @Negative
+  @Run @Negative @allure.label.story:Negative_Scenario
   Scenario: Send message to non-existent mailbox returns 404 MAILBOX_NOT_FOUND
     Given Save string "00000000-0000-0000-0000-000000000000" as "fakeToken"
     And Generate sender email and save as "from"

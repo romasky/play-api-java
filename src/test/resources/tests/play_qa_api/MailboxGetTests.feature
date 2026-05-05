@@ -1,8 +1,8 @@
 #language: en
-@allure.label.suite:Mail_Service @allure.label.feature:Mail @allure.label.story:Mailbox_Get
+@allure.label.epic:Mail_Service @allure.label.suite:Mail_Service @allure.label.subSuite:Mailbox_Get
 Feature: GET /api/v1/mail/:token
 
-  @Run @Smoke @Positive @allure.label.severity:critical
+  @Run @Smoke @Positive @allure.label.severity:critical @allure.label.story:Positive_Scenario
   Scenario: Get mailbox by token returns 200 with all expected fields
     When Create mailbox with empty body and save response as "createResp"
     Then Get and check status code 201 from "createResp"
@@ -14,7 +14,7 @@ Feature: GET /api/v1/mail/:token
     And Assert CreateMailboxResp "mailbox" has all required fields
     And Assert mailbox "mailbox" token matches "token"
 
-  @Run @Negative
+  @Run @Negative @allure.label.story:Negative_Scenario
   Scenario: Get mailbox with non-existent token returns 404 MAILBOX_NOT_FOUND
     Given Save string "00000000-0000-0000-0000-000000000000" as "fakeToken"
     When Get mailbox by token "fakeToken" and save response as "getResp"
@@ -22,7 +22,7 @@ Feature: GET /api/v1/mail/:token
     And Convert error response "getResp" to ErrorResp and save as "error"
     And Assert error code is "MAILBOX_NOT_FOUND" in "error"
 
-  @Run @Negative
+  @Run @Negative @allure.label.story:Negative_Scenario
   Scenario: Get mailbox with malformed token returns 404 MAILBOX_NOT_FOUND
     Given Save string "not-a-uuid-at-all" as "badToken"
     When Get mailbox by token "badToken" and save response as "getResp"

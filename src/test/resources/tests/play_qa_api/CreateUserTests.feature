@@ -1,10 +1,10 @@
 #language: en
-@allure.label.suite:User_Management @allure.label.feature:Users @allure.label.story:Create_User
+@allure.label.epic:User_Lifecycle @allure.label.suite:User_Management @allure.label.subSuite:Create_User
 Feature: POST /api/v1/users/create
 
   # ─────────────────── POSITIVE ───────────────────
 
-  @Run @Smoke @Positive @allure.label.severity:critical
+  @Run @Smoke @Positive @allure.label.severity:critical @allure.label.story:Positive_Scenario
   Scenario: Create user with minimal required fields returns 201 with token
     Given Generate email and save as "email"
     And Generate username and save as "username"
@@ -18,20 +18,20 @@ Feature: POST /api/v1/users/create
     And Assert CreateUserResp "created" has username "username"
     And Assert CreateUserResp "created" has access token not null
 
-  @Run @Positive
+  @Run @Positive @allure.label.story:Positive_Scenario
   Scenario: Create user with all optional fields returns 201
     When Create full user with all fields and save response as "response"
     Then Get and check status code 201 from "response"
     And Convert create user response "response" to CreateUserResp and save as "created"
     And Assert CreateUserResp "created" has access token not null
 
-  @Run @Positive
+  @Run @Positive @allure.label.story:Positive_Scenario
   Scenario: Response body never contains password field
     When Create minimal user and save response as "response"
     Then Get and check status code 201 from "response"
     And Assert response body does not contain "\"password\"" in "response"
 
-  @Run @Positive
+  @Run @Positive @allure.label.story:Positive_Scenario
   Scenario: access_token format matches usr_{timestamp}_{hex} pattern
     When Create minimal user and save response as "response"
     Then Get and check status code 201 from "response"
@@ -39,7 +39,7 @@ Feature: POST /api/v1/users/create
     And Save field accessToken from CreateUserResp "created" as "token"
     And Assert "token" matches regex "usr_\d+_[a-f0-9]{32}"
 
-  @Run @Positive
+  @Run @Positive @allure.label.story:Positive_Scenario
   Scenario: Create user metadata fields are correct on creation
     When Create minimal user and save response as "response"
     Then Get and check status code 201 from "response"
@@ -48,29 +48,29 @@ Feature: POST /api/v1/users/create
     And Assert CreateUserResp "created" metadata is_verified is false
     And Assert CreateUserResp "created" metadata login_count is 0
 
-  @Run @Positive
+  @Run @Positive @allure.label.story:Positive_Scenario
   Scenario: Create user with username at minimum length 3 chars returns 201
     When Create user with username length 3 and save response as "response"
     Then Get and check status code 201 from "response"
 
-  @Run @Positive
+  @Run @Positive @allure.label.story:Positive_Scenario
   Scenario: Create user with username at maximum length 30 chars returns 201
     When Create user with username length 30 and save response as "response"
     Then Get and check status code 201 from "response"
 
-  @Run @Positive
+  @Run @Positive @allure.label.story:Positive_Scenario
   Scenario: Create user with empty interests array returns 201
     Given Save string "" as "emptyInterests"
     When Create user with interests "emptyInterests" and save response as "response"
     Then Get and check status code 201 from "response"
 
-  @Run @Positive
+  @Run @Positive @allure.label.story:Positive_Scenario
   Scenario: Create user with multiple interests returns 201
     Given Save string "coding,travel,music" as "interests"
     When Create user with interests "interests" and save response as "response"
     Then Get and check status code 201 from "response"
 
-  @Run @Smoke @Positive @allure.label.severity:critical
+  @Run @Smoke @Positive @allure.label.severity:critical @allure.label.story:Positive_Scenario
   Scenario Outline: Create user with valid gender enum returns 201
     Given Generate email and save as "email"
     And Generate username and save as "username"
@@ -87,7 +87,7 @@ Feature: POST /api/v1/users/create
       | other             |
       | prefer_not_to_say |
 
-  @Run @Positive
+  @Run @Positive @allure.label.story:Positive_Scenario
   Scenario Outline: Create user with valid employment status returns 201
     Given Save string "<status>" as "status"
     When Create user with employment status "status" and save response as "response"
@@ -100,7 +100,7 @@ Feature: POST /api/v1/users/create
       | retired    |
       | freelancer |
 
-  @Run @Positive
+  @Run @Positive @allure.label.story:Positive_Scenario
   Scenario Outline: Create user with valid theme returns 201
     Given Save string "<theme>" as "theme"
     When Create user with theme "theme" and save response as "response"
@@ -113,7 +113,7 @@ Feature: POST /api/v1/users/create
 
   # ─────────────────── NEGATIVE ───────────────────
 
-  @Run @Negative
+  @Run @Negative @allure.label.story:Negative_Scenario
   Scenario: Create user with duplicate email returns 409 DUPLICATE_USER
     Given Generate email and save as "email_g"
     And Generate username and save as "username"
@@ -128,7 +128,7 @@ Feature: POST /api/v1/users/create
     And Convert error response "secondResp" to ErrorResp and save as "error"
     And Assert error code is "DUPLICATE_USER" in "error"
 
-  @Run @Negative
+  @Run @Negative @allure.label.story:Negative_Scenario
   Scenario: Create user with duplicate username returns 409 DUPLICATE_USER
     Given Generate email and save as "email1"
     And Generate email and save as "email2"
@@ -143,7 +143,7 @@ Feature: POST /api/v1/users/create
     And Convert error response "secondResp" to ErrorResp and save as "error"
     And Assert error code is "DUPLICATE_USER" in "error"
 
-  @Run @Negative
+  @Run @Negative @allure.label.story:Negative_Scenario
   Scenario: Create user with invalid email returns 400 VALIDATION_ERROR
     Given Generate username and save as "username"
     And Generate password and save as "password"
@@ -155,7 +155,7 @@ Feature: POST /api/v1/users/create
     And Convert error response "response" to ErrorResp and save as "error"
     And Assert error code is "VALIDATION_ERROR" in "error"
 
-  @Run @Negative
+  @Run @Negative @allure.label.story:Negative_Scenario
   Scenario: Create user with password shorter than 8 chars returns 400 VALIDATION_ERROR
     Given Generate email and save as "email"
     And Generate username and save as "username"
@@ -167,27 +167,27 @@ Feature: POST /api/v1/users/create
     And Convert error response "response" to ErrorResp and save as "error"
     And Assert error code is "VALIDATION_ERROR" in "error"
 
-  @Run @Negative
+  @Run @Negative @allure.label.story:Negative_Scenario
   Scenario: Create user with username shorter than 3 chars returns 400 VALIDATION_ERROR
     When Create user with username length 2 and save response as "response"
     Then Get and check status code 400 from "response"
 
-  @Run @Negative
+  @Run @Negative @allure.label.story:Negative_Scenario
   Scenario: Create user with username longer than 30 chars returns 400 VALIDATION_ERROR
     When Create user with username length 31 and save response as "response"
     Then Get and check status code 400 from "response"
 
-  @Run @Negative
+  @Run @Negative @allure.label.story:Negative_Scenario
   Scenario: Create user missing profile.first_name returns 400 VALIDATION_ERROR
     When Create user with firstName length 0 and save response as "response"
     Then Get and check status code 400 from "response"
 
-  @Run @Negative
+  @Run @Negative @allure.label.story:Negative_Scenario
   Scenario: Create user with first_name shorter than 2 chars returns 400 VALIDATION_ERROR
     When Create user with firstName length 1 and save response as "response"
     Then Get and check status code 400 from "response"
 
-  @Run @Negative
+  @Run @Negative @allure.label.story:Negative_Scenario
   Scenario: Create user with invalid gender enum returns 400 VALIDATION_ERROR
     Given Generate email and save as "email"
     And Generate username and save as "username"
@@ -200,7 +200,7 @@ Feature: POST /api/v1/users/create
     And Convert error response "response" to ErrorResp and save as "error"
     And Assert error code is "VALIDATION_ERROR" in "error"
 
-  @Run @Negative
+  @Run @Negative @allure.label.story:Negative_Scenario
   Scenario: Create user with invalid employment status enum returns 400 VALIDATION_ERROR
     Given Save string "king" as "status"
     When Create user with employment status "status" and save response as "response"
@@ -208,7 +208,7 @@ Feature: POST /api/v1/users/create
     And Convert error response "response" to ErrorResp and save as "error"
     And Assert error code is "VALIDATION_ERROR" in "error"
 
-  @Run @Negative
+  @Run @Negative @allure.label.story:Negative_Scenario
   Scenario: Create user with invalid theme enum returns 400 VALIDATION_ERROR
     Given Save string "pink" as "theme"
     When Create user with theme "theme" and save response as "response"
@@ -216,14 +216,14 @@ Feature: POST /api/v1/users/create
     And Convert error response "response" to ErrorResp and save as "error"
     And Assert error code is "VALIDATION_ERROR" in "error"
 
-  @Run @Negative
+  @Run @Negative @allure.label.story:Negative_Scenario
   Scenario: Create user with bio longer than 500 chars returns 400 VALIDATION_ERROR
     When Create user with bio of length 501 and save response as "response"
     Then Get and check status code 400 from "response"
     And Convert error response "response" to ErrorResp and save as "error"
     And Assert error code is "VALIDATION_ERROR" in "error"
 
-  @Run @Negative
+  @Run @Negative @allure.label.story:Negative_Scenario
   Scenario: VALIDATION_ERROR response contains request_id and error details
     When Create user with bio of length 501 and save response as "response"
     Then Get and check status code 400 from "response"
