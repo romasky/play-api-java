@@ -7,7 +7,6 @@ import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.qameta.allure.Step;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Assertions;
 
@@ -20,7 +19,6 @@ public class OptionsSteps {
     public void before(Scenario scenario) { ctx.before(scenario); }
 
     @When("Send OPTIONS request to users and save response as {string}")
-    @Step("OPTIONS /users/options")
     public void sendOptions(String varName) {
         ctx.save(varName, rest.options(ApiPaths.USERS_OPTIONS));
     }
@@ -32,7 +30,6 @@ public class OptionsSteps {
     }
 
     @Then("Assert options allowed methods contains {string} in {string}")
-    @Step("Assert allowed_methods contains '{method}'")
     public void assertAllowedMethodsContains(String method, String varName) {
         UserOptionsResp resp = (UserOptionsResp) ctx.get(varName, true);
         Assertions.assertTrue(resp.getAllowedMethods().contains(method),

@@ -7,7 +7,6 @@ import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.qameta.allure.Step;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Assertions;
 
@@ -20,13 +19,11 @@ public class HealthSteps {
     public void before(Scenario scenario) { ctx.before(scenario); }
 
     @When("Get health and save response as {string}")
-    @Step("GET /health")
     public void getHealth(String varName) {
         ctx.save(varName, rest.get(ApiPaths.HEALTH));
     }
 
     @When("Get health with request id {string} and save response as {string}")
-    @Step("GET /health with X-Request-ID")
     public void getHealthWithRequestId(String requestId, String varName) {
         ctx.save(varName, rest.get(ApiPaths.HEALTH, "X-Request-ID", ctx.str(requestId)));
     }
@@ -38,7 +35,6 @@ public class HealthSteps {
     }
 
     @Then("Assert health status is ok in {string}")
-    @Step("Assert health status = ok")
     public void assertHealthStatusOk(String varName) {
         HealthResp resp = (HealthResp) ctx.get(varName, true);
         Assertions.assertEquals("ok", resp.getStatus());

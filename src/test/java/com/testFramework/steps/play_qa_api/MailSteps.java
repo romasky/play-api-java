@@ -7,8 +7,6 @@ import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.qameta.allure.Allure;
-import io.qameta.allure.Step;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Assertions;
 
@@ -27,27 +25,23 @@ public class MailSteps {
     // ── Create mailbox ───────────────────────────────────────────────
 
     @When("Create mailbox with empty body and save response as {string}")
-    @Step("POST /mail/create (empty body)")
     public void createMailboxEmpty(String varName) {
         ctx.save(varName, rest.post(ApiPaths.MAIL_CREATE, new CreateMailboxReq()));
     }
 
     @When("Create mailbox with local part {string} and save response as {string}")
-    @Step("POST /mail/create local_part={localPartVar}")
     public void createMailboxWithLocalPart(String localPartVar, String varName) {
         ctx.save(varName, rest.post(ApiPaths.MAIL_CREATE,
                 CreateMailboxReq.builder().localPart(ctx.str(localPartVar)).build()));
     }
 
     @When("Create mailbox with domain {string} and save response as {string}")
-    @Step("POST /mail/create domain={domainVar}")
     public void createMailboxWithDomain(String domainVar, String varName) {
         ctx.save(varName, rest.post(ApiPaths.MAIL_CREATE,
                 CreateMailboxReq.builder().domain(ctx.str(domainVar)).build()));
     }
 
     @When("Create mailbox with domain {string} local part {string} and save response as {string}")
-    @Step("POST /mail/create domain+local_part")
     public void createMailboxWithDomainAndLocalPart(String domainVar, String localPartVar, String varName) {
         ctx.save(varName, rest.post(ApiPaths.MAIL_CREATE,
                 CreateMailboxReq.builder()
@@ -72,7 +66,6 @@ public class MailSteps {
     }
 
     @Then("Assert CreateMailboxResp {string} has all required fields")
-    @Step("Assert mailbox response has all fields")
     public void assertCreateMailboxFields(String varName) {
         CreateMailboxResp resp = (CreateMailboxResp) ctx.get(varName, true);
         Assertions.assertNotNull(resp.getId(), "id is null");
@@ -84,7 +77,6 @@ public class MailSteps {
     }
 
     @Then("Assert CreateMailboxResp {string} token is UUID format")
-    @Step("Assert mailbox token is UUID")
     public void assertMailboxTokenIsUUID(String varName) {
         String token = ((CreateMailboxResp) ctx.get(varName, true)).getToken();
         Assertions.assertDoesNotThrow(() -> UUID.fromString(token),
@@ -108,11 +100,8 @@ public class MailSteps {
     // ── Get mailbox ──────────────────────────────────────────────────
 
     @When("Get mailbox by token {string} and save response as {string}")
-    @Step("GET /mail/:token")
     public void getMailbox(String tokenVar, String varName) {
-        String token = ctx.str(tokenVar);
-        Allure.parameter("token", token);
-        ctx.save(varName, rest.get(ApiPaths.mailGet(token)));
+        ctx.save(varName, rest.get(ApiPaths.mailGet(ctx.str(tokenVar))));
     }
 
     @Then("Convert get mailbox response {string} to CreateMailboxResp and save as {string}")
@@ -129,11 +118,8 @@ public class MailSteps {
     // ── Get messages ─────────────────────────────────────────────────
 
     @When("Get messages for mailbox {string} and save response as {string}")
-    @Step("GET /mail/:token/messages")
     public void getMessages(String tokenVar, String varName) {
-        String token = ctx.str(tokenVar);
-        Allure.parameter("token", token);
-        ctx.save(varName, rest.get(ApiPaths.mailMessages(token)));
+        ctx.save(varName, rest.get(ApiPaths.mailMessages(ctx.str(tokenVar))));
     }
 
     @Then("Convert messages list response {string} to MessagesListResp and save as {string}")
@@ -142,7 +128,6 @@ public class MailSteps {
     }
 
     @Then("Assert messages list {string} count is {int}")
-    @Step("Assert messages count = {expected}")
     public void assertMessagesCount(String varName, int expected) {
         MessagesListResp resp = (MessagesListResp) ctx.get(varName, true);
         Assertions.assertEquals(expected, resp.getCount(),
@@ -157,7 +142,6 @@ public class MailSteps {
     }
 
     @Then("Assert messages list {string} items have no body field")
-    @Step("Assert list items have no full body")
     public void assertMessagesListNoBody(String varName) {
         Response resp = (Response) ctx.get(varName, true);
         // body_preview is allowed, but "body" as a standalone key should not appear at top level of message items
@@ -181,13 +165,8 @@ public class MailSteps {
     // ── Get single message ───────────────────────────────────────────
 
     @When("Get message {string} from mailbox {string} and save response as {string}")
-    @Step("GET /mail/:token/messages/:id")
     public void getMessage(String msgIdVar, String tokenVar, String varName) {
-        String token = ctx.str(tokenVar);
-        String msgId = ctx.str(msgIdVar);
-        Allure.parameter("token", token);
-        Allure.parameter("messageId", msgId);
-        ctx.save(varName, rest.get(ApiPaths.mailMessage(token, msgId)));
+        ctx.save(varName, rest.get(ApiPaths.mailMessage(ctx.str(tokenVar), ctx.str(msgIdVar))));
     }
 
     @Then("Convert message response {string} to MessageResp and save as {string}")
@@ -196,7 +175,6 @@ public class MailSteps {
     }
 
     @Then("Assert message {string} has full body not null")
-    @Step("Assert message has body field")
     public void assertMessageHasBody(String varName) {
         MessageResp msg = (MessageResp) ctx.get(varName, true);
         Assertions.assertNotNull(msg.getBody(), "body is null");
@@ -217,10 +195,7 @@ public class MailSteps {
     // ── Send message ─────────────────────────────────────────────────
 
     @When("Send message to mailbox {string} from {string} subject {string} body {string} and save response as {string}")
-    @Step("POST /mail/:token/send")
     public void sendMessage(String tokenVar, String fromVar, String subjectVar, String bodyVar, String varName) {
-        Allure.parameter("from", ctx.str(fromVar));
-        Allure.parameter("subject", ctx.str(subjectVar));
         ctx.save(varName, rest.post(ApiPaths.mailSend(ctx.str(tokenVar)),
                 SendMessageReq.builder()
                         .from(ctx.str(fromVar))
@@ -230,7 +205,6 @@ public class MailSteps {
     }
 
     @When("Send message with html to mailbox {string} from {string} subject {string} body {string} htmlBody {string} and save response as {string}")
-    @Step("POST /mail/:token/send (with HTML)")
     public void sendMessageWithHtml(String tokenVar, String fromVar, String subjectVar,
                                     String bodyVar, String htmlBodyVar, String varName) {
         ctx.save(varName, rest.post(ApiPaths.mailSend(ctx.str(tokenVar)),
@@ -243,9 +217,7 @@ public class MailSteps {
     }
 
     @When("Send message with missing field {string} to mailbox {string} and save response as {string}")
-    @Step("POST /mail/:token/send (missing field)")
     public void sendMessageMissingField(String missingField, String tokenVar, String varName) {
-        Allure.parameter("missingField", missingField);
         SendMessageReq.SendMessageReqBuilder req = SendMessageReq.builder();
         if (!missingField.equals("from"))    req.from("sender@test.com");
         if (!missingField.equals("subject")) req.subject("Test Subject");
@@ -266,10 +238,7 @@ public class MailSteps {
     // ── Delete mailbox ───────────────────────────────────────────────
 
     @When("Delete mailbox {string} and save response as {string}")
-    @Step("DELETE /mail/:token")
     public void deleteMailbox(String tokenVar, String varName) {
-        String token = ctx.str(tokenVar);
-        Allure.parameter("token", token);
-        ctx.save(varName, rest.delete(ApiPaths.mailDelete(token)));
+        ctx.save(varName, rest.delete(ApiPaths.mailDelete(ctx.str(tokenVar))));
     }
 }

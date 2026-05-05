@@ -61,22 +61,19 @@ jobs:
           path: target/cucumber-reports
           retention-days: 30
 
+      - name: Prepare Allure report for Pages
+        if: always() && github.ref == 'refs/heads/main'
+        run: |
+          mkdir -p /tmp/gh-pages/${{ github.run_number }}
+          mkdir -p /tmp/gh-pages/latest
+          cp -r target/site/allure-maven-plugin/. /tmp/gh-pages/${{ github.run_number }}/
+          cp -r target/site/allure-maven-plugin/. /tmp/gh-pages/latest/
+
       - name: Deploy Allure report to GitHub Pages
         if: always() && github.ref == 'refs/heads/main'
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
-          publish_dir: target/site/allure-maven-plugin
-          destination_dir: ${{ github.run_number }}
-          keep_files: true
-
-      - name: Update Pages index (latest symlink)
-        if: always() && github.ref == 'refs/heads/main'
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: gh-pages
-          publish_dir: target/site/allure-maven-plugin
-          destination_dir: latest
+          publish_dir: /tmp/gh-pages
           keep_files: true
