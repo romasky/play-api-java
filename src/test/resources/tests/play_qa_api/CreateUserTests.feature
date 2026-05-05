@@ -224,9 +224,10 @@ Feature: POST /api/v1/users/create
     And Assert error code is "VALIDATION_ERROR" in "error"
 
   @Run @Negative
-  Scenario: VALIDATION_ERROR response contains error details
+  Scenario: VALIDATION_ERROR response contains request_id and error details
     When Create user with bio of length 501 and save response as "response"
     Then Get and check status code 400 from "response"
     And Convert error response "response" to ErrorResp and save as "error"
     And Assert error response has request_id in "error"
-    And Assert error validation array is not empty in "error"
+    And Assert error code is "VALIDATION_ERROR" in "error"
+    And Assert error message contains "bio" in "error"
