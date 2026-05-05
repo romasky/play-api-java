@@ -1,0 +1,39 @@
+{
+    "id": "69f99126651d1b8a6e1ca10e",
+    "email": "qovo91ji9j@play-qa.com",
+    "username": "user_nt7zoe2y",
+    "access_token": "usr_1777963302_485c3dafecc008b5b38c76470e61be01",
+    "profile": {
+        "first_name": "Testileslm",
+        "last_name": "Userebsiuy"
+    },
+    "contacts": {
+        "phone_verified": false
+    },
+    "address": {
+        
+    },
+    "employment": {
+        "status": "unemployed"
+    },
+    "settings": {
+        "language": "",
+        "timezone": "",
+        "theme": "",
+        "notifications_enabled": false,
+        "email_notifications": false,
+        "sms_notifications": false,
+        "two_factor_enabled": false,
+        "private_profile": false
+    },
+    "metadata": {
+        "created_at": "2026-05-05T06:41:42.685679994Z",
+        "updated_at": "2026-05-05T06:41:42.685679994Z",
+        "expires_at": "2026-05-06T06:41:42.685679994Z",
+        "login_count": 0,
+        "is_active": true,
+        "is_verified": false,
+        "is_premium": false,
+        "role": "user"
+    }
+}
