@@ -29,13 +29,13 @@ public class AccountsSteps {
     public void before(Scenario scenario) { ctx.before(scenario); }
 
     // Nginx create_user zone: 30r/min, burst=10. Pace to stay within the window.
-    @Before("@Users")
+    @Before("@allure.label.suite:User_Management")
     public void paceCreateUserScenarios() throws InterruptedException {
         Thread.sleep(2_000);
     }
 
     // Go LoginRateLimiter: 5r/min. Pace login scenarios to avoid 429.
-    @Before("@Login")
+    @Before("@allure.label.story:Login")
     public void paceLoginScenarios() throws InterruptedException {
         Thread.sleep(13_000);
     }
