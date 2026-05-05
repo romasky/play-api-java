@@ -1,5 +1,5 @@
 #language: en
-@AllTests @Options @allure.label.suite:User Management @allure.label.feature:Users @allure.label.story:Options
+@AllTests @Options @allure.label.suite:User_Management @allure.label.feature:Users @allure.label.story:Options
 Feature: OPTIONS /api/v1/users/options
 
   @Run @Smoke @allure.label.severity:critical

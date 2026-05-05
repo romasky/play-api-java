@@ -1,5 +1,5 @@
 #language: en
-@AllTests @Users @CRUD @DeleteUser @allure.label.suite:User Management @allure.label.feature:Users @allure.label.story:Delete_User
+@AllTests @Users @CRUD @DeleteUser @allure.label.suite:User_Management @allure.label.feature:Users @allure.label.story:Delete_User
 Feature: DELETE /api/v1/users/delete/:id
 
   @Run @Smoke @allure.label.severity:critical

@@ -1,5 +1,5 @@
 #language: en
-@AllTests @Users @CRUD @UpdateUser @allure.label.suite:User Management @allure.label.feature:Users @allure.label.story:Update_User
+@AllTests @Users @CRUD @UpdateUser @allure.label.suite:User_Management @allure.label.feature:Users @allure.label.story:Update_User
 Feature: PUT /api/v1/users/update/:id
 
   @Run @Smoke @allure.label.severity:critical

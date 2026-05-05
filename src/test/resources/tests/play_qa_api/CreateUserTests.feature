@@ -1,5 +1,5 @@
 #language: en
-@AllTests @Users @CreateUser @allure.label.suite:User Management @allure.label.feature:Users @allure.label.story:Create_User
+@AllTests @Users @CreateUser @allure.label.suite:User_Management @allure.label.feature:Users @allure.label.story:Create_User
 Feature: POST /api/v1/users/create
 
   # ─────────────────── POSITIVE ───────────────────

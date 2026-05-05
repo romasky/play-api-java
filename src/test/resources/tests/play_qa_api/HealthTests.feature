@@ -1,5 +1,5 @@
 #language: en
-@AllTests @Health @allure.label.suite:Health Check @allure.label.feature:Health @allure.label.story:Availability
+@AllTests @Health @allure.label.suite:Health_Check @allure.label.feature:Health @allure.label.story:Availability
 Feature: GET /api/v1/health
 
   @Run @Smoke @allure.label.severity:critical
