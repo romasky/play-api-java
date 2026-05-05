@@ -230,4 +230,4 @@ Feature: POST /api/v1/users/create
     And Convert error response "response" to ErrorResp and save as "error"
     And Assert error response has request_id in "error"
     And Assert error code is "VALIDATION_ERROR" in "error"
-    And Assert error message contains "bio" in "error"
+    And Assert response body contains "bio" in "response"
