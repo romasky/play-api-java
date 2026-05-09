@@ -1,0 +1,10 @@
+{
+    "success": false,
+    "error": {
+        "code": "VALIDATION_ERROR",
+        "message": "Invalid request body",
+        "details": "password must be at least 8 characters long"
+    },
+    "timestamp": "2026-05-09T09:21:40.11496506Z",
+    "request_id": "06109239-d9fa-4e7f-8f3e-c4ed9f9af2ff"
+}
