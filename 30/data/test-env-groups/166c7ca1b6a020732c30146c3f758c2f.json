@@ -1,0 +1,1 @@
+{"id":"166c7ca1b6a020732c30146c3f758c2f","fullName":"src/test/resources/tests/play_qa_api/CreateUserTests.feature:171","name":"Create user with username shorter than 3 chars returns 400 VALIDATION_ERROR","status":"failed","testResultsByEnv":{"default":"96dda55ea90dd153eec12227660cadd4"}}

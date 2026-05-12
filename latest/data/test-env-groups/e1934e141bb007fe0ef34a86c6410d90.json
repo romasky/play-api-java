@@ -1,0 +1,1 @@
+{"id":"e1934e141bb007fe0ef34a86c6410d90","fullName":"src/test/resources/tests/play_qa_api/MailboxCreateTests.feature:85","name":"Create mailbox with local_part longer than 30 chars returns 400 INVALID_LOCAL_PART","status":"passed","testResultsByEnv":{"default":"2320b8675121440bfeb2dc137ba01494"}}

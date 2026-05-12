@@ -1,0 +1,38 @@
+{
+    "id": "6a030d95782f8e32373242a5",
+    "email": "80aa046qgl@play-qa.com",
+    "username": "user_hp02bbth",
+    "profile": {
+        "first_name": "Testxvamto",
+        "last_name": "Usermohuut"
+    },
+    "contacts": {
+        "phone_verified": false
+    },
+    "address": {
+        
+    },
+    "employment": {
+        
+    },
+    "settings": {
+        "language": "",
+        "timezone": "",
+        "theme": "",
+        "notifications_enabled": false,
+        "email_notifications": false,
+        "sms_notifications": false,
+        "two_factor_enabled": false,
+        "private_profile": false
+    },
+    "metadata": {
+        "created_at": "2026-05-12T11:23:01.946Z",
+        "updated_at": "2026-05-12T11:23:02.132465855Z",
+        "expires_at": "2026-05-13T11:23:01.946Z",
+        "login_count": 0,
+        "is_active": true,
+        "is_verified": false,
+        "is_premium": false,
+        "role": "user"
+    }
+}
