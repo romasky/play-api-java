@@ -25,7 +25,8 @@
 | Rest Assured | 5.4.0 | HTTP client for API testing |
 | JUnit 5 | 5.10.2 | Test runner |
 | Cucumber | 7.15.0 | BDD framework |
-| Allure | 2.27.0 | Test reporting |
+| Allure Adapter | 2.29.1 | JVM adapter (allure-cucumber7-jvm) |
+| Allure Report | 3.8.0 | Report generator (new UI) |
 | Lombok | 1.18.38 | Boilerplate reduction |
 | Jackson | 2.17.0 | JSON serialization |
 
