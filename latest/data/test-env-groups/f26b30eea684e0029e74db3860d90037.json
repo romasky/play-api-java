@@ -1,1 +1,1 @@
-{"id":"f26b30eea684e0029e74db3860d90037","fullName":"src/test/resources/tests/play_qa_api/CreateUserTests.feature:186","name":"Create user with first_name shorter than 2 chars returns 400 VALIDATION_ERROR","status":"failed","testResultsByEnv":{"default":"b7b84dad166dbed2e200c15f3912500e"}}
+{"id":"f26b30eea684e0029e74db3860d90037","fullName":"src/test/resources/tests/play_qa_api/CreateUserTests.feature:186","name":"Create user with first_name shorter than 2 chars returns 400 VALIDATION_ERROR","status":"passed","testResultsByEnv":{"default":"c88da4b15d5e604e7cea4ed383891177"}}

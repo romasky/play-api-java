@@ -1,1 +1,1 @@
-{"id":"703cce872ef2dc376786dd261231c28f","fullName":"src/test/resources/tests/play_qa_api/MailboxGetTests.feature:18","name":"Get mailbox with non-existent token returns 404 MAILBOX_NOT_FOUND","status":"passed","testResultsByEnv":{"default":"ddebb67a183c9e6b00af97e4a8e903e8"}}
+{"id":"703cce872ef2dc376786dd261231c28f","fullName":"src/test/resources/tests/play_qa_api/MailboxGetTests.feature:18","name":"Get mailbox with non-existent token returns 404 MAILBOX_NOT_FOUND","status":"passed","testResultsByEnv":{"default":"65f867bd55c153a74047759973e599a1"}}

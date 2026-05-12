@@ -1,1 +1,1 @@
-{"id":"79ecba85c423e76b6d668bcc794da660","fullName":"src/test/resources/tests/play_qa_api/MailboxGetTests.feature:26","name":"Get mailbox with malformed token returns 404 MAILBOX_NOT_FOUND","status":"passed","testResultsByEnv":{"default":"5206b92315cf6d4face00b92b4e6859f"}}
+{"id":"79ecba85c423e76b6d668bcc794da660","fullName":"src/test/resources/tests/play_qa_api/MailboxGetTests.feature:26","name":"Get mailbox with malformed token returns 404 MAILBOX_NOT_FOUND","status":"passed","testResultsByEnv":{"default":"48635e73ceab3ca7c198845bbecb213a"}}

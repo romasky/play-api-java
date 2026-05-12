@@ -1,1 +1,1 @@
-{"id":"716d1ac59f657bd0359a751e65580e8d","fullName":"src/test/resources/tests/play_qa_api/CreateUserTests.feature:62","name":"Create user with empty interests array returns 201","status":"failed","testResultsByEnv":{"default":"ac83bab98464e03059c74322d4e932fd"}}
+{"id":"716d1ac59f657bd0359a751e65580e8d","fullName":"src/test/resources/tests/play_qa_api/CreateUserTests.feature:62","name":"Create user with empty interests array returns 201","status":"passed","testResultsByEnv":{"default":"bf31e8b8df7f8caf7b2a106850445bab"}}

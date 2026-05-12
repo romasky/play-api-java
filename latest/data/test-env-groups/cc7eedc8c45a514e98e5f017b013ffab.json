@@ -1,1 +1,1 @@
-{"id":"cc7eedc8c45a514e98e5f017b013ffab","fullName":"src/test/resources/tests/play_qa_api/CreateUserTests.feature:191","name":"Create user with invalid gender enum returns 400 VALIDATION_ERROR","status":"failed","testResultsByEnv":{"default":"52ac777693bd24bfe0a9f7675fa8b5a2"}}
+{"id":"cc7eedc8c45a514e98e5f017b013ffab","fullName":"src/test/resources/tests/play_qa_api/CreateUserTests.feature:191","name":"Create user with invalid gender enum returns 400 VALIDATION_ERROR","status":"passed","testResultsByEnv":{"default":"9b21ba65255d1eb5f45726279bb6a0b3"}}

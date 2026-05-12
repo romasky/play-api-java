@@ -1,1 +1,1 @@
-{"id":"0cef8c1d36fc60434d4c38e49910a702","fullName":"src/test/resources/tests/play_qa_api/CreateUserTests.feature:147","name":"Create user with invalid email returns 400 VALIDATION_ERROR","status":"failed","testResultsByEnv":{"default":"fc2e141762817889fa46ff3441ab29e4"}}
+{"id":"0cef8c1d36fc60434d4c38e49910a702","fullName":"src/test/resources/tests/play_qa_api/CreateUserTests.feature:147","name":"Create user with invalid email returns 400 VALIDATION_ERROR","status":"passed","testResultsByEnv":{"default":"e59c9c754509e4f31d484ee2a39f6f48"}}

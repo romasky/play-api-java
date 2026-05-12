@@ -1,1 +1,1 @@
-{"id":"a957cf975f8ce5ba1715c51738e03833","fullName":"src/test/resources/tests/play_qa_api/CreateUserTests.feature:132","name":"Create user with duplicate username returns 409 DUPLICATE_USER","status":"failed","testResultsByEnv":{"default":"b00c258a0d3f7db87f784491561f8d34"}}
+{"id":"a957cf975f8ce5ba1715c51738e03833","fullName":"src/test/resources/tests/play_qa_api/CreateUserTests.feature:132","name":"Create user with duplicate username returns 409 DUPLICATE_USER","status":"passed","testResultsByEnv":{"default":"8740cf47d492ca05535437027f1e00cd"}}

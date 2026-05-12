@@ -1,1 +1,1 @@
-{"id":"e63a144e4e5455f587829caeff8b0169","fullName":"src/test/resources/tests/play_qa_api/DeleteUserTests.feature:6","name":"Delete user with valid token returns 204 and subsequent GET returns 404","status":"passed","testResultsByEnv":{"default":"9d5890e2e1ca82bda52860052e0d782b"}}
+{"id":"e63a144e4e5455f587829caeff8b0169","fullName":"src/test/resources/tests/play_qa_api/DeleteUserTests.feature:6","name":"Delete user with valid token returns 204 and subsequent GET returns 404","status":"passed","testResultsByEnv":{"default":"16661a5c13ce87cd6b2dfd697c957ac7"}}

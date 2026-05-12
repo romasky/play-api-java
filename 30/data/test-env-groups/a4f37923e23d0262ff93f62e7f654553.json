@@ -1,1 +1,1 @@
-{"id":"a4f37923e23d0262ff93f62e7f654553","fullName":"src/test/resources/tests/play_qa_api/CreateUserTests.feature:52","name":"Create user with username at minimum length 3 chars returns 201","status":"failed","testResultsByEnv":{"default":"81f3be7e158f9f28a2e82bdaad1d1d23"}}
+{"id":"a4f37923e23d0262ff93f62e7f654553","fullName":"src/test/resources/tests/play_qa_api/CreateUserTests.feature:52","name":"Create user with username at minimum length 3 chars returns 201","status":"passed","testResultsByEnv":{"default":"7f5a8cdf323f26aa28d975cd73b6a7d5"}}
