@@ -2,6 +2,7 @@ package com.testFramework.steps.play_qa_api;
 
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
+import io.qameta.allure.Allure;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Assertions;
 
@@ -20,6 +21,11 @@ public class BaseSteps {
         if (this.scenario == null) {
             this.scenario = scenario;
         }
+        renameCurrentHook("Setup: init scenario context");
+    }
+
+    protected static void renameCurrentHook(String name) {
+        Allure.getLifecycle().updateFixture(r -> r.setName(name));
     }
 
     protected void save(String key, Object value) {

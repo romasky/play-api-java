@@ -20,9 +20,7 @@ public class CommonSteps {
     private final BaseSteps ctx = new BaseSteps();
 
     @Before
-    public void before(Scenario scenario) {
-        ctx.before(scenario);
-    }
+    public void before(Scenario scenario) { ctx.before(scenario); }
 
     // ── Data generation ──────────────────────────────────────────────
 
