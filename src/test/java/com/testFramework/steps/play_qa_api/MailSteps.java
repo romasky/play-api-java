@@ -3,8 +3,6 @@ package com.testFramework.steps.play_qa_api;
 import com.testFramework.core.RestHandler;
 import com.testFramework.play_qa_api.ApiPaths;
 import com.testFramework.play_qa_api.models.mail.*;
-import io.cucumber.java.Before;
-import io.cucumber.java.Scenario;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
@@ -18,9 +16,6 @@ public class MailSteps {
 
     private final BaseSteps ctx = new BaseSteps();
     private final RestHandler rest = new RestHandler();
-
-    @Before
-    public void before(Scenario scenario) { ctx.before(scenario); }
 
     // ── Create mailbox ───────────────────────────────────────────────
 

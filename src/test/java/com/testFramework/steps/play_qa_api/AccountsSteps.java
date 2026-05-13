@@ -11,7 +11,6 @@ import com.testFramework.play_qa_api.models.error.ErrorResp;
 import com.testFramework.play_qa_api.models.login.LoginReq;
 import com.testFramework.play_qa_api.models.login.LoginResp;
 import io.cucumber.java.Before;
-import io.cucumber.java.Scenario;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -24,9 +23,6 @@ public class AccountsSteps {
 
     private final BaseSteps ctx = new BaseSteps();
     private final RestHandler rest = new RestHandler();
-
-    @Before
-    public void before(Scenario scenario) { ctx.before(scenario); }
 
     // Nginx create_user zone: 30r/min, burst=10. Pace to stay within the window.
     @Before("@allure.label.suite:User_Management")
