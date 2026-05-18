@@ -1,0 +1,39 @@
+{
+    "id": "6a0afcb0782f8e3237324f42",
+    "email": "xek6b6ur85@play-qa.com",
+    "username": "user_un32886d",
+    "access_token": "usr_1779104944_13e81d22201e803dc9bab2621f48aa53",
+    "profile": {
+        "first_name": "Testbaetly",
+        "last_name": "Userzanhqz"
+    },
+    "contacts": {
+        "phone_verified": false
+    },
+    "address": {
+        
+    },
+    "employment": {
+        "status": "student"
+    },
+    "settings": {
+        "language": "",
+        "timezone": "",
+        "theme": "",
+        "notifications_enabled": false,
+        "email_notifications": false,
+        "sms_notifications": false,
+        "two_factor_enabled": false,
+        "private_profile": false
+    },
+    "metadata": {
+        "created_at": "2026-05-18T11:49:04.148525446Z",
+        "updated_at": "2026-05-18T11:49:04.148525446Z",
+        "expires_at": "2026-05-19T11:49:04.148525446Z",
+        "login_count": 0,
+        "is_active": true,
+        "is_verified": false,
+        "is_premium": false,
+        "role": "user"
+    }
+}
