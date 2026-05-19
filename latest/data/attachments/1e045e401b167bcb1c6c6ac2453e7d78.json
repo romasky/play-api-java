@@ -1,0 +1,10 @@
+{
+    "success": false,
+    "error": {
+        "code": "INVALID_LOCAL_PART",
+        "message": "invalid local part: only lowercase letters, digits, _ and - are allowed",
+        "details": "invalid local part: only lowercase letters, digits, _ and - are allowed"
+    },
+    "timestamp": "2026-05-19T11:25:36.184816022Z",
+    "request_id": "b0e30725-b1db-41a8-afae-39dc01e94b2d"
+}
