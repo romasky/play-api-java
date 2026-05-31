@@ -1,0 +1,39 @@
+{
+    "id": "6a1c0b57782f8e3237325e73",
+    "email": "e6qnhrjr4m@play-qa.com",
+    "username": "user_4hw90kad",
+    "access_token": "usr_1780222807_3be80496950002840021811d55c4ed66",
+    "profile": {
+        "first_name": "Testkbbedl",
+        "last_name": "Usercanlyx"
+    },
+    "contacts": {
+        "phone_verified": false
+    },
+    "address": {
+        
+    },
+    "employment": {
+        "status": "freelancer"
+    },
+    "settings": {
+        "language": "",
+        "timezone": "",
+        "theme": "",
+        "notifications_enabled": false,
+        "email_notifications": false,
+        "sms_notifications": false,
+        "two_factor_enabled": false,
+        "private_profile": false
+    },
+    "metadata": {
+        "created_at": "2026-05-31T10:20:07.575965504Z",
+        "updated_at": "2026-05-31T10:20:07.575965504Z",
+        "expires_at": "2026-06-01T10:20:07.575965504Z",
+        "login_count": 0,
+        "is_active": true,
+        "is_verified": false,
+        "is_premium": false,
+        "role": "user"
+    }
+}
