@@ -1,0 +1,39 @@
+{
+    "id": "6a23f13c782f8e32373266d7",
+    "email": "tz1jv6bkuu@play-qa.com",
+    "username": "user_1l0fxooq",
+    "access_token": "usr_1780740412_bf719f5ea1fbf75974433e7750a2428d",
+    "profile": {
+        "first_name": "Testpyfyem",
+        "last_name": "Userrwevlc"
+    },
+    "contacts": {
+        "phone_verified": false
+    },
+    "address": {
+        
+    },
+    "employment": {
+        
+    },
+    "settings": {
+        "language": "",
+        "timezone": "",
+        "theme": "",
+        "notifications_enabled": false,
+        "email_notifications": false,
+        "sms_notifications": false,
+        "two_factor_enabled": false,
+        "private_profile": false
+    },
+    "metadata": {
+        "created_at": "2026-06-06T10:06:52.696241503Z",
+        "updated_at": "2026-06-06T10:06:52.696241503Z",
+        "expires_at": "2026-06-07T10:06:52.696241503Z",
+        "login_count": 0,
+        "is_active": true,
+        "is_verified": false,
+        "is_premium": false,
+        "role": "user"
+    }
+}
