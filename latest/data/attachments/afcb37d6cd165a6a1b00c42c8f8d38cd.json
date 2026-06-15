@@ -1,0 +1,10 @@
+{
+    "success": false,
+    "error": {
+        "code": "VALIDATION_ERROR",
+        "message": "Invalid request body",
+        "details": "username must be at least 3 characters long"
+    },
+    "timestamp": "2026-06-15T13:59:29.968582197Z",
+    "request_id": "a51315f9-1fe9-42c8-a3a8-7a3aa7346151"
+}
