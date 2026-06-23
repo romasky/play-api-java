@@ -1,0 +1,10 @@
+{
+    "success": false,
+    "error": {
+        "code": "VALIDATION_ERROR",
+        "message": "Invalid request body",
+        "details": "first name must be at least 2 characters long"
+    },
+    "timestamp": "2026-06-23T11:20:30.824646068Z",
+    "request_id": "aa4ae4a1-2928-4b02-a108-640819bffd82"
+}
