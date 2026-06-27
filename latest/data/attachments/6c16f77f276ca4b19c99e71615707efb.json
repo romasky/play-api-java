@@ -1,0 +1,10 @@
+{
+    "success": false,
+    "error": {
+        "code": "INVALID_LOCAL_PART",
+        "message": "invalid local part: must be 3-30 characters",
+        "details": "invalid local part: must be 3-30 characters"
+    },
+    "timestamp": "2026-06-27T10:15:35.279267772Z",
+    "request_id": "c4dd5594-7ca6-4e67-9a6e-c4e907b28cfe"
+}
