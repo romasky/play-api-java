@@ -1,0 +1,10 @@
+{
+    "success": false,
+    "error": {
+        "code": "DUPLICATE_USER",
+        "message": "Email or username already exists",
+        "details": "Database operation failed"
+    },
+    "timestamp": "2026-07-08T10:20:30.90429246Z",
+    "request_id": "bf1ad14f-0880-4804-a11e-345974e65eb1"
+}
