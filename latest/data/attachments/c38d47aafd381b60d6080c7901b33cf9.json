@@ -1,0 +1,10 @@
+{
+    "success": false,
+    "error": {
+        "code": "MAILBOX_NOT_FOUND",
+        "message": "Mailbox not found",
+        "details": "mailbox not found"
+    },
+    "timestamp": "2026-07-21T10:27:26.149912035Z",
+    "request_id": "16dff792-cf87-48f5-b098-408cd199ea73"
+}
