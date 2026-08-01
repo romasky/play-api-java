@@ -1,0 +1,45 @@
+{
+    "id": "6a6dc3ff57668dd2f8666fe4",
+    "email": "vz9aem8hxt@play-qa.com",
+    "username": "user_8w240xlq",
+    "access_token": "usr_1785578495_30c1b2c86ebc8d9068611690f24ad4b4",
+    "profile": {
+        "first_name": "Testugnchd",
+        "last_name": "Userlmmakj",
+        "bio": "Test user bio",
+        "gender": "male"
+    },
+    "contacts": {
+        "phone": "+14182782428",
+        "phone_verified": false,
+        "telegram": "@testuser"
+    },
+    "address": {
+        "country": "US",
+        "city": "San Francisco"
+    },
+    "employment": {
+        "status": "employed",
+        "company": "Test Corp"
+    },
+    "settings": {
+        "language": "en",
+        "timezone": "America/Los_Angeles",
+        "theme": "dark",
+        "notifications_enabled": true,
+        "email_notifications": false,
+        "sms_notifications": false,
+        "two_factor_enabled": false,
+        "private_profile": false
+    },
+    "metadata": {
+        "created_at": "2026-08-01T10:01:35.152491576Z",
+        "updated_at": "2026-08-01T10:01:35.152491576Z",
+        "expires_at": "2026-08-02T10:01:35.152491576Z",
+        "login_count": 0,
+        "is_active": true,
+        "is_verified": false,
+        "is_premium": false,
+        "role": "user"
+    }
+}
