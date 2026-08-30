@@ -1,0 +1,40 @@
+{
+    "id": "6a9430b32ce78527e0ee50cb",
+    "email": "wy2fwxhtrs@play-qa.com",
+    "username": "user_1iccnz7u",
+    "access_token": "usr_1788096691_1e0e494075bc14f4ffd06a8891a53155",
+    "profile": {
+        "first_name": "Testidubxt",
+        "last_name": "Usermuazre",
+        "gender": "female"
+    },
+    "contacts": {
+        "phone_verified": false
+    },
+    "address": {
+        
+    },
+    "employment": {
+        
+    },
+    "settings": {
+        "language": "",
+        "timezone": "",
+        "theme": "",
+        "notifications_enabled": false,
+        "email_notifications": false,
+        "sms_notifications": false,
+        "two_factor_enabled": false,
+        "private_profile": false
+    },
+    "metadata": {
+        "created_at": "2026-08-30T13:31:31.923694056Z",
+        "updated_at": "2026-08-30T13:31:31.923694056Z",
+        "expires_at": "2026-08-31T13:31:31.923694056Z",
+        "login_count": 0,
+        "is_active": true,
+        "is_verified": false,
+        "is_premium": false,
+        "role": "user"
+    }
+}
