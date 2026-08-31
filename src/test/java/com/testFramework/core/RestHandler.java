@@ -2,7 +2,8 @@ package com.testFramework.core;
 
 import io.qameta.allure.Allure;
 import io.qameta.allure.Step;
-import io.restassured.RestAssured;
+import io.restassured.config.HttpClientConfig;
+import io.restassured.config.RestAssuredConfig;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
@@ -11,11 +12,22 @@ import static io.restassured.RestAssured.given;
 
 public class RestHandler {
 
+    // Apache HttpClient parameter keys (see org.apache.http.params.CoreConnectionPNames).
+    // Used as string literals so we don't depend on the Apache class being on the classpath.
+    private static final String HTTP_CONNECTION_TIMEOUT = "http.connection.timeout";
+    private static final String HTTP_SOCKET_TIMEOUT = "http.socket.timeout";
+
     private final String baseUrl;
+    private final RestAssuredConfig config;
 
     public RestHandler() {
         this.baseUrl = PropertyHandler.get("baseUrl");
-        RestAssured.baseURI = this.baseUrl;
+        int connectionTimeout = Integer.parseInt(PropertyHandler.get("connectionTimeout"));
+        int socketTimeout = Integer.parseInt(PropertyHandler.get("socketTimeout"));
+        this.config = RestAssuredConfig.config().httpClient(
+                HttpClientConfig.httpClientConfig()
+                        .setParam(HTTP_CONNECTION_TIMEOUT, connectionTimeout)
+                        .setParam(HTTP_SOCKET_TIMEOUT, socketTimeout));
     }
 
     @Step("POST {path}")
@@ -83,12 +95,12 @@ public class RestHandler {
 
     @Step("HEAD {path}")
     public Response head(String path) {
-        return given().head(path).then().extract().response();
+        return buildSpec().head(path).then().extract().response();
     }
 
     @Step("OPTIONS {path}")
     public Response options(String path) {
-        Response r = given().options(path).then().extract().response();
+        Response r = buildSpec().options(path).then().extract().response();
         attachResponse(r);
         return r;
     }
@@ -102,7 +114,7 @@ public class RestHandler {
     }
 
     private RequestSpecification buildSpec(String... headers) {
-        RequestSpecification spec = given();
+        RequestSpecification spec = given().config(config).baseUri(baseUrl);
         if (headers != null) {
             for (int i = 0; i < headers.length - 1; i += 2) {
                 spec.header(headers[i], headers[i + 1]);

@@ -120,6 +120,24 @@ public class CommonSteps {
         ctx.assertStatusCode(expectedCode, responseVar);
     }
 
+    @Then("Assert status code is one of {string} in {string}")
+    public void assertStatusCodeOneOf(String csvCodes, String responseVar) {
+        Response response = (Response) ctx.get(responseVar, true);
+        int actual = response.getStatusCode();
+        java.util.List<Integer> allowed = java.util.Arrays.stream(csvCodes.split(","))
+                .map(String::trim).map(Integer::parseInt).toList();
+        Assertions.assertTrue(allowed.contains(actual),
+                "Status " + actual + " not in allowed " + allowed + ". Body: " + response.asString());
+    }
+
+    @Then("Assert response is not a server error in {string}")
+    public void assertNotServerError(String responseVar) {
+        Response response = (Response) ctx.get(responseVar, true);
+        int actual = response.getStatusCode();
+        Assertions.assertTrue(actual < 500,
+                "Expected non-5xx but got " + actual + ". Body: " + response.asString());
+    }
+
     // ── Response header assertions ────────────────────────────────────
 
     @Then("Assert response header {string} equals {string} in {string}")

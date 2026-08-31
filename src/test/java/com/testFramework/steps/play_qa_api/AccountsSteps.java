@@ -338,6 +338,22 @@ public class AccountsSteps {
         ctx.save(saveAs, ((Response) ctx.get(rawVar, true)).as(UserResp.class));
     }
 
+    @Then("Assert UserResp {string} id equals {string}")
+    public void assertUserRespId(String varName, String expectedVar) {
+        Assertions.assertEquals(ctx.str(expectedVar),
+                ((UserResp) ctx.get(varName, true)).getId(), "UserResp id mismatch");
+    }
+
+    @Then("Assert UserResp {string} has all core fields")
+    public void assertUserRespCoreFields(String varName) {
+        UserResp resp = (UserResp) ctx.get(varName, true);
+        Assertions.assertNotNull(resp.getId(), "id is null");
+        Assertions.assertNotNull(resp.getEmail(), "email is null");
+        Assertions.assertNotNull(resp.getUsername(), "username is null");
+        Assertions.assertNotNull(resp.getProfile(), "profile is null");
+        Assertions.assertNotNull(resp.getMetadata(), "metadata is null");
+    }
+
     @Then("Convert users list response {string} to UsersListResp and save as {string}")
     public void convertUsersListResponse(String rawVar, String saveAs) {
         ctx.save(saveAs, ((Response) ctx.get(rawVar, true)).as(UsersListResp.class));
@@ -499,6 +515,49 @@ public class AccountsSteps {
     @When("Logout user {string} with no auth header and save response as {string}")
     public void logoutUserNoAuth(String idVar, String varName) {
         ctx.save(varName, rest.postNoBody(ApiPaths.usersLogout(ctx.str(idVar))));
+    }
+
+    // ── Raw Authorization header (security tests) ─────────────────────
+    // These steps send a LITERAL Authorization header value verbatim (no bearerHeader()
+    // normalization), so we can exercise empty / whitespace / malformed tokens exactly
+    // as a real client would send them.
+
+    @When("Delete user {string} with raw auth header {string} and save response as {string}")
+    public void deleteUserRawAuth(String idVar, String rawHeader, String varName) {
+        ctx.save(varName, rest.delete(ApiPaths.usersDelete(ctx.str(idVar)),
+                "Authorization", rawHeader));
+    }
+
+    @When("Patch user {string} with raw auth header {string} firstName {string} and save response as {string}")
+    public void patchUserRawAuth(String idVar, String rawHeader, String firstNameVar, String varName) {
+        ctx.save(varName, rest.patch(ApiPaths.usersPatch(ctx.str(idVar)),
+                CreateUserReq.builder()
+                        .profile(ProfileReq.builder()
+                                .firstName(ctx.str(firstNameVar))
+                                .lastName("RawAuthLast")
+                                .build())
+                        .build(),
+                "Authorization", rawHeader));
+    }
+
+    @When("Update user {string} with raw auth header {string} and save response as {string}")
+    public void updateUserRawAuth(String idVar, String rawHeader, String varName) {
+        ctx.save(varName, rest.put(ApiPaths.usersUpdate(ctx.str(idVar)),
+                CreateUserReq.builder()
+                        .email(Generator.email())
+                        .username(Generator.username())
+                        .profile(ProfileReq.builder()
+                                .firstName(Generator.firstName())
+                                .lastName(Generator.lastName())
+                                .build())
+                        .build(),
+                "Authorization", rawHeader));
+    }
+
+    @When("Logout user {string} with raw auth header {string} and save response as {string}")
+    public void logoutUserRawAuth(String idVar, String rawHeader, String varName) {
+        ctx.save(varName, rest.postNoBody(ApiPaths.usersLogout(ctx.str(idVar)),
+                "Authorization", rawHeader));
     }
 
     // ── Error assertions ─────────────────────────────────────────────

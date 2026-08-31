@@ -138,16 +138,17 @@ public class MailSteps {
 
     @Then("Assert messages list {string} items have no body field")
     public void assertMessagesListNoBody(String varName) {
-        Response resp = (Response) ctx.get(varName, true);
-        // body_preview is allowed, but "body" as a standalone key should not appear at top level of message items
-        // We check the raw JSON doesn't have `"body":` without "preview"
-        String raw = resp.asString();
-        // Only body_preview should appear, not a standalone "body" key
-        // Use simple heuristic: count occurrences of "body_preview" vs "\"body\":"
-        long previewCount = raw.chars().filter(c -> c == 'p').count(); // rough check
-        Assertions.assertFalse(
-                raw.contains("\"html_body\""),
-                "List items should NOT contain html_body. Body: " + raw);
+        // The list endpoint returns only body_preview per item; the full body / html_body
+        // are exposed solely by the single-message endpoint. Verify via the typed DTO
+        // that no list item carries a full body or html_body.
+        MessagesListResp resp = ((Response) ctx.get(varName, true)).as(MessagesListResp.class);
+        Assertions.assertNotNull(resp.getMessages(), "messages list is null");
+        for (MessageResp msg : resp.getMessages()) {
+            Assertions.assertNull(msg.getBody(),
+                    "List item " + msg.getId() + " should NOT contain full body: " + msg.getBody());
+            Assertions.assertNull(msg.getHtmlBody(),
+                    "List item " + msg.getId() + " should NOT contain html_body: " + msg.getHtmlBody());
+        }
     }
 
     @Then("Save first message id from messages list {string} as {string}")
