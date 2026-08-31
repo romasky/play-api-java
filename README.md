@@ -11,7 +11,7 @@
 - **Strict Object Pattern** — every request/response is a typed DTO. No raw JSON, no `Map<String, Object>`.
 - **BDD Scenarios** — human-readable Cucumber `.feature` files covering positive and negative paths.
 - **Allure Reports** — rich HTML reports with step-level detail, published automatically to GitHub Pages.
-- **Built-in Temp Mail** — uses the `play-qa.com` mail API for end-to-end email flow tests (no Selenium needed).
+- **Temp Mail flows** — end-to-end mailbox tests (create → send → list/read → delete) driven directly through the `play-qa.com` mail API in `MailSteps` (no Selenium needed).
 - **CI/CD** — GitHub Actions runs tests on every push, PR, and daily at 08:00 UTC.
 
 ---
@@ -42,8 +42,7 @@ src/test/
 │   │   ├── Generator.java              # Random data generation
 │   │   ├── PropertyHandler.java        # Config loading (config.properties)
 │   │   ├── RestHandler.java            # Rest Assured wrapper (all HTTP methods)
-│   │   ├── RunMode.java                # PROD/DEV enum
-│   │   └── TempMailHandler.java        # Temp mailbox via play-qa.com mail API
+│   │   └── RunMode.java                # PROD/DEV enum
 │   ├── play_qa_api/
 │   │   ├── ApiPaths.java               # All API endpoint paths
 │   │   ├── Constants.java              # Shared constants (enums, timeouts)
