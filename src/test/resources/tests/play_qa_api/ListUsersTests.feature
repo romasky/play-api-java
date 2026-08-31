@@ -37,3 +37,23 @@ Feature: List Users
     When Get users list and save response as "listResp"
     Then Get and check status code 200 from "listResp"
     And Assert response header "Cache-Control" contains "no-store" in "listResp"
+
+  # ─────────────────── NEGATIVE / BOUNDARY PAGINATION ───────────────────
+  # Spec does not state how invalid pagination params are handled, so these
+  # assert the weaker-but-true property (no 5xx) and record actual behavior.
+  # Tighten to an exact code once the contract is confirmed.
+
+  @Run @Negative @allure.label.story:Negative_Scenario
+  Scenario Outline: Users list with invalid pagination <label> does not 5xx
+    When Get users list page "<page>" perPage "<perPage>" and save response as "listResp"
+    Then Assert response is not a server error in "listResp"
+    And Assert status code is one of "200,400" in "listResp"
+    Examples:
+      | label            | page | perPage |
+      | per_page zero    | 1    | 0       |
+      | per_page negative| 1    | -5      |
+      | page zero        | 0    | 10      |
+      | page negative    | -1   | 10      |
+      | per_page over max| 1    | 100000  |
+      | page non-numeric | abc  | 10      |
+      | perPage non-num  | 1    | xyz     |
