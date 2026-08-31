@@ -12,6 +12,7 @@
 - **BDD Scenarios** — human-readable Cucumber `.feature` files covering positive and negative paths.
 - **Allure Reports** — rich HTML reports with step-level detail, published automatically to GitHub Pages.
 - **Temp Mail flows** — end-to-end mailbox tests (create → send → list/read → delete) driven directly through the `play-qa.com` mail API in `MailSteps` (no Selenium needed).
+- **Security coverage** — auth-bypass and cross-account (IDOR) guards on mutating endpoints: empty / malformed Bearer tokens and revoked-token attacks are asserted to return `401` (see `TokenSecurityTests.feature`).
 - **CI/CD** — GitHub Actions runs tests on every push, PR, and daily at 08:00 UTC.
 
 ---
@@ -77,6 +78,7 @@ src/test/
         ├── MailTests.feature           # Mail API scenarios
         ├── OptionsTests.feature        # OPTIONS /users/options scenarios
         ├── PatchUserTests.feature      # PATCH /users/patch/:id scenarios
+        ├── TokenSecurityTests.feature  # Auth-bypass / IDOR guards on mutating endpoints
         ├── UpdateUserTests.feature     # PUT /users/update/:id scenarios
         └── UserExistsTests.feature     # HEAD /users/exists/:id scenarios
 ```
