@@ -1,0 +1,39 @@
+{
+    "id": "6aa2a8388854c2a396160115",
+    "email": "kvayetele3@play-qa.com",
+    "username": "user_jcfgcb5z",
+    "access_token": "usr_1789044792_6eb883f1f9da59784adeb482606792b9",
+    "profile": {
+        "first_name": "Testymlokl",
+        "last_name": "Userczeilp"
+    },
+    "contacts": {
+        "phone_verified": false
+    },
+    "address": {
+        
+    },
+    "employment": {
+        
+    },
+    "settings": {
+        "language": "",
+        "timezone": "",
+        "theme": "",
+        "notifications_enabled": false,
+        "email_notifications": false,
+        "sms_notifications": false,
+        "two_factor_enabled": false,
+        "private_profile": false
+    },
+    "metadata": {
+        "created_at": "2026-09-10T12:53:12.509813834Z",
+        "updated_at": "2026-09-10T12:53:12.509813834Z",
+        "expires_at": "2026-09-11T12:53:12.509813834Z",
+        "login_count": 0,
+        "is_active": true,
+        "is_verified": false,
+        "is_premium": false,
+        "role": "user"
+    }
+}
