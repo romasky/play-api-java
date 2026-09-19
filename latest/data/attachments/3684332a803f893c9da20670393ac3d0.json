@@ -1,0 +1,10 @@
+{
+    "success": false,
+    "error": {
+        "code": "INVALID_TOKEN",
+        "message": "Invalid or expired token",
+        "details": "Token does not match user or has expired"
+    },
+    "timestamp": "2026-09-19T12:23:56.59258008Z",
+    "request_id": "0736e051-8c8d-4c70-9154-0b9364da0928"
+}
