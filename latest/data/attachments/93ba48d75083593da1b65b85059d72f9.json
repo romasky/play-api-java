@@ -1,0 +1,39 @@
+{
+    "id": "6aba96a9d31c568702643fd2",
+    "email": "rd5wq3sjx2@play-qa.com",
+    "username": "user_o7ddojru",
+    "access_token": "usr_1790613161_8d26697c50a837274d4da2805db0167f",
+    "profile": {
+        "first_name": "Testopkago",
+        "last_name": "Userhnopad"
+    },
+    "contacts": {
+        "phone_verified": false
+    },
+    "address": {
+        
+    },
+    "employment": {
+        
+    },
+    "settings": {
+        "language": "",
+        "timezone": "",
+        "theme": "",
+        "notifications_enabled": false,
+        "email_notifications": false,
+        "sms_notifications": false,
+        "two_factor_enabled": false,
+        "private_profile": false
+    },
+    "metadata": {
+        "created_at": "2026-09-28T16:32:41.887329303Z",
+        "updated_at": "2026-09-28T16:32:41.887329303Z",
+        "expires_at": "2026-09-29T16:32:41.887329303Z",
+        "login_count": 0,
+        "is_active": true,
+        "is_verified": false,
+        "is_premium": false,
+        "role": "user"
+    }
+}
