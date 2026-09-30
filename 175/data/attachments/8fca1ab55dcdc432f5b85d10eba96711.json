@@ -1,0 +1,39 @@
+{
+    "id": "6abd1ffb394dd20e81b89260",
+    "email": "4seaon6pfq@play-qa.com",
+    "username": "user_fu6w6yih",
+    "access_token": "usr_1790779387_75fa024cf727eda2d3ca667f0a61f5b2",
+    "profile": {
+        "first_name": "Testycghsg",
+        "last_name": "Userswobam"
+    },
+    "contacts": {
+        "phone_verified": false
+    },
+    "address": {
+        
+    },
+    "employment": {
+        "status": "student"
+    },
+    "settings": {
+        "language": "",
+        "timezone": "",
+        "theme": "",
+        "notifications_enabled": false,
+        "email_notifications": false,
+        "sms_notifications": false,
+        "two_factor_enabled": false,
+        "private_profile": false
+    },
+    "metadata": {
+        "created_at": "2026-09-30T14:43:07.546583338Z",
+        "updated_at": "2026-09-30T14:43:07.546583338Z",
+        "expires_at": "2026-10-01T14:43:07.546583338Z",
+        "login_count": 0,
+        "is_active": true,
+        "is_verified": false,
+        "is_premium": false,
+        "role": "user"
+    }
+}

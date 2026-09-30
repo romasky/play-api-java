@@ -1,0 +1,10 @@
+{
+    "success": false,
+    "error": {
+        "code": "MISSING_TOKEN",
+        "message": "Authorization header is required",
+        "details": "Please provide Bearer token in Authorization header"
+    },
+    "timestamp": "2026-09-30T14:41:20.056330614Z",
+    "request_id": "f159c4e4-2788-44f4-9ae0-afb2cbdb5433"
+}
