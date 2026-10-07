@@ -1,0 +1,39 @@
+{
+    "id": "6ac66109516d151feeb7f8cd",
+    "email": "bnbpx8wao3@play-qa.com",
+    "username": "user_2u6i17l3",
+    "access_token": "usr_1791385865_5c9369160a7a460b2d29102f0c7cf24c",
+    "profile": {
+        "first_name": "Testegrvim",
+        "last_name": "Useribpult"
+    },
+    "contacts": {
+        "phone_verified": false
+    },
+    "address": {
+        
+    },
+    "employment": {
+        
+    },
+    "settings": {
+        "language": "",
+        "timezone": "",
+        "theme": "system",
+        "notifications_enabled": false,
+        "email_notifications": false,
+        "sms_notifications": false,
+        "two_factor_enabled": false,
+        "private_profile": false
+    },
+    "metadata": {
+        "created_at": "2026-10-07T15:11:05.048630504Z",
+        "updated_at": "2026-10-07T15:11:05.048630504Z",
+        "expires_at": "2026-10-08T15:11:05.048630504Z",
+        "login_count": 0,
+        "is_active": true,
+        "is_verified": false,
+        "is_premium": false,
+        "role": "user"
+    }
+}
