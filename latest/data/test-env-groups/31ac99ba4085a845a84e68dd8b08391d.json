@@ -1,1 +1,1 @@
-{"id":"31ac99ba4085a845a84e68dd8b08391d","fullName":"src/test/resources/tests/play_qa_api/DeleteUserTests.feature:42","name":"Delete non-existent user with another user token returns 401 INVALID_TOKEN","status":"passed","testResultsByEnv":{"default":"c61b9d72529b91a6079ec167ebac4859"}}
+{"id":"31ac99ba4085a845a84e68dd8b08391d","fullName":"src/test/resources/tests/play_qa_api/DeleteUserTests.feature:42","name":"Delete non-existent user with another user token returns 401 INVALID_TOKEN","status":"passed","testResultsByEnv":{"default":"c38ae957620f66f3ca642b5e2d732418"}}

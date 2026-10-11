@@ -1,1 +1,1 @@
-{"id":"d1208ea4babe5fced383a8129c753d04","fullName":"src/test/resources/tests/play_qa_api/CreateUserTests.feature:220","name":"Create user with bio longer than 500 chars returns 400 VALIDATION_ERROR","status":"passed","testResultsByEnv":{"default":"149cb15787c2a4603bf68134b66a13c1"}}
+{"id":"d1208ea4babe5fced383a8129c753d04","fullName":"src/test/resources/tests/play_qa_api/CreateUserTests.feature:220","name":"Create user with bio longer than 500 chars returns 400 VALIDATION_ERROR","status":"passed","testResultsByEnv":{"default":"e278ef1b460c87bc4218b13ec55cd909"}}
