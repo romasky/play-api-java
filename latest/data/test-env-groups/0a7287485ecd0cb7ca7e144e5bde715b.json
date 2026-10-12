@@ -1,1 +1,1 @@
-{"id":"0a7287485ecd0cb7ca7e144e5bde715b","fullName":"src/test/resources/tests/play_qa_api/LogoutTests.feature:83","name":"Logout with no auth header returns 401 MISSING_TOKEN","status":"passed","testResultsByEnv":{"default":"ec78b778f7a1bb614df780c85a24479c"}}
+{"id":"0a7287485ecd0cb7ca7e144e5bde715b","fullName":"src/test/resources/tests/play_qa_api/LogoutTests.feature:83","name":"Logout with no auth header returns 401 MISSING_TOKEN","status":"passed","testResultsByEnv":{"default":"9883d3e7d6265a8d0303eeb060cc210a"}}
