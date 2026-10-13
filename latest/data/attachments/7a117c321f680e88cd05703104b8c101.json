@@ -1,0 +1,40 @@
+{
+    "id": "6ace4f5e9350ef0bd1f4364c",
+    "email": "vlxqwmj0yv@play-qa.com",
+    "username": "user_ttm7hmis",
+    "access_token": "usr_1791905630_9d974e5a24b9af049f74a40e46c0661c",
+    "profile": {
+        "first_name": "Testtvsask",
+        "last_name": "Useropsphl",
+        "gender": "male"
+    },
+    "contacts": {
+        "phone_verified": false
+    },
+    "address": {
+        
+    },
+    "employment": {
+        
+    },
+    "settings": {
+        "language": "",
+        "timezone": "",
+        "theme": "",
+        "notifications_enabled": false,
+        "email_notifications": false,
+        "sms_notifications": false,
+        "two_factor_enabled": false,
+        "private_profile": false
+    },
+    "metadata": {
+        "created_at": "2026-10-13T15:33:50.711179204Z",
+        "updated_at": "2026-10-13T15:33:50.711179204Z",
+        "expires_at": "2026-10-14T15:33:50.711179204Z",
+        "login_count": 0,
+        "is_active": true,
+        "is_verified": false,
+        "is_premium": false,
+        "role": "user"
+    }
+}

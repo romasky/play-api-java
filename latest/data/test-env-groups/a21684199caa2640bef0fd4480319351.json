@@ -1,1 +1,1 @@
-{"id":"a21684199caa2640bef0fd4480319351","fullName":"src/test/resources/tests/play_qa_api/TokenSecurityTests.feature:21","name":"PATCH with empty Bearer token is rejected 401 INVALID_TOKEN_FORMAT","status":"passed","testResultsByEnv":{"default":"fb76eaf95718b5fef6fe05d8d88b496a"}}
+{"id":"a21684199caa2640bef0fd4480319351","fullName":"src/test/resources/tests/play_qa_api/TokenSecurityTests.feature:21","name":"PATCH with empty Bearer token is rejected 401 INVALID_TOKEN_FORMAT","status":"passed","testResultsByEnv":{"default":"37bf4918e719507475fb1e537f2ba3b4"}}

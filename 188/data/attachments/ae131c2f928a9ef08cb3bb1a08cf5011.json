@@ -1,0 +1,39 @@
+{
+    "id": "6ace531f9350ef0bd1f4382c",
+    "email": "jim7675deb@play-qa.com",
+    "username": "user_qye40yfa",
+    "access_token": "usr_1791906591_14e979f7f8a171049a599ec67e948232",
+    "profile": {
+        "first_name": "Testamgrid",
+        "last_name": "Userookfhm"
+    },
+    "contacts": {
+        "phone_verified": false
+    },
+    "address": {
+        
+    },
+    "employment": {
+        
+    },
+    "settings": {
+        "language": "",
+        "timezone": "",
+        "theme": "",
+        "notifications_enabled": false,
+        "email_notifications": false,
+        "sms_notifications": false,
+        "two_factor_enabled": false,
+        "private_profile": false
+    },
+    "metadata": {
+        "created_at": "2026-10-13T15:49:51.143794692Z",
+        "updated_at": "2026-10-13T15:49:51.143794692Z",
+        "expires_at": "2026-10-14T15:49:51.143794692Z",
+        "login_count": 0,
+        "is_active": true,
+        "is_verified": false,
+        "is_premium": false,
+        "role": "user"
+    }
+}
