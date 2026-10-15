@@ -1,0 +1,1 @@
+{"id":"4c48bd5c413ecfc4e0f357a0d8c47fa9","fullName":"src/test/resources/tests/play_qa_api/CreateUserTests.feature:159","name":"Create user with password shorter than 8 chars returns 400 VALIDATION_ERROR","status":"passed","testResultsByEnv":{"default":"f3ba7ab58a7c13a2a163e540ed095057"}}

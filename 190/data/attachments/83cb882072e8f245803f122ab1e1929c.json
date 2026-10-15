@@ -1,0 +1,39 @@
+{
+    "id": "6ad0d0bf07eaed7f49b5297b",
+    "email": "10c3h79217@play-qa.com",
+    "username": "17i",
+    "access_token": "usr_1792069823_70ccae4144b244e3fdf3727b1874ed24",
+    "profile": {
+        "first_name": "Testkyffgr",
+        "last_name": "Userflejli"
+    },
+    "contacts": {
+        "phone_verified": false
+    },
+    "address": {
+        
+    },
+    "employment": {
+        
+    },
+    "settings": {
+        "language": "",
+        "timezone": "",
+        "theme": "",
+        "notifications_enabled": false,
+        "email_notifications": false,
+        "sms_notifications": false,
+        "two_factor_enabled": false,
+        "private_profile": false
+    },
+    "metadata": {
+        "created_at": "2026-10-15T13:10:23.697223145Z",
+        "updated_at": "2026-10-15T13:10:23.697223145Z",
+        "expires_at": "2026-10-16T13:10:23.697223145Z",
+        "login_count": 0,
+        "is_active": true,
+        "is_verified": false,
+        "is_premium": false,
+        "role": "user"
+    }
+}
