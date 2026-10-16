@@ -1,1 +1,1 @@
-{"id":"360f59fa0830408de6930997a4416901","fullName":"src/test/resources/tests/play_qa_api/GetUserTests.feature:47","name":"Get user with malformed ID returns 404 USER_NOT_FOUND","status":"passed","testResultsByEnv":{"default":"c19c75424642e92678b6ce017e068e76"}}
+{"id":"360f59fa0830408de6930997a4416901","fullName":"src/test/resources/tests/play_qa_api/GetUserTests.feature:47","name":"Get user with malformed ID returns 404 USER_NOT_FOUND","status":"passed","testResultsByEnv":{"default":"26d54b648563c30733c0cb96ffa1746b"}}
