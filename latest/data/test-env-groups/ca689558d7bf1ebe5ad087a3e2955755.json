@@ -1,1 +1,1 @@
-{"id":"ca689558d7bf1ebe5ad087a3e2955755","fullName":"src/test/resources/tests/play_qa_api/MailboxCreateTests.feature:93","name":"Create mailbox with uppercase in local_part returns 400 INVALID_LOCAL_PART","status":"passed","testResultsByEnv":{"default":"957b4015dedaf97bc527da17c306d238"}}
+{"id":"ca689558d7bf1ebe5ad087a3e2955755","fullName":"src/test/resources/tests/play_qa_api/MailboxCreateTests.feature:93","name":"Create mailbox with uppercase in local_part returns 400 INVALID_LOCAL_PART","status":"passed","testResultsByEnv":{"default":"44cdc1c05c1a7cceee65b2ff6a1f29d7"}}

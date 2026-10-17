@@ -1,1 +1,1 @@
-{"id":"bbd83e02f85d44c16591e0a2d307f1ba","fullName":"src/test/resources/tests/play_qa_api/LoginTests.feature:88","name":"Login with password shorter than 8 chars returns 400 VALIDATION_ERROR","status":"passed","testResultsByEnv":{"default":"184ce42bf304ff66688c6d3f8695aa11"}}
+{"id":"bbd83e02f85d44c16591e0a2d307f1ba","fullName":"src/test/resources/tests/play_qa_api/LoginTests.feature:88","name":"Login with password shorter than 8 chars returns 400 VALIDATION_ERROR","status":"passed","testResultsByEnv":{"default":"7414dd1d409471c61b2b113729e780e0"}}
