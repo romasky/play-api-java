@@ -1,0 +1,39 @@
+{
+    "id": "6ad635d5fc98d2c63f3aa5eb",
+    "email": "r4bghou8m8@play-qa.com",
+    "username": "user_a2mgfhug",
+    "access_token": "usr_1792423381_8e6d1fafe21c49fd1e47c49421ed205d",
+    "profile": {
+        "first_name": "Testxcajyr",
+        "last_name": "Userovpuyl"
+    },
+    "contacts": {
+        "phone_verified": false
+    },
+    "address": {
+        
+    },
+    "employment": {
+        "status": "student"
+    },
+    "settings": {
+        "language": "",
+        "timezone": "",
+        "theme": "",
+        "notifications_enabled": false,
+        "email_notifications": false,
+        "sms_notifications": false,
+        "two_factor_enabled": false,
+        "private_profile": false
+    },
+    "metadata": {
+        "created_at": "2026-10-19T15:23:01.466386978Z",
+        "updated_at": "2026-10-19T15:23:01.466386978Z",
+        "expires_at": "2026-10-20T15:23:01.466386978Z",
+        "login_count": 0,
+        "is_active": true,
+        "is_verified": false,
+        "is_premium": false,
+        "role": "user"
+    }
+}

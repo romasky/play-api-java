@@ -1,1 +1,1 @@
-{"id":"c1833d70aba1bafd047652570369a63d","fullName":"src/test/resources/tests/play_qa_api/MailboxCreateTests.feature:101","name":"Create mailbox with @ in local_part returns 400 INVALID_LOCAL_PART","status":"passed","testResultsByEnv":{"default":"b41870498e831f51bdef96d04464a66b"}}
+{"id":"c1833d70aba1bafd047652570369a63d","fullName":"src/test/resources/tests/play_qa_api/MailboxCreateTests.feature:101","name":"Create mailbox with @ in local_part returns 400 INVALID_LOCAL_PART","status":"passed","testResultsByEnv":{"default":"5acb1fb35ccee1d43571835703df6f67"}}
