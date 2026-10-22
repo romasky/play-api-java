@@ -1,1 +1,1 @@
-{"id":"360e05d9ebc492f54bea526e86289063","fullName":"src/test/resources/tests/play_qa_api/TokenSecurityTests.feature:68","name":"Logged-out user with empty Bearer token cannot DELETE another account","status":"passed","testResultsByEnv":{"default":"3f88c4e1f1a86c3adef46567ea197a8f"}}
+{"id":"360e05d9ebc492f54bea526e86289063","fullName":"src/test/resources/tests/play_qa_api/TokenSecurityTests.feature:68","name":"Logged-out user with empty Bearer token cannot DELETE another account","status":"passed","testResultsByEnv":{"default":"9bc7a174200b811dbe216237fc15514d"}}

@@ -1,1 +1,1 @@
-{"id":"63a6365895808333f49aa18f577c29ac","fullName":"src/test/resources/tests/play_qa_api/TokenSecurityTests.feature:55","name":"Logout with empty Bearer token is rejected 401 INVALID_TOKEN_FORMAT","status":"passed","testResultsByEnv":{"default":"9b2a2d67f4567075c50a86c521f72dbb"}}
+{"id":"63a6365895808333f49aa18f577c29ac","fullName":"src/test/resources/tests/play_qa_api/TokenSecurityTests.feature:55","name":"Logout with empty Bearer token is rejected 401 INVALID_TOKEN_FORMAT","status":"passed","testResultsByEnv":{"default":"e310bc2634e4a38fba25d84bedfd14a8"}}

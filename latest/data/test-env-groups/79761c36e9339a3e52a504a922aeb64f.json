@@ -1,1 +1,1 @@
-{"id":"79761c36e9339a3e52a504a922aeb64f","fullName":"src/test/resources/tests/play_qa_api/MailboxDeleteTests.feature:50","name":"Delete non-existent mailbox returns 404 MAILBOX_NOT_FOUND","status":"passed","testResultsByEnv":{"default":"d08f6b91f4bfe90f56d0662cd3c793b4"}}
+{"id":"79761c36e9339a3e52a504a922aeb64f","fullName":"src/test/resources/tests/play_qa_api/MailboxDeleteTests.feature:50","name":"Delete non-existent mailbox returns 404 MAILBOX_NOT_FOUND","status":"passed","testResultsByEnv":{"default":"406909c0eead16221a6dfda299a608f6"}}

@@ -1,0 +1,1 @@
+{"id":"21de3480b5a11ec369ed826a9ade493a","fullName":"src/test/resources/tests/play_qa_api/DeleteUserTests.feature:31","name":"Delete with no Authorization header returns 401 MISSING_TOKEN","status":"passed","testResultsByEnv":{"default":"51f4f935e009ba59db2581613fd4c79f"}}

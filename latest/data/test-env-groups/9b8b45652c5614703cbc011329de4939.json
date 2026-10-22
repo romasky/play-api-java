@@ -1,1 +1,1 @@
-{"id":"9b8b45652c5614703cbc011329de4939","fullName":"src/test/resources/tests/play_qa_api/MailMessagesTests.feature:19","name":"Messages list does not contain html_body field","status":"passed","testResultsByEnv":{"default":"48e10eb631ad6889c36f29bcc8f016fe"}}
+{"id":"9b8b45652c5614703cbc011329de4939","fullName":"src/test/resources/tests/play_qa_api/MailMessagesTests.feature:19","name":"Messages list does not contain html_body field","status":"broken","testResultsByEnv":{"default":"3738ad51ed9701cbc3724e69353ce399"}}
