@@ -1,1 +1,1 @@
-{"id":"86410a99aa87650455c680660c2597ef","fullName":"src/test/resources/tests/play_qa_api/TokenSecurityTests.feature:86","name":"Logged-out user with empty Bearer token cannot PATCH another account","status":"passed","testResultsByEnv":{"default":"34c6047c23c7f559a4686351deb14094"}}
+{"id":"86410a99aa87650455c680660c2597ef","fullName":"src/test/resources/tests/play_qa_api/TokenSecurityTests.feature:86","name":"Logged-out user with empty Bearer token cannot PATCH another account","status":"passed","testResultsByEnv":{"default":"77890b538bf9f343ae7b6432e7248869"}}

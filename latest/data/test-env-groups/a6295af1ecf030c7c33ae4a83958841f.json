@@ -1,1 +1,1 @@
-{"id":"a6295af1ecf030c7c33ae4a83958841f","fullName":"src/test/resources/tests/play_qa_api/UpdateUserTests.feature:69","name":"PUT update non-existent user with another user token returns 401 INVALID_TOKEN","status":"passed","testResultsByEnv":{"default":"326a297542a3ffbca87d254f46744579"}}
+{"id":"a6295af1ecf030c7c33ae4a83958841f","fullName":"src/test/resources/tests/play_qa_api/UpdateUserTests.feature:69","name":"PUT update non-existent user with another user token returns 401 INVALID_TOKEN","status":"failed","testResultsByEnv":{"default":"c57701f285bb06c452d8ad18c901c711"}}
