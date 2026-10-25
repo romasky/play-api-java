@@ -1,0 +1,10 @@
+{
+    "success": false,
+    "error": {
+        "code": "FORBIDDEN",
+        "message": "You can only modify your own account",
+        "details": "Your token is valid, but it belongs to a different user. This is 403, not 401: the credential was accepted, the permission was not."
+    },
+    "timestamp": "2026-10-25T13:08:00.798640085Z",
+    "request_id": "66c7070a-3a5e-4a02-95fb-ec1794fc9fcd"
+}

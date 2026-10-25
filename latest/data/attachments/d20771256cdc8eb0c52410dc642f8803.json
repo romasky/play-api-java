@@ -1,0 +1,10 @@
+{
+    "success": false,
+    "error": {
+        "code": "VALIDATION_ERROR",
+        "message": "Invalid request body",
+        "details": "gender must be one of: male female other prefer_not_to_say"
+    },
+    "timestamp": "2026-10-25T13:04:00.357699586Z",
+    "request_id": "2c94ead7-2f89-40da-aa38-317b0fa8e4b5"
+}
