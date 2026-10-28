@@ -5,6 +5,7 @@ import com.testFramework.support.LocalBaseUrlServer;
 import io.qameta.allure.Allure;
 import io.qameta.allure.AllureLifecycle;
 import io.qameta.allure.AllureResultsWriter;
+import io.qameta.allure.aspects.StepsAspects;
 import io.qameta.allure.model.StepResult;
 import io.qameta.allure.model.TestResult;
 import io.qameta.allure.model.TestResultContainer;
@@ -120,6 +121,12 @@ class RestHandlerTest {
         assertEquals(List.of(), attachmentsDuring(() -> rest.head("/h")));
     }
 
+    /** Proves the AspectJ agent actually weaves {@code @Step}; without it the report has no request steps. */
+    @Test
+    void verbsAreRecordedAsAllureSteps() {
+        assertEquals(List.of("GET /g"), stepNamesDuring(() -> rest.get("/g")));
+    }
+
     @Test
     void blankResponseBodyIsNotAttached() {
         assertEquals(List.of(), attachmentsDuring(() -> rest.get(EMPTY_REPLY_PATH)));
@@ -227,9 +234,22 @@ class RestHandlerTest {
         assertEquals("{\"ok\":true}", r.asString());
     }
 
-    /** Runs the call inside a throwaway Allure test case and returns the names of all attachments it made. */
+    /** Names of all attachments the call made, at any step depth. */
     private static List<String> attachmentsDuring(Supplier<Response> call) {
+        TestResult result = resultOf(call);
+        List<String> names = new ArrayList<>();
+        collectAttachments(result, result.getSteps(), names);
+        return names;
+    }
+
+    private static List<String> stepNamesDuring(Supplier<Response> call) {
+        return resultOf(call).getSteps().stream().map(StepResult::getName).toList();
+    }
+
+    /** Runs the call inside a throwaway Allure test case and returns what Allure recorded. */
+    private static TestResult resultOf(Supplier<Response> call) {
         AllureLifecycle original = Allure.getLifecycle();
+        AllureLifecycle originalSteps = StepsAspects.getLifecycle();
         List<TestResult> written = new ArrayList<>();
         AllureLifecycle capture = new AllureLifecycle(new AllureResultsWriter() {
             @Override public void write(TestResult result) { written.add(result); }
@@ -238,6 +258,7 @@ class RestHandlerTest {
         });
         String uuid = UUID.randomUUID().toString();
         Allure.setLifecycle(capture);
+        StepsAspects.setLifecycle(capture); // the @Step aspect keeps its own lifecycle holder
         try {
             capture.scheduleTestCase(new TestResult().setUuid(uuid));
             capture.startTestCase(uuid);
@@ -246,10 +267,9 @@ class RestHandlerTest {
             capture.writeTestCase(uuid);
         } finally {
             Allure.setLifecycle(original);
+            StepsAspects.setLifecycle(originalSteps);
         }
-        List<String> names = new ArrayList<>();
-        collectAttachments(written.get(0), written.get(0).getSteps(), names);
-        return names;
+        return written.get(0);
     }
 
     private static void collectAttachments(WithAttachments node, List<StepResult> steps, List<String> names) {
