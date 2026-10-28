@@ -272,6 +272,8 @@ class RequestPinTest {
             Object dto = ctx.get("dto", true);
             assertEquals(c.type(), dto.getClass(), c.path());
             assertEquals(c.expected(), c.field().apply(dto), c.path());
+            // rows share a canned reply; a stale "dto" would let a no-op Convert step pass
+            ScenarioContext.local.get(SCENARIO).remove("dto");
         }
         assertEquals(12, converts.size(), "every Convert step is pinned");
     }
