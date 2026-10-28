@@ -165,6 +165,18 @@ class BaseStepsTest {
         assertEquals("t1", dto.getTime());
     }
 
+    @Test
+    void bearerAuthResolvesTheTokenVariableAndPrefixesBearer() {
+        ctx.save("tok", "abc");
+        ctx.save("empty", "");
+        ctx.save("prefixed", "Bearer xyz");
+
+        assertArrayEquals(new String[]{"Authorization", "Bearer abc"}, ctx.bearerAuth("tok"));
+        assertArrayEquals(new String[]{"Authorization", "Bearer "}, ctx.bearerAuth("empty"));
+        assertArrayEquals(new String[]{"Authorization", "Bearer xyz"}, ctx.bearerAuth("prefixed"));
+        assertArrayEquals(new String[]{"Authorization", "Bearer literal"}, ctx.bearerAuth("literal"));
+    }
+
     private static Response jsonResponse(String body) {
         return new ResponseBuilder().setStatusCode(200).setContentType("application/json").setBody(body).build();
     }

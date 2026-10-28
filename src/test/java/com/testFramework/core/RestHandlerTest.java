@@ -78,6 +78,23 @@ class RestHandlerTest {
         assertEquals("Bearer Bearer", RestHandler.bearerHeader("Bearer"));
     }
 
+    // ── authorization ───────────────────────────────────────────────
+
+    @Test
+    void authorizationIsOneVerbatimNameValuePair() {
+        assertEquals("Authorization", RestHandler.AUTHORIZATION);
+        assertArrayEquals(new String[]{"Authorization", "Bearer "}, RestHandler.authorization("Bearer "));
+        assertArrayEquals(new String[]{"Authorization", ""}, RestHandler.authorization(""));
+        assertArrayEquals(new String[]{"Authorization", " x "}, RestHandler.authorization(" x "));
+    }
+
+    @Test
+    void authorizationPairIsSentAsTheAuthorizationHeader() {
+        rest.delete("/u/1", RestHandler.authorization("Bearer t"));
+
+        assertEquals("Bearer t", last.authorization());
+    }
+
     // ── verbs ───────────────────────────────────────────────────────
 
     @Test

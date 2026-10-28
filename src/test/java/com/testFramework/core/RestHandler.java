@@ -127,6 +127,13 @@ public class RestHandler {
         }
     }
 
+    public static final String AUTHORIZATION = "Authorization";
+
+    /** The {@code Authorization} header as a name-value pair for the {@code String...} headers; the value is sent verbatim. */
+    public static String[] authorization(String headerValue) {
+        return new String[]{AUTHORIZATION, headerValue};
+    }
+
     public static String bearerHeader(String token) {
         return token.startsWith("Bearer ") ? token : "Bearer " + token;
     }

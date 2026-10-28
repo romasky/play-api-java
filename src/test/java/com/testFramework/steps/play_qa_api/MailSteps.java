@@ -141,7 +141,7 @@ public class MailSteps {
         // The list endpoint returns only body_preview per item; the full body / html_body
         // are exposed solely by the single-message endpoint. Verify via the typed DTO
         // that no list item carries a full body or html_body.
-        MessagesListResp resp = ((Response) ctx.get(varName, true)).as(MessagesListResp.class);
+        MessagesListResp resp = ctx.response(varName).as(MessagesListResp.class);
         Assertions.assertNotNull(resp.getMessages(), "messages list is null");
         for (MessageResp msg : resp.getMessages()) {
             Assertions.assertNull(msg.getBody(),

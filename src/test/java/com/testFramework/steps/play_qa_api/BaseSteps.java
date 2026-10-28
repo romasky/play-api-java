@@ -1,5 +1,6 @@
 package com.testFramework.steps.play_qa_api;
 
+import com.testFramework.core.RestHandler;
 import io.qameta.allure.Allure;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Assertions;
@@ -73,6 +74,11 @@ public class BaseSteps {
     /** Deserializes the response stored under {@code rawVar} into {@code type} and saves it as {@code saveAs}. */
     protected <T> void convertAndSave(String rawVar, Class<T> type, String saveAs) {
         save(saveAs, response(rawVar).as(type));
+    }
+
+    /** {@code Authorization: Bearer <token>} where the token is resolved from context (literal fallback). */
+    protected String[] bearerAuth(String tokenVar) {
+        return RestHandler.authorization(RestHandler.bearerHeader(str(tokenVar)));
     }
 
     protected void assertStatusCode(int expected, String varName) {

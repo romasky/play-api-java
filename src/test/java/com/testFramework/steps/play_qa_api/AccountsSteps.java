@@ -404,7 +404,7 @@ public class AccountsSteps {
 
     @Then("Assert user exists header is {string} in response {string}")
     public void assertUserExistsHeader(String expected, String varName) {
-        String header = ((Response) ctx.get(varName, true)).getHeader("X-User-Exists");
+        String header = ctx.response(varName).getHeader("X-User-Exists");
         Assertions.assertEquals(expected, header, "X-User-Exists header mismatch");
     }
 
@@ -423,7 +423,7 @@ public class AccountsSteps {
                                 .lastName(ctx.str(lastNameVar))
                                 .build())
                         .build(),
-                "Authorization", RestHandler.bearerHeader(ctx.str(tokenVar))));
+                ctx.bearerAuth(tokenVar)));
     }
 
     @When("Update user {string} with no auth header and save response as {string}")
@@ -450,7 +450,7 @@ public class AccountsSteps {
                                 .lastName(Generator.lastName())
                                 .build())
                         .build(),
-                "Authorization", RestHandler.bearerHeader(ctx.str(tokenVar))));
+                ctx.bearerAuth(tokenVar)));
     }
 
     @When("Patch user {string} token {string} firstName {string} and save response as {string}")
@@ -462,21 +462,21 @@ public class AccountsSteps {
                                 .lastName("PatchedLastName")
                                 .build())
                         .build(),
-                "Authorization", RestHandler.bearerHeader(ctx.str(tokenVar))));
+                ctx.bearerAuth(tokenVar)));
     }
 
     @When("Patch user {string} token {string} email {string} and save response as {string}")
     public void patchUserEmail(String idVar, String tokenVar, String emailVar, String varName) {
         ctx.save(varName, rest.patch(ApiPaths.usersPatch(ctx.str(idVar)),
                 CreateUserReq.builder().email(ctx.str(emailVar)).build(),
-                "Authorization", RestHandler.bearerHeader(ctx.str(tokenVar))));
+                ctx.bearerAuth(tokenVar)));
     }
 
     @When("Patch user {string} token {string} username {string} and save response as {string}")
     public void patchUserUsername(String idVar, String tokenVar, String usernameVar, String varName) {
         ctx.save(varName, rest.patch(ApiPaths.usersPatch(ctx.str(idVar)),
                 CreateUserReq.builder().username(ctx.str(usernameVar)).build(),
-                "Authorization", RestHandler.bearerHeader(ctx.str(tokenVar))));
+                ctx.bearerAuth(tokenVar)));
     }
 
     @When("Patch user {string} with no auth header and save response as {string}")
@@ -494,7 +494,7 @@ public class AccountsSteps {
     public void patchUserEmptyBody(String idVar, String tokenVar, String varName) {
         ctx.save(varName, rest.patch(ApiPaths.usersPatch(ctx.str(idVar)),
                 CreateUserReq.builder().build(),
-                "Authorization", RestHandler.bearerHeader(ctx.str(tokenVar))));
+                ctx.bearerAuth(tokenVar)));
     }
 
     // ── Delete / Logout ──────────────────────────────────────────────
@@ -502,7 +502,7 @@ public class AccountsSteps {
     @When("Delete user {string} with token {string} and save response as {string}")
     public void deleteUser(String idVar, String tokenVar, String varName) {
         ctx.save(varName, rest.delete(ApiPaths.usersDelete(ctx.str(idVar)),
-                "Authorization", RestHandler.bearerHeader(ctx.str(tokenVar))));
+                ctx.bearerAuth(tokenVar)));
     }
 
     @When("Delete user {string} with no auth header and save response as {string}")
@@ -513,7 +513,7 @@ public class AccountsSteps {
     @When("Logout user {string} with token {string} and save response as {string}")
     public void logoutUser(String idVar, String tokenVar, String varName) {
         ctx.save(varName, rest.postNoBody(ApiPaths.usersLogout(ctx.str(idVar)),
-                "Authorization", RestHandler.bearerHeader(ctx.str(tokenVar))));
+                ctx.bearerAuth(tokenVar)));
     }
 
     @When("Logout user {string} with no auth header and save response as {string}")
@@ -529,7 +529,7 @@ public class AccountsSteps {
     @When("Delete user {string} with raw auth header {string} and save response as {string}")
     public void deleteUserRawAuth(String idVar, String rawHeader, String varName) {
         ctx.save(varName, rest.delete(ApiPaths.usersDelete(ctx.str(idVar)),
-                "Authorization", rawHeader));
+                RestHandler.authorization(rawHeader)));
     }
 
     @When("Patch user {string} with raw auth header {string} firstName {string} and save response as {string}")
@@ -541,7 +541,7 @@ public class AccountsSteps {
                                 .lastName("RawAuthLast")
                                 .build())
                         .build(),
-                "Authorization", rawHeader));
+                RestHandler.authorization(rawHeader)));
     }
 
     @When("Update user {string} with raw auth header {string} and save response as {string}")
@@ -555,13 +555,13 @@ public class AccountsSteps {
                                 .lastName(Generator.lastName())
                                 .build())
                         .build(),
-                "Authorization", rawHeader));
+                RestHandler.authorization(rawHeader)));
     }
 
     @When("Logout user {string} with raw auth header {string} and save response as {string}")
     public void logoutUserRawAuth(String idVar, String rawHeader, String varName) {
         ctx.save(varName, rest.postNoBody(ApiPaths.usersLogout(ctx.str(idVar)),
-                "Authorization", rawHeader));
+                RestHandler.authorization(rawHeader)));
     }
 
     // ── Error assertions ─────────────────────────────────────────────
