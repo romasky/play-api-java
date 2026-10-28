@@ -21,7 +21,7 @@ public class CommonSteps {
 
     @Before
     public void before(Scenario scenario) {
-        ScenarioContext.current = scenario;
+        ScenarioContext.scenarioName = scenario.getName();
         BaseSteps.renameCurrentHook("Setup: init scenario context");
     }
 

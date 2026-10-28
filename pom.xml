@@ -281,8 +281,10 @@
                                 <include>com/testFramework/steps/play_qa_api/BaseSteps*</include>
                             </includes>
                             <excludes>
-                                <exclude>**/*Test</exclude>
+                                <!-- report matches class-file paths, agent matches class names -->
+                                <exclude>**/*Test.class</exclude>
                                 <exclude>**/*Test$*</exclude>
+                                <exclude>**/*Test</exclude>
                             </excludes>
                             <formats>
                                 <format>XML</format>
