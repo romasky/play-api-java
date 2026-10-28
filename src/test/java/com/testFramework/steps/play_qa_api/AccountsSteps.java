@@ -368,10 +368,7 @@ public class AccountsSteps {
                 CreateUserReq.builder()
                         .email(ctx.str(emailVar))
                         .username(ctx.str(usernameVar))
-                        .profile(ProfileReq.builder()
-                                .firstName(ctx.str(firstNameVar))
-                                .lastName(ctx.str(lastNameVar))
-                                .build())
+                        .profile(namedProfile(firstNameVar, lastNameVar).build())
                         .build(),
                 ctx.bearerAuth(tokenVar)));
     }
@@ -379,39 +376,20 @@ public class AccountsSteps {
     @When("Update user {string} with no auth header and save response as {string}")
     public void updateUserNoAuth(String idVar, String varName) {
         ctx.save(varName, rest.put(ApiPaths.usersUpdate(ctx.str(idVar)),
-                CreateUserReq.builder()
-                        .email(Generator.email())
-                        .username(Generator.username())
-                        .profile(ProfileReq.builder()
-                                .firstName(Generator.firstName())
-                                .lastName(Generator.lastName())
-                                .build())
-                        .build()));
+                UserFixtures.randomUpdate().build()));
     }
 
     @When("Update user {string} with token {string} and invalid email and save response as {string}")
     public void updateUserInvalidEmail(String idVar, String tokenVar, String varName) {
         ctx.save(varName, rest.put(ApiPaths.usersUpdate(ctx.str(idVar)),
-                CreateUserReq.builder()
-                        .email("notanemail")
-                        .username(Generator.username())
-                        .profile(ProfileReq.builder()
-                                .firstName(Generator.firstName())
-                                .lastName(Generator.lastName())
-                                .build())
-                        .build(),
+                UserFixtures.randomUpdate().email("notanemail").build(),
                 ctx.bearerAuth(tokenVar)));
     }
 
     @When("Patch user {string} token {string} firstName {string} and save response as {string}")
     public void patchUser(String idVar, String tokenVar, String firstNameVar, String varName) {
         ctx.save(varName, rest.patch(ApiPaths.usersPatch(ctx.str(idVar)),
-                CreateUserReq.builder()
-                        .profile(ProfileReq.builder()
-                                .firstName(ctx.str(firstNameVar))
-                                .lastName("PatchedLastName")
-                                .build())
-                        .build(),
+                profilePatch(firstNameVar, "PatchedLastName"),
                 ctx.bearerAuth(tokenVar)));
     }
 
@@ -432,12 +410,7 @@ public class AccountsSteps {
     @When("Patch user {string} with no auth header and save response as {string}")
     public void patchUserNoAuth(String idVar, String varName) {
         ctx.save(varName, rest.patch(ApiPaths.usersPatch(ctx.str(idVar)),
-                CreateUserReq.builder()
-                        .profile(ProfileReq.builder()
-                                .firstName(Generator.firstName())
-                                .lastName(Generator.lastName())
-                                .build())
-                        .build()));
+                CreateUserReq.builder().profile(UserFixtures.randomProfile().build()).build()));
     }
 
     @When("Patch user {string} with empty body token {string} and save response as {string}")
@@ -445,6 +418,13 @@ public class AccountsSteps {
         ctx.save(varName, rest.patch(ApiPaths.usersPatch(ctx.str(idVar)),
                 CreateUserReq.builder().build(),
                 ctx.bearerAuth(tokenVar)));
+    }
+
+    /** PATCH body touching only the profile name; the caller picks the last name. */
+    private CreateUserReq profilePatch(String firstNameVar, String lastName) {
+        return CreateUserReq.builder()
+                .profile(ProfileReq.builder().firstName(ctx.str(firstNameVar)).lastName(lastName).build())
+                .build();
     }
 
     // ── Delete / Logout ──────────────────────────────────────────────
@@ -485,26 +465,14 @@ public class AccountsSteps {
     @When("Patch user {string} with raw auth header {string} firstName {string} and save response as {string}")
     public void patchUserRawAuth(String idVar, String rawHeader, String firstNameVar, String varName) {
         ctx.save(varName, rest.patch(ApiPaths.usersPatch(ctx.str(idVar)),
-                CreateUserReq.builder()
-                        .profile(ProfileReq.builder()
-                                .firstName(ctx.str(firstNameVar))
-                                .lastName("RawAuthLast")
-                                .build())
-                        .build(),
+                profilePatch(firstNameVar, "RawAuthLast"),
                 RestHandler.authorization(rawHeader)));
     }
 
     @When("Update user {string} with raw auth header {string} and save response as {string}")
     public void updateUserRawAuth(String idVar, String rawHeader, String varName) {
         ctx.save(varName, rest.put(ApiPaths.usersUpdate(ctx.str(idVar)),
-                CreateUserReq.builder()
-                        .email(Generator.email())
-                        .username(Generator.username())
-                        .profile(ProfileReq.builder()
-                                .firstName(Generator.firstName())
-                                .lastName(Generator.lastName())
-                                .build())
-                        .build(),
+                UserFixtures.randomUpdate().build(),
                 RestHandler.authorization(rawHeader)));
     }
 
