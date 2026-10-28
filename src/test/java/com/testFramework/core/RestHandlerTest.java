@@ -1,7 +1,7 @@
 package com.testFramework.core;
 
 import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpServer;
+import com.testFramework.support.LocalBaseUrlServer;
 import io.qameta.allure.Allure;
 import io.qameta.allure.AllureLifecycle;
 import io.qameta.allure.AllureResultsWriter;
@@ -17,7 +17,6 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -35,26 +34,19 @@ class RestHandlerTest {
 
     private static final String EMPTY_REPLY_PATH = "/no-content";
 
-    private static HttpServer server;
+    private static LocalBaseUrlServer server;
     private static volatile Recorded last;
-    private static String previousBaseUrl;
 
     private RestHandler rest;
 
     @BeforeAll
     static void startServer() throws IOException {
-        server = HttpServer.create(new InetSocketAddress("localhost", 0), 0);
-        server.createContext("/", RestHandlerTest::record);
-        server.start();
-        previousBaseUrl = System.getProperty("baseUrl");
-        System.setProperty("baseUrl", "http://localhost:" + server.getAddress().getPort());
+        server = LocalBaseUrlServer.start(RestHandlerTest::record);
     }
 
     @AfterAll
     static void stopServer() {
-        server.stop(0);
-        if (previousBaseUrl == null) System.clearProperty("baseUrl");
-        else System.setProperty("baseUrl", previousBaseUrl);
+        server.close();
     }
 
     @BeforeEach
@@ -279,11 +271,6 @@ class RestHandlerTest {
             exchange.close();
             return;
         }
-        byte[] reply = "{\"ok\":true}".getBytes(StandardCharsets.UTF_8);
-        boolean head = "HEAD".equals(exchange.getRequestMethod());
-        exchange.getResponseHeaders().add("Content-Type", "application/json");
-        exchange.sendResponseHeaders(200, head ? -1 : reply.length);
-        if (!head) exchange.getResponseBody().write(reply);
-        exchange.close();
+        LocalBaseUrlServer.replyJson(exchange, "{\"ok\":true}");
     }
 }

@@ -26,6 +26,8 @@ public class CommonSteps {
     }
 
     // ── Data generation ──────────────────────────────────────────────
+    // CPD-OFF: one-line "Generate X and save as" steps — each is already clear and local;
+    // CPD sees only their shared annotation/save shape (ub-mode: leave clear, local code).
 
     @Given("Save string {string} as {string}")
     public void saveString(String value, String contextKey) {
@@ -112,6 +114,8 @@ public class CommonSteps {
     public void saveCurrentDate(String currentDate) {
         ctx.save(currentDate, new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
     }
+
+    // CPD-ON
 
     // ── Status code assertions ────────────────────────────────────────
 

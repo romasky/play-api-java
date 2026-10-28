@@ -331,7 +331,20 @@
                         <version>3.28.0</version>
                         <configuration>
                             <includeTests>true</includeTests>
-                            <minimumTokens>60</minimumTokens>
+                            <!--
+                                Calibrated at 85 (was 60). After the step-layer dedup every remaining clone
+                                at 60-84 tokens is incidental: CPD (with identifiers and literals ignored)
+                                matches runs of adjacent one-line steps (Convert / Save field / typed-cast
+                                asserts), RestHandler verbs, ApiPaths and Generator one-liners, and step-class
+                                boilerplate. Checked against the pre-dedup code (c721bee): at 85 CPD still
+                                flags the copy-pasted create-user (99 tokens) and update-user (87 tokens)
+                                builder chains, so a new clone of that shape fails the build. Shorter
+                                random-user chains (~60-80 tokens) need review, not this gate.
+                                Outliers above 85 that are clear and local (the "Generate X" steps, pin data
+                                tables) are fenced with // CPD-OFF ... // CPD-ON plus a reason, rather than
+                                raising this number further.
+                            -->
+                            <minimumTokens>85</minimumTokens>
                             <ignoreIdentifiers>true</ignoreIdentifiers>
                             <ignoreLiterals>true</ignoreLiterals>
                             <ignoreAnnotations>true</ignoreAnnotations>

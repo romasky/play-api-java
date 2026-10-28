@@ -4,8 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpServer;
 import com.testFramework.core.RestHandler;
+import com.testFramework.support.LocalBaseUrlServer;
 import com.testFramework.play_qa_api.models.createUser.response.CreateUserResp;
 import com.testFramework.play_qa_api.models.createUser.response.UserResp;
 import com.testFramework.play_qa_api.models.createUser.response.UsersListResp;
@@ -25,7 +25,6 @@ import org.junit.jupiter.api.Test;
 import org.opentest4j.AssertionFailedError;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
@@ -75,6 +74,7 @@ class RequestPinTest {
     /** Keys the fixture pre-saves; the golden shows only keys a step added before its request left. */
     private static Set<String> fixtureKeys;
 
+    // CPD-OFF: canned-reply and fixture tables are data, not logic
     private static final Map<String, String> CANNED = Map.ofEntries(
             Map.entry("/api/v1/login", "{\"access_token\":\"tok-from-login\"}"),
             Map.entry("/canned/login", "{\"access_token\":\"tok-1\"}"),
@@ -87,9 +87,9 @@ class RequestPinTest {
             Map.entry("/canned/message", "{\"id\":\"msg-1\"}"),
             Map.entry("/canned/health", "{\"status\":\"ok\"}"),
             Map.entry("/canned/options", "{\"allowed_methods\":[\"GET\"]}"));
+    // CPD-ON
 
-    private static HttpServer server;
-    private static String previousBaseUrl;
+    private static LocalBaseUrlServer server;
     private static final List<Recorded> recorded = new CopyOnWriteArrayList<>();
 
     private final BaseSteps ctx = new BaseSteps();
@@ -102,18 +102,12 @@ class RequestPinTest {
 
     @BeforeAll
     static void startServer() throws IOException {
-        server = HttpServer.create(new InetSocketAddress("localhost", 0), 0);
-        server.createContext("/", RequestPinTest::record);
-        server.start();
-        previousBaseUrl = System.getProperty("baseUrl");
-        System.setProperty("baseUrl", "http://localhost:" + server.getAddress().getPort());
+        server = LocalBaseUrlServer.start(RequestPinTest::record);
     }
 
     @AfterAll
     static void stopServer() {
-        server.stop(0);
-        if (previousBaseUrl == null) System.clearProperty("baseUrl");
-        else System.setProperty("baseUrl", previousBaseUrl);
+        server.close();
     }
 
     @BeforeEach
@@ -126,6 +120,7 @@ class RequestPinTest {
         options = new OptionsSteps();
         rest = new RestHandler();
         out = new StringBuilder();
+        // CPD-OFF: fixture table (data)
         Map.ofEntries(
                 Map.entry("uid", "u-123"), Map.entry("tok", "t-abc"), Map.entry("tokPrefixed", "Bearer t-pre"),
                 Map.entry("tokEmpty", ""), Map.entry("email", "E-mail@x.io"), Map.entry("uname", "Uname-1"),
@@ -137,6 +132,7 @@ class RequestPinTest {
                 Map.entry("msgId", "m-1"), Map.entry("from", "From@x.io"), Map.entry("subject", "Subj-1"),
                 Map.entry("body", "Body-1"), Map.entry("html", "<b>Hi</b>"), Map.entry("reqId", "req-1"))
                 .forEach(ctx::save);
+        // CPD-ON
         fixtureKeys = Set.copyOf(ScenarioContext.local.get(SCENARIO).keySet());
     }
 
@@ -253,6 +249,7 @@ class RequestPinTest {
 
     @Test
     void everyConvertStepStoresTheTypedDto() {
+        // CPD-OFF: one row per Convert step (data)
         List<Convert> converts = List.of(
                 new Convert("/canned/login", accounts::convertLoginResponse, LoginResp.class, o -> ((LoginResp) o).getAccessToken(), "tok-1"),
                 new Convert("/canned/createUser", accounts::convertCreateUserResponse, CreateUserResp.class, o -> ((CreateUserResp) o).getId(), "id-1"),
@@ -266,6 +263,8 @@ class RequestPinTest {
                 new Convert("/canned/message", mail::convertSendMessageResp, MessageResp.class, o -> ((MessageResp) o).getId(), "msg-1"),
                 new Convert("/canned/health", health::convertHealthResponse, HealthResp.class, o -> ((HealthResp) o).getStatus(), "ok"),
                 new Convert("/canned/options", options::convertOptionsResp, UserOptionsResp.class, o -> ((UserOptionsResp) o).getAllowedMethods(), List.of("GET")));
+
+        // CPD-ON
 
         for (Convert c : converts) {
             ctx.save("raw", rest.get(c.path()));
@@ -359,11 +358,6 @@ class RequestPinTest {
                 exchange.getRequestHeaders().getFirst("X-Request-ID"),
                 new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8),
                 addedKeys(scenario.keySet())));
-        byte[] reply = CANNED.getOrDefault(exchange.getRequestURI().getPath(), "{}").getBytes(StandardCharsets.UTF_8);
-        boolean head = "HEAD".equals(exchange.getRequestMethod());
-        exchange.getResponseHeaders().add("Content-Type", "application/json");
-        exchange.sendResponseHeaders(200, head ? -1 : reply.length);
-        if (!head) exchange.getResponseBody().write(reply);
-        exchange.close();
+        LocalBaseUrlServer.replyJson(exchange, CANNED.getOrDefault(exchange.getRequestURI().getPath(), "{}"));
     }
 }
