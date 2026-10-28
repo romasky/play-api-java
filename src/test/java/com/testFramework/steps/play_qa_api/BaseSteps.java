@@ -32,6 +32,16 @@ public class BaseSteps {
         Allure.getLifecycle().updateFixture(r -> r.setName(name));
     }
 
+    /** Rate-limit pacing for a @Before hook: labels the hook in the report, then waits. */
+    static void pause(String scope, long millis) throws InterruptedException {
+        renameCurrentHook(pauseName(scope, millis));
+        Thread.sleep(millis);
+    }
+
+    static String pauseName(String scope, long millis) {
+        return "Rate limit pause: " + scope + " (" + millis / 1000 + "s)";
+    }
+
     protected void save(String key, Object value) {
         ContextKey k = ContextKey.parse(key);
         Map<String, Object> scope = k.global()

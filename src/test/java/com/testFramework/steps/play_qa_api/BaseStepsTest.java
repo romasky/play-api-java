@@ -203,6 +203,21 @@ class BaseStepsTest {
         assertArrayEquals(new String[]{"Authorization", "Bearer literal"}, ctx.bearerAuth("literal"));
     }
 
+    @Test
+    void pauseNameShowsScopeAndWholeSeconds() {
+        assertEquals("Rate limit pause: Login (13s)", BaseSteps.pauseName("Login", 13_000));
+        assertEquals("Rate limit pause: User Management (2s)", BaseSteps.pauseName("User Management", 2_000));
+    }
+
+    @Test
+    void pauseWaitsAtLeastTheGivenTime() throws InterruptedException {
+        long start = System.nanoTime();
+
+        BaseSteps.pause("Unit", 50);
+
+        assertTrue(System.nanoTime() - start >= 50_000_000L, "pause returned before 50 ms");
+    }
+
     private static Response jsonResponse(String body) {
         return new ResponseBuilder().setStatusCode(200).setContentType("application/json").setBody(body).build();
     }
