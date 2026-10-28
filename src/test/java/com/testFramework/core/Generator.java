@@ -1,6 +1,5 @@
 package com.testFramework.core;
 
-import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Generator {
@@ -25,10 +24,6 @@ public class Generator {
         return alphanumericString(10).toLowerCase() + "@play-qa.com";
     }
 
-    public static String email(String domain) {
-        return alphanumericString(10).toLowerCase() + "@" + domain;
-    }
-
     public static String username() {
         return "user_" + alphanumericString(8).toLowerCase();
     }
@@ -43,10 +38,6 @@ public class Generator {
 
     public static String lastName() {
         return "User" + latinString(6);
-    }
-
-    public static String uuid() {
-        return UUID.randomUUID().toString();
     }
 
     public static String phoneNumber() {

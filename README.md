@@ -43,7 +43,6 @@ src/test/
 │   │   ├── Generator.java              # Random data generation
 │   │   ├── PropertyHandler.java        # Config loading (config.properties)
 │   │   ├── RestHandler.java            # Rest Assured wrapper (all HTTP methods)
-│   │   └── RunMode.java                # PROD/DEV enum
 │   ├── play_qa_api/
 │   │   ├── ApiPaths.java               # All API endpoint paths
 │   │   ├── Constants.java              # Shared constants (enums, timeouts)
