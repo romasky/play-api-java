@@ -59,7 +59,7 @@ Feature: Patch User
     And Assert error code is "MISSING_TOKEN" in "error"
 
   @Run @Negative @allure.label.story:Negative_Scenario
-  Scenario: Patch with another user token returns 401 INVALID_TOKEN
+  Scenario: Patch with another user token returns 403 FORBIDDEN
     When Create minimal user and save response as "userAResp"
     Then Get and check status code 201 from "userAResp"
     And Convert create user response "userAResp" to CreateUserResp and save as "userA"
@@ -70,9 +70,9 @@ Feature: Patch User
     And Save field accessToken from CreateUserResp "userB" as "userBToken"
     And Generate first name and save as "newFirst"
     When Patch user "userAId" token "userBToken" firstName "newFirst" and save response as "patchResp"
-    Then Get and check status code 401 from "patchResp"
+    Then Get and check status code 403 from "patchResp"
     And Convert error response "patchResp" to ErrorResp and save as "error"
-    And Assert error code is "INVALID_TOKEN" in "error"
+    And Assert error code is "FORBIDDEN" in "error"
 
   @Run @Flow @allure.label.story:End_to_End_Flow
   Scenario: Patch after logout returns 401 INVALID_TOKEN

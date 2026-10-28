@@ -39,19 +39,19 @@ Feature: Delete User
     And Assert error code is "MISSING_TOKEN" in "error"
 
   @Run @Negative @allure.label.story:Negative_Scenario
-  Scenario: Delete non-existent user with another user token returns 401 INVALID_TOKEN
+  Scenario: Delete non-existent user with another user token returns 403 FORBIDDEN
     When Create minimal user and save response as "createResp"
     Then Get and check status code 201 from "createResp"
     And Convert create user response "createResp" to CreateUserResp and save as "created"
     And Save field accessToken from CreateUserResp "created" as "token"
     And Generate fake mongo id and save as "fakeId"
     When Delete user "fakeId" with token "token" and save response as "deleteResp"
-    Then Get and check status code 401 from "deleteResp"
+    Then Get and check status code 403 from "deleteResp"
     And Convert error response "deleteResp" to ErrorResp and save as "error"
-    And Assert error code is "INVALID_TOKEN" in "error"
+    And Assert error code is "FORBIDDEN" in "error"
 
   @Run @Negative @allure.label.story:Negative_Scenario
-  Scenario: Delete with another user token returns 401 INVALID_TOKEN
+  Scenario: Delete with another user token returns 403 FORBIDDEN
     When Create minimal user and save response as "userAResp"
     Then Get and check status code 201 from "userAResp"
     And Convert create user response "userAResp" to CreateUserResp and save as "userA"
@@ -61,9 +61,9 @@ Feature: Delete User
     And Convert create user response "userBResp" to CreateUserResp and save as "userB"
     And Save field accessToken from CreateUserResp "userB" as "userBToken"
     When Delete user "userAId" with token "userBToken" and save response as "deleteResp"
-    Then Get and check status code 401 from "deleteResp"
+    Then Get and check status code 403 from "deleteResp"
     And Convert error response "deleteResp" to ErrorResp and save as "error"
-    And Assert error code is "INVALID_TOKEN" in "error"
+    And Assert error code is "FORBIDDEN" in "error"
 
   @Run @Flow @allure.label.story:End_to_End_Flow
   Scenario: Delete same user twice — second delete returns 404

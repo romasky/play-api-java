@@ -46,7 +46,7 @@ Feature: Update User
     And Assert error code is "MISSING_TOKEN" in "error"
 
   @Run @Negative @allure.label.story:Negative_Scenario
-  Scenario: PUT update with another user token returns 401 INVALID_TOKEN
+  Scenario: PUT update with another user token returns 403 FORBIDDEN
     When Create minimal user and save response as "userAResp"
     Then Get and check status code 201 from "userAResp"
     And Convert create user response "userAResp" to CreateUserResp and save as "userA"
@@ -61,12 +61,12 @@ Feature: Update User
     And Generate first name and save as "newFirst"
     And Generate last name and save as "newLast"
     When Update user "userAId" token "userBToken" firstName "newFirst" lastName "newLast" email "newEmail" username "newUsername" and save response as "updateResp"
-    Then Get and check status code 401 from "updateResp"
+    Then Get and check status code 403 from "updateResp"
     And Convert error response "updateResp" to ErrorResp and save as "error"
-    And Assert error code is "INVALID_TOKEN" in "error"
+    And Assert error code is "FORBIDDEN" in "error"
 
   @Run @Negative @allure.label.story:Negative_Scenario
-  Scenario: PUT update non-existent user with another user token returns 401 INVALID_TOKEN
+  Scenario: PUT update non-existent user with another user token returns 403 FORBIDDEN
     When Create minimal user and save response as "createResp"
     Then Get and check status code 201 from "createResp"
     And Convert create user response "createResp" to CreateUserResp and save as "created"
@@ -77,9 +77,9 @@ Feature: Update User
     And Generate first name and save as "newFirst"
     And Generate last name and save as "newLast"
     When Update user "fakeId" token "token" firstName "newFirst" lastName "newLast" email "newEmail" username "newUsername" and save response as "updateResp"
-    Then Get and check status code 401 from "updateResp"
+    Then Get and check status code 403 from "updateResp"
     And Convert error response "updateResp" to ErrorResp and save as "error"
-    And Assert error code is "INVALID_TOKEN" in "error"
+    And Assert error code is "FORBIDDEN" in "error"
 
   @Run @Negative @allure.label.story:Negative_Scenario
   Scenario: PUT update with invalid email returns 400 VALIDATION_ERROR
