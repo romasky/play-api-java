@@ -1,1 +1,1 @@
-{"id":"799db8b293edaaad65983c00f487f5db","fullName":"src/test/resources/tests/play_qa_api/CreateUserTests.feature:117","name":"Create user with duplicate email returns 409 DUPLICATE_USER","status":"passed","testResultsByEnv":{"default":"38f928fc487d6aa7005a332c076ee86d"}}
+{"id":"799db8b293edaaad65983c00f487f5db","fullName":"src/test/resources/tests/play_qa_api/CreateUserTests.feature:117","name":"Create user with duplicate email returns 409 DUPLICATE_USER","status":"passed","testResultsByEnv":{"default":"c7cee05f3884b18684eaf0819d346384"}}
