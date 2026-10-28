@@ -30,7 +30,7 @@ public class HealthSteps {
 
     @Then("Assert health status is ok in {string}")
     public void assertHealthStatusOk(String varName) {
-        HealthResp resp = (HealthResp) ctx.get(varName, true);
+        HealthResp resp = ctx.required(varName, HealthResp.class);
         Assertions.assertEquals("ok", resp.getStatus());
         Assertions.assertNotNull(resp.getTime(), "time field should not be null");
         Assertions.assertFalse(resp.getTime().isBlank(), "time field should not be blank");

@@ -118,6 +118,32 @@ class BaseStepsTest {
     }
 
     @Test
+    void requiredReturnsTheStoredValueAsTheGivenType() {
+        HealthResp stored = new HealthResp();
+        ctx.save("dto_g", stored);
+
+        HealthResp actual = ctx.required("dto_g", HealthResp.class);
+
+        assertSame(stored, actual);
+    }
+
+    @Test
+    void requiredOfMissingVariableFailsWithContextMessage() {
+        AssertionFailedError e = assertThrows(AssertionFailedError.class, () -> ctx.required("nope_g", HealthResp.class));
+
+        assertEquals("Context variable 'nope' (global) not found.", e.getMessage());
+    }
+
+    @Test
+    void requiredOfWrongTypeFailsNamingBothTypes() {
+        ctx.save("k", "a string");
+
+        ClassCastException e = assertThrows(ClassCastException.class, () -> ctx.required("k", HealthResp.class));
+
+        assertEquals("Cannot cast java.lang.String to " + HealthResp.class.getName(), e.getMessage());
+    }
+
+    @Test
     void strStringifiesStoredValue() {
         ctx.save("n", 7);
 

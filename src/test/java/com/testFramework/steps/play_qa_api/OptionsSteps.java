@@ -24,27 +24,27 @@ public class OptionsSteps {
 
     @Then("Assert options allowed methods contains {string} in {string}")
     public void assertAllowedMethodsContains(String method, String varName) {
-        UserOptionsResp resp = (UserOptionsResp) ctx.get(varName, true);
+        UserOptionsResp resp = ctx.required(varName, UserOptionsResp.class);
         Assertions.assertTrue(resp.getAllowedMethods().contains(method),
                 "allowed_methods should contain '" + method + "'. Actual: " + resp.getAllowedMethods());
     }
 
     @Then("Assert options allowed methods has {int} items in {string}")
     public void assertAllowedMethodsCount(int count, String varName) {
-        UserOptionsResp resp = (UserOptionsResp) ctx.get(varName, true);
+        UserOptionsResp resp = ctx.required(varName, UserOptionsResp.class);
         Assertions.assertEquals(count, resp.getAllowedMethods().size());
     }
 
     @Then("Assert options endpoints map is not empty in {string}")
     public void assertEndpointsNotEmpty(String varName) {
-        UserOptionsResp resp = (UserOptionsResp) ctx.get(varName, true);
+        UserOptionsResp resp = ctx.required(varName, UserOptionsResp.class);
         Assertions.assertNotNull(resp.getEndpoints());
         Assertions.assertFalse(resp.getEndpoints().isEmpty());
     }
 
     @Then("Assert options authentication type is {string} in {string}")
     public void assertAuthenticationType(String expected, String varName) {
-        UserOptionsResp resp = (UserOptionsResp) ctx.get(varName, true);
+        UserOptionsResp resp = ctx.required(varName, UserOptionsResp.class);
         Assertions.assertNotNull(resp.getAuthentication());
         Assertions.assertEquals(expected, resp.getAuthentication().getType());
     }

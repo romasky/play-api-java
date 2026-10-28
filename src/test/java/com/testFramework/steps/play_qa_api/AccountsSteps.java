@@ -75,7 +75,7 @@ public class AccountsSteps {
 
     @Then("Assert login response {string} has all required fields")
     public void assertLoginResponseFields(String varName) {
-        LoginResp resp = (LoginResp) ctx.get(varName, true);
+        LoginResp resp = ctx.required(varName, LoginResp.class);
         Assertions.assertNotNull(resp.getAccessToken(), "access_token is null");
         Assertions.assertFalse(resp.getAccessToken().isBlank());
         Assertions.assertNotNull(resp.getUserId(), "user_id is null");
@@ -86,12 +86,12 @@ public class AccountsSteps {
 
     @Then("Save field accessToken from LoginResp {string} as {string}")
     public void saveTokenFromLoginResp(String varName, String saveAs) {
-        ctx.save(saveAs, ((LoginResp) ctx.get(varName, true)).getAccessToken());
+        ctx.save(saveAs, ctx.required(varName, LoginResp.class).getAccessToken());
     }
 
     @Then("Save field userId from LoginResp {string} as {string}")
     public void saveUserIdFromLoginResp(String varName, String saveAs) {
-        ctx.save(saveAs, ((LoginResp) ctx.get(varName, true)).getUserId());
+        ctx.save(saveAs, ctx.required(varName, LoginResp.class).getUserId());
     }
 
     // ── Create user ──────────────────────────────────────────────────
@@ -221,49 +221,49 @@ public class AccountsSteps {
     @Then("Assert CreateUserResp {string} has email {string}")
     public void assertCreateUserRespEmail(String varName, String expected) {
         Assertions.assertEquals(ctx.str(expected),
-                ((CreateUserResp) ctx.get(varName, true)).getEmail());
+                ctx.required(varName, CreateUserResp.class).getEmail());
     }
 
     @Then("Assert CreateUserResp {string} has username {string}")
     public void assertCreateUserRespUsername(String varName, String expected) {
         Assertions.assertEquals(ctx.str(expected),
-                ((CreateUserResp) ctx.get(varName, true)).getUsername());
+                ctx.required(varName, CreateUserResp.class).getUsername());
     }
 
     @Then("Assert CreateUserResp {string} has access token not null")
     public void assertCreateUserRespHasToken(String varName) {
-        String token = ((CreateUserResp) ctx.get(varName, true)).getAccessToken();
+        String token = ctx.required(varName, CreateUserResp.class).getAccessToken();
         Assertions.assertNotNull(token);
         Assertions.assertFalse(token.isBlank());
     }
 
     @Then("Assert CreateUserResp {string} metadata is_active is true")
     public void assertMetadataIsActive(String varName) {
-        CreateUserResp resp = (CreateUserResp) ctx.get(varName, true);
+        CreateUserResp resp = ctx.required(varName, CreateUserResp.class);
         Assertions.assertNotNull(resp.getMetadata());
         Assertions.assertTrue(resp.getMetadata().getIsActive());
     }
 
     @Then("Assert CreateUserResp {string} metadata is_verified is false")
     public void assertMetadataIsVerified(String varName) {
-        CreateUserResp resp = (CreateUserResp) ctx.get(varName, true);
+        CreateUserResp resp = ctx.required(varName, CreateUserResp.class);
         Assertions.assertEquals(Boolean.FALSE, resp.getMetadata().getIsVerified());
     }
 
     @Then("Assert CreateUserResp {string} metadata login_count is 0")
     public void assertMetadataLoginCount(String varName) {
-        CreateUserResp resp = (CreateUserResp) ctx.get(varName, true);
+        CreateUserResp resp = ctx.required(varName, CreateUserResp.class);
         Assertions.assertEquals(0, resp.getMetadata().getLoginCount());
     }
 
     @Then("Save field id from CreateUserResp {string} as {string}")
     public void saveIdFromCreateUserResp(String varName, String saveAs) {
-        ctx.save(saveAs, ((CreateUserResp) ctx.get(varName, true)).getId());
+        ctx.save(saveAs, ctx.required(varName, CreateUserResp.class).getId());
     }
 
     @Then("Save field accessToken from CreateUserResp {string} as {string}")
     public void saveTokenFromCreateUserResp(String varName, String saveAs) {
-        ctx.save(saveAs, ((CreateUserResp) ctx.get(varName, true)).getAccessToken());
+        ctx.save(saveAs, ctx.required(varName, CreateUserResp.class).getAccessToken());
     }
 
     // ── Get / List users ─────────────────────────────────────────────
@@ -294,12 +294,12 @@ public class AccountsSteps {
     @Then("Assert UserResp {string} id equals {string}")
     public void assertUserRespId(String varName, String expectedVar) {
         Assertions.assertEquals(ctx.str(expectedVar),
-                ((UserResp) ctx.get(varName, true)).getId(), "UserResp id mismatch");
+                ctx.required(varName, UserResp.class).getId(), "UserResp id mismatch");
     }
 
     @Then("Assert UserResp {string} has all core fields")
     public void assertUserRespCoreFields(String varName) {
-        UserResp resp = (UserResp) ctx.get(varName, true);
+        UserResp resp = ctx.required(varName, UserResp.class);
         Assertions.assertNotNull(resp.getId(), "id is null");
         Assertions.assertNotNull(resp.getEmail(), "email is null");
         Assertions.assertNotNull(resp.getUsername(), "username is null");
@@ -314,7 +314,7 @@ public class AccountsSteps {
 
     @Then("Assert users list {string} has pagination fields")
     public void assertUserListPaginationFields(String varName) {
-        UsersListResp resp = (UsersListResp) ctx.get(varName, true);
+        UsersListResp resp = ctx.required(varName, UsersListResp.class);
         Assertions.assertNotNull(resp.getPage(), "page is null");
         Assertions.assertNotNull(resp.getPerPage(), "per_page is null");
         Assertions.assertNotNull(resp.getTotalPages(), "total_pages is null");
@@ -323,18 +323,18 @@ public class AccountsSteps {
     @Then("Assert users list {string} per page is {int}")
     public void assertUsersListPerPage(String varName, int expected) {
         Assertions.assertEquals(expected,
-                ((UsersListResp) ctx.get(varName, true)).getPerPage());
+                ctx.required(varName, UsersListResp.class).getPerPage());
     }
 
     @Then("Assert users list {string} page is {int}")
     public void assertUsersListPage(String varName, int expected) {
         Assertions.assertEquals(expected,
-                ((UsersListResp) ctx.get(varName, true)).getPage());
+                ctx.required(varName, UsersListResp.class).getPage());
     }
 
     @Then("Assert users list {string} count is at most {int}")
     public void assertUsersListCountAtMost(String varName, int max) {
-        UsersListResp resp = (UsersListResp) ctx.get(varName, true);
+        UsersListResp resp = ctx.required(varName, UsersListResp.class);
         Assertions.assertTrue(resp.getUsers().size() <= max,
                 "Expected at most " + max + " users, got " + resp.getUsers().size());
     }
@@ -489,28 +489,28 @@ public class AccountsSteps {
 
     @Then("Assert error code is {string} in {string}")
     public void assertErrorCode(String expected, String varName) {
-        ErrorResp error = (ErrorResp) ctx.get(varName, true);
+        ErrorResp error = ctx.required(varName, ErrorResp.class);
         Assertions.assertEquals(expected, error.getError().getCode(),
                 "Error code mismatch. Full: " + error);
     }
 
     @Then("Assert error message contains {string} in {string}")
     public void assertErrorMessageContains(String expected, String varName) {
-        ErrorResp error = (ErrorResp) ctx.get(varName, true);
+        ErrorResp error = ctx.required(varName, ErrorResp.class);
         Assertions.assertTrue(error.getError().getMessage().contains(expected),
                 "Error message '" + error.getError().getMessage() + "' does not contain '" + expected + "'");
     }
 
     @Then("Assert error response has request_id in {string}")
     public void assertErrorHasRequestId(String varName) {
-        ErrorResp error = (ErrorResp) ctx.get(varName, true);
+        ErrorResp error = ctx.required(varName, ErrorResp.class);
         Assertions.assertNotNull(error.getRequestId(), "request_id should not be null");
         Assertions.assertFalse(error.getRequestId().isBlank());
     }
 
     @Then("Assert error validation array is not empty in {string}")
     public void assertValidationArrayNotEmpty(String varName) {
-        ErrorResp error = (ErrorResp) ctx.get(varName, true);
+        ErrorResp error = ctx.required(varName, ErrorResp.class);
         Assertions.assertNotNull(error.getError().getValidation(), "validation array is null");
         Assertions.assertFalse(error.getError().getValidation().isEmpty(), "validation array is empty");
     }

@@ -66,9 +66,14 @@ public class BaseSteps {
         return String.valueOf(get(key));
     }
 
+    /** The value stored under {@code key} as {@code type}; fails if it is missing, throws if it is another type. */
+    protected <T> T required(String key, Class<T> type) {
+        return type.cast(get(key, true));
+    }
+
     /** The raw HTTP response stored under {@code varName}; fails if it is missing. */
     protected Response response(String varName) {
-        return (Response) get(varName, true);
+        return required(varName, Response.class);
     }
 
     /** Deserializes the response stored under {@code rawVar} into {@code type} and saves it as {@code saveAs}. */
