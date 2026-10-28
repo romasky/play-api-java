@@ -43,9 +43,13 @@ src/test/
 │   │   ├── Generator.java              # Random data generation
 │   │   ├── PropertyHandler.java        # Config loading (config.properties)
 │   │   ├── RestHandler.java            # Rest Assured wrapper (all HTTP methods)
+│   │   └── *Test.java                  # Unit tests (run by -Pquality)
+│   ├── support/
+│   │   └── LocalBaseUrlServer.java     # Local HTTP recorder for unit/pin tests
 │   ├── play_qa_api/
 │   │   ├── ApiPaths.java               # All API endpoint paths
 │   │   ├── Constants.java              # Shared constants (enums, timeouts)
+│   │   ├── UserFixtures.java           # Request bodies for create/update/patch user
 │   │   └── models/
 │   │       ├── createUser/             # Request DTOs: CreateUserReq, ProfileReq, ...
 │   │       │   └── response/           # Response DTOs: CreateUserResp, UserResp, ...
@@ -61,11 +65,17 @@ src/test/
 │       ├── CommonSteps.java            # Generic reusable steps (generate data, assert)
 │       ├── HealthSteps.java            # Health endpoint step definitions
 │       ├── MailSteps.java              # Mail API step definitions
-│       └── OptionsSteps.java           # User options step definitions
+│       ├── OptionsSteps.java           # User options step definitions
+│       ├── GoldenFile.java             # Golden-file helper for pin tests
+│       ├── StepCatalogPinTest.java     # Pins every step expression
+│       ├── RequestPinTest.java         # Pins every outgoing request
+│       └── BaseStepsTest.java          # Pins the scenario-context contract
 └── resources/
-    ├── config.properties               # Base URL, timeouts, run mode
+    ├── config.properties               # Base URL, timeouts
     ├── cucumber.properties             # Cucumber publish settings
     ├── junit-platform.properties       # Cucumber plugin and glue config
+    ├── categories.json                 # Allure failure categories
+    ├── pins/                           # Goldens: step-catalog.txt, requests.txt
     └── tests/play_qa_api/
         ├── CreateUserTests.feature     # POST /users/create scenarios
         ├── DeleteUserTests.feature     # DELETE /users/delete/:id scenarios
@@ -80,6 +90,7 @@ src/test/
         ├── TokenSecurityTests.feature  # Auth-bypass / IDOR guards on mutating endpoints
         ├── UpdateUserTests.feature     # PUT /users/update/:id scenarios
         └── UserExistsTests.feature     # HEAD /users/exists/:id scenarios
+tools/crap/Crap.java                    # CRAP gate over the JaCoCo report (-Pquality)
 ```
 
 ---
