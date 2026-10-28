@@ -21,6 +21,8 @@ public class RestHandler {
     private static final String HTTP_CONNECTION_TIMEOUT = "http.connection.timeout";
     private static final String HTTP_SOCKET_TIMEOUT = "http.socket.timeout";
 
+    public static final String AUTHORIZATION = "Authorization";
+
     private final String baseUrl;
     private final RestAssuredConfig config;
 
@@ -36,78 +38,61 @@ public class RestHandler {
 
     @Step("POST {path}")
     public Response post(String path, Object body, String... headers) {
-        Response r = buildPostSpec(path, body, headers);
-        attachResponse(r);
-        return r;
-    }
-
-    private Response buildPostSpec(String path, Object body, String... headers) {
         RequestSpecification spec = buildSpec(headers).contentType(ContentType.JSON);
         if (body != null) spec.body(body);
-        return spec.post(path).then().extract().response();
+        return attachResponse(spec.post(path));
     }
 
     @Step("POST {path} (no body)")
     public Response postNoBody(String path, String... headers) {
-        Response r = buildSpec(headers).post(path).then().extract().response();
-        attachResponse(r);
-        return r;
+        return attachResponse(buildSpec(headers).post(path));
     }
 
     @Step("GET {path}")
     public Response get(String path, String... headers) {
-        Response r = buildSpec(headers).get(path).then().extract().response();
-        attachResponse(r);
-        return r;
+        return attachResponse(buildSpec(headers).get(path));
     }
 
     /** Query params are a Map so they can never be mistaken for the {@code String...} headers of the overload above. */
     @Step("GET {path}")
     public Response get(String path, Map<String, String> queryParams, String... headers) {
-        Response r = buildSpec(headers).queryParams(queryParams).get(path).then().extract().response();
-        attachResponse(r);
-        return r;
+        return attachResponse(buildSpec(headers).queryParams(queryParams).get(path));
     }
 
     @Step("PUT {path}")
     public Response put(String path, Object body, String... headers) {
-        Response r = buildSpec(headers).contentType(ContentType.JSON).body(body).put(path).then().extract().response();
-        attachResponse(r);
-        return r;
+        return attachResponse(buildSpec(headers).contentType(ContentType.JSON).body(body).put(path));
     }
 
     @Step("PATCH {path}")
     public Response patch(String path, Object body, String... headers) {
-        Response r = buildSpec(headers).contentType(ContentType.JSON).body(body).patch(path).then().extract().response();
-        attachResponse(r);
-        return r;
+        return attachResponse(buildSpec(headers).contentType(ContentType.JSON).body(body).patch(path));
     }
 
     @Step("DELETE {path}")
     public Response delete(String path, String... headers) {
-        Response r = buildSpec(headers).delete(path).then().extract().response();
-        attachResponse(r);
-        return r;
+        return attachResponse(buildSpec(headers).delete(path));
     }
 
+    /** Not attached: a HEAD response has no body, so there is nothing to show. */
     @Step("HEAD {path}")
     public Response head(String path) {
-        return buildSpec().head(path).then().extract().response();
+        return buildSpec().head(path);
     }
 
     @Step("OPTIONS {path}")
     public Response options(String path) {
-        Response r = buildSpec().options(path).then().extract().response();
-        attachResponse(r);
-        return r;
+        return attachResponse(buildSpec().options(path));
     }
 
-    private static void attachResponse(Response r) {
+    /** Attaches a non-blank body to the current Allure step and hands the response back. */
+    private static Response attachResponse(Response r) {
         int status = r.getStatusCode();
         String body = r.getBody().asPrettyString();
         if (!body.isBlank()) {
             Allure.addAttachment("Response " + status, "application/json", body, ".json");
         }
+        return r;
     }
 
     private RequestSpecification buildSpec(String... headers) {
@@ -126,8 +111,6 @@ public class RestHandler {
             action.accept(nameValues[i], nameValues[i + 1]);
         }
     }
-
-    public static final String AUTHORIZATION = "Authorization";
 
     /** The {@code Authorization} header as a name-value pair for the {@code String...} headers; the value is sent verbatim. */
     public static String[] authorization(String headerValue) {
