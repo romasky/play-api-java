@@ -17,7 +17,9 @@ import io.cucumber.java.en.When;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Assertions;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AccountsSteps {
 
@@ -329,8 +331,10 @@ public class AccountsSteps {
 
     @When("Get users list page {string} perPage {string} and save response as {string}")
     public void getUsersListPaged(String pageVar, String perPageVar, String varName) {
-        ctx.save(varName, rest.get(ApiPaths.USERS_LIST,
-                new String[]{"page", ctx.str(pageVar), "per_page", ctx.str(perPageVar)}));
+        Map<String, String> query = new LinkedHashMap<>();
+        query.put("page", ctx.str(pageVar));
+        query.put("per_page", ctx.str(perPageVar));
+        ctx.save(varName, rest.get(ApiPaths.USERS_LIST, query));
     }
 
     @Then("Convert get user response {string} to UserResp and save as {string}")

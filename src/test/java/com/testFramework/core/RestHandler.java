@@ -9,6 +9,7 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
 import java.util.Arrays;
+import java.util.Map;
 import java.util.function.BiConsumer;
 
 import static io.restassured.RestAssured.given;
@@ -42,7 +43,7 @@ public class RestHandler {
 
     private Response buildPostSpec(String path, Object body, String... headers) {
         RequestSpecification spec = buildSpec(headers).contentType(ContentType.JSON);
-        if (body != null && !body.toString().isEmpty()) spec.body(body);
+        if (body != null) spec.body(body);
         return spec.post(path).then().extract().response();
     }
 
@@ -60,17 +61,12 @@ public class RestHandler {
         return r;
     }
 
+    /** Query params are a Map so they can never be mistaken for the {@code String...} headers of the overload above. */
     @Step("GET {path}")
-    public Response get(String path, String[] queryParams, String... headers) {
-        Response r = buildGetWithParams(path, queryParams, headers);
+    public Response get(String path, Map<String, String> queryParams, String... headers) {
+        Response r = buildSpec(headers).queryParams(queryParams).get(path).then().extract().response();
         attachResponse(r);
         return r;
-    }
-
-    private Response buildGetWithParams(String path, String[] queryParams, String... headers) {
-        RequestSpecification spec = buildSpec(headers);
-        forEachPair(queryParams, spec::queryParam);
-        return spec.get(path).then().extract().response();
     }
 
     @Step("PUT {path}")
