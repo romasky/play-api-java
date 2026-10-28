@@ -8,6 +8,9 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
+import java.util.Arrays;
+import java.util.function.BiConsumer;
+
 import static io.restassured.RestAssured.given;
 
 public class RestHandler {
@@ -66,9 +69,7 @@ public class RestHandler {
 
     private Response buildGetWithParams(String path, String[] queryParams, String... headers) {
         RequestSpecification spec = buildSpec(headers);
-        for (int i = 0; i < queryParams.length - 1; i += 2) {
-            spec.queryParam(queryParams[i], queryParams[i + 1]);
-        }
+        forEachPair(queryParams, spec::queryParam);
         return spec.get(path).then().extract().response();
     }
 
@@ -115,12 +116,19 @@ public class RestHandler {
 
     private RequestSpecification buildSpec(String... headers) {
         RequestSpecification spec = given().config(config).baseUri(baseUrl);
-        if (headers != null) {
-            for (int i = 0; i < headers.length - 1; i += 2) {
-                spec.header(headers[i], headers[i + 1]);
-            }
-        }
+        forEachPair(headers, spec::header);
         return spec;
+    }
+
+    /** Walks a {name, value, name, value…} array; an unpaired name is a caller bug, never silently dropped. */
+    private static void forEachPair(String[] nameValues, BiConsumer<String, String> action) {
+        if (nameValues.length % 2 != 0) {
+            throw new IllegalArgumentException("Expected name-value pairs but got " + nameValues.length
+                    + " element(s): " + Arrays.toString(nameValues));
+        }
+        for (int i = 0; i < nameValues.length; i += 2) {
+            action.accept(nameValues[i], nameValues[i + 1]);
+        }
     }
 
     public static String bearerHeader(String token) {
