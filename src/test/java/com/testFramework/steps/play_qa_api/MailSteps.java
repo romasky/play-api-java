@@ -47,7 +47,7 @@ public class MailSteps {
 
     @Then("Convert create mailbox response {string} to CreateMailboxResp and save as {string}")
     public void convertCreateMailboxResp(String rawVar, String saveAs) {
-        ctx.save(saveAs, ((Response) ctx.get(rawVar, true)).as(CreateMailboxResp.class));
+        ctx.convertAndSave(rawVar, CreateMailboxResp.class, saveAs);
     }
 
     @Then("Save field token from CreateMailboxResp {string} as {string}")
@@ -101,7 +101,7 @@ public class MailSteps {
 
     @Then("Convert get mailbox response {string} to CreateMailboxResp and save as {string}")
     public void convertGetMailboxResp(String rawVar, String saveAs) {
-        ctx.save(saveAs, ((Response) ctx.get(rawVar, true)).as(CreateMailboxResp.class));
+        ctx.convertAndSave(rawVar, CreateMailboxResp.class, saveAs);
     }
 
     @Then("Assert mailbox {string} token matches {string}")
@@ -119,7 +119,7 @@ public class MailSteps {
 
     @Then("Convert messages list response {string} to MessagesListResp and save as {string}")
     public void convertMessagesListResp(String rawVar, String saveAs) {
-        ctx.save(saveAs, ((Response) ctx.get(rawVar, true)).as(MessagesListResp.class));
+        ctx.convertAndSave(rawVar, MessagesListResp.class, saveAs);
     }
 
     @Then("Assert messages list {string} count is {int}")
@@ -167,7 +167,7 @@ public class MailSteps {
 
     @Then("Convert message response {string} to MessageResp and save as {string}")
     public void convertMessageResp(String rawVar, String saveAs) {
-        ctx.save(saveAs, ((Response) ctx.get(rawVar, true)).as(MessageResp.class));
+        ctx.convertAndSave(rawVar, MessageResp.class, saveAs);
     }
 
     @Then("Assert message {string} has full body not null")
@@ -223,7 +223,7 @@ public class MailSteps {
 
     @Then("Convert send message response {string} to MessageResp and save as {string}")
     public void convertSendMessageResp(String rawVar, String saveAs) {
-        ctx.save(saveAs, ((Response) ctx.get(rawVar, true)).as(MessageResp.class));
+        ctx.convertAndSave(rawVar, MessageResp.class, saveAs);
     }
 
     @Then("Save field id from MessageResp {string} as {string}")

@@ -65,8 +65,18 @@ public class BaseSteps {
         return String.valueOf(get(key));
     }
 
+    /** The raw HTTP response stored under {@code varName}; fails if it is missing. */
+    protected Response response(String varName) {
+        return (Response) get(varName, true);
+    }
+
+    /** Deserializes the response stored under {@code rawVar} into {@code type} and saves it as {@code saveAs}. */
+    protected <T> void convertAndSave(String rawVar, Class<T> type, String saveAs) {
+        save(saveAs, response(rawVar).as(type));
+    }
+
     protected void assertStatusCode(int expected, String varName) {
-        Response response = (Response) get(varName, true);
+        Response response = response(varName);
         int actual = response.getStatusCode();
         Assertions.assertEquals(expected, actual,
                 "Unexpected status code. Body: " + response.asString());

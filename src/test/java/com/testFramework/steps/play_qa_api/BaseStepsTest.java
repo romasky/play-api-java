@@ -1,5 +1,6 @@
 package com.testFramework.steps.play_qa_api;
 
+import com.testFramework.play_qa_api.models.health.HealthResp;
 import io.restassured.builder.ResponseBuilder;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.AfterEach;
@@ -136,6 +137,36 @@ class BaseStepsTest {
 
         AssertionFailedError e = assertThrows(AssertionFailedError.class, () -> ctx.assertStatusCode(401, "resp"));
         assertEquals("Unexpected status code. Body: {\"code\":\"FORBIDDEN\"} ==> expected: <401> but was: <403>", e.getMessage());
+    }
+
+    @Test
+    void responseReturnsTheStoredResponse() {
+        Response stored = response(200, "{}");
+        ctx.save("resp", stored);
+
+        assertSame(stored, ctx.response("resp"));
+    }
+
+    @Test
+    void responseOfMissingVariableFailsWithContextMessage() {
+        AssertionFailedError e = assertThrows(AssertionFailedError.class, () -> ctx.response("nope"));
+
+        assertEquals("Context variable 'nope' (local) not found.", e.getMessage());
+    }
+
+    @Test
+    void convertAndSaveDeserializesTheStoredResponseIntoTheGivenType() {
+        ctx.save("raw", jsonResponse("{\"status\":\"ok\",\"time\":\"t1\"}"));
+
+        ctx.convertAndSave("raw", HealthResp.class, "dto_g");
+
+        HealthResp dto = (HealthResp) ScenarioContext.global.get("dto");
+        assertEquals("ok", dto.getStatus());
+        assertEquals("t1", dto.getTime());
+    }
+
+    private static Response jsonResponse(String body) {
+        return new ResponseBuilder().setStatusCode(200).setContentType("application/json").setBody(body).build();
     }
 
     private static Response response(int status, String body) {

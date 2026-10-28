@@ -5,7 +5,6 @@ import com.testFramework.play_qa_api.ApiPaths;
 import com.testFramework.play_qa_api.models.options.UserOptionsResp;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.restassured.response.Response;
 import org.junit.jupiter.api.Assertions;
 
 public class OptionsSteps {
@@ -20,8 +19,7 @@ public class OptionsSteps {
 
     @Then("Convert options response {string} to UserOptionsResp and save as {string}")
     public void convertOptionsResp(String rawVar, String saveAs) {
-        Response resp = (Response) ctx.get(rawVar, true);
-        ctx.save(saveAs, resp.as(UserOptionsResp.class));
+        ctx.convertAndSave(rawVar, UserOptionsResp.class, saveAs);
     }
 
     @Then("Assert options allowed methods contains {string} in {string}")

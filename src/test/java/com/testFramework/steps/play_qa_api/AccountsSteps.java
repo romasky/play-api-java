@@ -70,7 +70,7 @@ public class AccountsSteps {
 
     @Then("Convert login response {string} to LoginResp and save as {string}")
     public void convertLoginResponse(String rawVar, String saveAs) {
-        ctx.save(saveAs, ((Response) ctx.get(rawVar, true)).as(LoginResp.class));
+        ctx.convertAndSave(rawVar, LoginResp.class, saveAs);
     }
 
     @Then("Assert login response {string} has all required fields")
@@ -266,7 +266,7 @@ public class AccountsSteps {
 
     @Then("Convert create user response {string} to CreateUserResp and save as {string}")
     public void convertCreateUserResponse(String rawVar, String saveAs) {
-        ctx.save(saveAs, ((Response) ctx.get(rawVar, true)).as(CreateUserResp.class));
+        ctx.convertAndSave(rawVar, CreateUserResp.class, saveAs);
     }
 
     @Then("Assert CreateUserResp {string} has email {string}")
@@ -339,7 +339,7 @@ public class AccountsSteps {
 
     @Then("Convert get user response {string} to UserResp and save as {string}")
     public void convertUserResponse(String rawVar, String saveAs) {
-        ctx.save(saveAs, ((Response) ctx.get(rawVar, true)).as(UserResp.class));
+        ctx.convertAndSave(rawVar, UserResp.class, saveAs);
     }
 
     @Then("Assert UserResp {string} id equals {string}")
@@ -360,7 +360,7 @@ public class AccountsSteps {
 
     @Then("Convert users list response {string} to UsersListResp and save as {string}")
     public void convertUsersListResponse(String rawVar, String saveAs) {
-        ctx.save(saveAs, ((Response) ctx.get(rawVar, true)).as(UsersListResp.class));
+        ctx.convertAndSave(rawVar, UsersListResp.class, saveAs);
     }
 
     @Then("Assert users list {string} has pagination fields")
@@ -568,7 +568,7 @@ public class AccountsSteps {
 
     @Then("Convert error response {string} to ErrorResp and save as {string}")
     public void convertErrorResponse(String rawVar, String saveAs) {
-        ctx.save(saveAs, ((Response) ctx.get(rawVar, true)).as(ErrorResp.class));
+        ctx.convertAndSave(rawVar, ErrorResp.class, saveAs);
     }
 
     @Then("Assert error code is {string} in {string}")

@@ -25,8 +25,7 @@ public class HealthSteps {
 
     @Then("Convert health response {string} to HealthResp and save as {string}")
     public void convertHealthResponse(String rawVar, String saveAs) {
-        Response resp = (Response) ctx.get(rawVar, true);
-        ctx.save(saveAs, resp.as(HealthResp.class));
+        ctx.convertAndSave(rawVar, HealthResp.class, saveAs);
     }
 
     @Then("Assert health status is ok in {string}")
