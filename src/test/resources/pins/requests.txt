@@ -1,0 +1,1038 @@
+### login token
+POST /api/v1/login
+  query: <absent>
+  authorization: <absent>
+  content-type: "application/json"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: {
+  "email" : "E-mail@x.io",
+  "password" : "P@ss-1"
+}
+  saved out: "tok-from-login"
+
+### login raw
+POST /api/v1/login
+  query: <absent>
+  authorization: <absent>
+  content-type: "application/json"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: {
+  "email" : "E-mail@x.io",
+  "password" : "P@ss-1"
+}
+  saved out: Response 200
+
+### login no body
+POST /api/v1/login
+  query: <absent>
+  authorization: <absent>
+  content-type: "application/json"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: { }
+  saved out: Response 200
+
+### create
+POST /api/v1/users/create
+  query: <absent>
+  authorization: <absent>
+  content-type: "application/json"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: {
+  "email" : "E-mail@x.io",
+  "password" : "P@ss-1",
+  "profile" : {
+    "first_name" : "First-N",
+    "last_name" : "Last-N"
+  },
+  "username" : "Uname-1"
+}
+  saved out: Response 200
+
+### create literals
+POST /api/v1/users/create
+  query: <absent>
+  authorization: <absent>
+  content-type: "application/json"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: {
+  "email" : "Lit-E",
+  "password" : "Lit-P",
+  "profile" : {
+    "first_name" : "Lit-F",
+    "last_name" : "Lit-L"
+  },
+  "username" : "Lit-U"
+}
+  saved out: Response 200
+
+### create gender
+POST /api/v1/users/create
+  query: <absent>
+  authorization: <absent>
+  content-type: "application/json"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: {
+  "email" : "E-mail@x.io",
+  "password" : "P@ss-1",
+  "profile" : {
+    "first_name" : "First-N",
+    "gender" : "female",
+    "last_name" : "Last-N"
+  },
+  "username" : "Uname-1"
+}
+  saved out: Response 200
+
+### create employment
+POST /api/v1/users/create
+  query: <absent>
+  authorization: <absent>
+  content-type: "application/json"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: {
+  "email" : "<email>",
+  "employment" : {
+    "status" : "employed"
+  },
+  "password" : "<password>",
+  "profile" : {
+    "first_name" : "<firstName>",
+    "last_name" : "<lastName>"
+  },
+  "username" : "<username>"
+}
+  saved out: Response 200
+
+### create theme
+POST /api/v1/users/create
+  query: <absent>
+  authorization: <absent>
+  content-type: "application/json"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: {
+  "email" : "<email>",
+  "password" : "<password>",
+  "profile" : {
+    "first_name" : "<firstName>",
+    "last_name" : "<lastName>"
+  },
+  "settings" : {
+    "theme" : "Dark-T"
+  },
+  "username" : "<username>"
+}
+  saved out: Response 200
+
+### create username length 13
+POST /api/v1/users/create
+  query: <absent>
+  authorization: <absent>
+  content-type: "application/json"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: {
+  "email" : "<email>",
+  "password" : "<password>",
+  "profile" : {
+    "first_name" : "<firstName>",
+    "last_name" : "<lastName>"
+  },
+  "username" : "<alnum13>"
+}
+  saved out: Response 200
+
+### create interests csv
+POST /api/v1/users/create
+  query: <absent>
+  authorization: <absent>
+  content-type: "application/json"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: {
+  "email" : "<email>",
+  "password" : "<password>",
+  "profile" : {
+    "first_name" : "<firstName>",
+    "interests" : [ "go", "java" ],
+    "last_name" : "<lastName>"
+  },
+  "username" : "<username>"
+}
+  saved out: Response 200
+
+### create interests spaced
+POST /api/v1/users/create
+  query: <absent>
+  authorization: <absent>
+  content-type: "application/json"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: {
+  "email" : "<email>",
+  "password" : "<password>",
+  "profile" : {
+    "first_name" : "<firstName>",
+    "interests" : [ " go ", " java " ],
+    "last_name" : "<lastName>"
+  },
+  "username" : "<username>"
+}
+  saved out: Response 200
+
+### create interests blank
+POST /api/v1/users/create
+  query: <absent>
+  authorization: <absent>
+  content-type: "application/json"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: {
+  "email" : "<email>",
+  "password" : "<password>",
+  "profile" : {
+    "first_name" : "<firstName>",
+    "interests" : [ ],
+    "last_name" : "<lastName>"
+  },
+  "username" : "<username>"
+}
+  saved out: Response 200
+
+### create interests empty literal
+POST /api/v1/users/create
+  query: <absent>
+  authorization: <absent>
+  content-type: "application/json"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: {
+  "email" : "<email>",
+  "password" : "<password>",
+  "profile" : {
+    "first_name" : "<firstName>",
+    "interests" : [ ],
+    "last_name" : "<lastName>"
+  },
+  "username" : "<username>"
+}
+  saved out: Response 200
+
+### create bio length 21
+POST /api/v1/users/create
+  query: <absent>
+  authorization: <absent>
+  content-type: "application/json"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: {
+  "email" : "<email>",
+  "password" : "<password>",
+  "profile" : {
+    "bio" : "<alnum21>",
+    "first_name" : "<firstName>",
+    "last_name" : "<lastName>"
+  },
+  "username" : "<username>"
+}
+  saved out: Response 200
+
+### create firstName length 7
+POST /api/v1/users/create
+  query: <absent>
+  authorization: <absent>
+  content-type: "application/json"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: {
+  "email" : "<email>",
+  "password" : "<password>",
+  "profile" : {
+    "first_name" : "<alnum7>",
+    "last_name" : "<lastName>"
+  },
+  "username" : "<username>"
+}
+  saved out: Response 200
+
+### create firstName length 0
+POST /api/v1/users/create
+  query: <absent>
+  authorization: <absent>
+  content-type: "application/json"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: {
+  "email" : "<email>",
+  "password" : "<password>",
+  "profile" : {
+    "first_name" : "",
+    "last_name" : "<lastName>"
+  },
+  "username" : "<username>"
+}
+  saved out: Response 200
+
+### create firstName length -1
+POST /api/v1/users/create
+  query: <absent>
+  authorization: <absent>
+  content-type: "application/json"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: {
+  "email" : "<email>",
+  "password" : "<password>",
+  "profile" : {
+    "first_name" : "",
+    "last_name" : "<lastName>"
+  },
+  "username" : "<username>"
+}
+  saved out: Response 200
+
+### create minimal
+POST /api/v1/users/create
+  query: <absent>
+  authorization: <absent>
+  content-type: "application/json"
+  x-request-id: <absent>
+  context keys added before request: [generatedEmail, generatedPassword]
+  body: {
+  "email" : "<email>",
+  "password" : "<password>",
+  "profile" : {
+    "first_name" : "<firstName>",
+    "last_name" : "<lastName>"
+  },
+  "username" : "<username>"
+}
+  saved out: Response 200
+
+### saved generatedEmail
+  saved generatedEmail: "<email>"
+
+### saved generatedPassword
+  saved generatedPassword: "<password>"
+
+### create full
+POST /api/v1/users/create
+  query: <absent>
+  authorization: <absent>
+  content-type: "application/json"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: {
+  "address" : {
+    "city" : "San Francisco",
+    "country" : "US"
+  },
+  "contacts" : {
+    "phone" : "<phone>",
+    "telegram" : "@testuser"
+  },
+  "email" : "<email>",
+  "employment" : {
+    "company" : "Test Corp",
+    "status" : "employed"
+  },
+  "password" : "<password>",
+  "profile" : {
+    "bio" : "Test user bio",
+    "first_name" : "<firstName>",
+    "gender" : "male",
+    "last_name" : "<lastName>"
+  },
+  "settings" : {
+    "language" : "en",
+    "notifications_enabled" : true,
+    "theme" : "dark",
+    "timezone" : "America/Los_Angeles"
+  },
+  "username" : "<username>"
+}
+  saved out: Response 200
+
+### get by id
+GET /api/v1/users/get/u-123
+  query: <absent>
+  authorization: <absent>
+  content-type: <absent>
+  x-request-id: <absent>
+  context keys added before request: []
+  body: <empty>
+  saved out: Response 200
+
+### get by literal id
+GET /api/v1/users/get/Lit-Id
+  query: <absent>
+  authorization: <absent>
+  content-type: <absent>
+  x-request-id: <absent>
+  context keys added before request: []
+  body: <empty>
+  saved out: Response 200
+
+### list
+GET /api/v1/users/list
+  query: <absent>
+  authorization: <absent>
+  content-type: <absent>
+  x-request-id: <absent>
+  context keys added before request: []
+  body: <empty>
+  saved out: Response 200
+
+### list paged
+GET /api/v1/users/list
+  query: "page=2&per_page=5"
+  authorization: <absent>
+  content-type: <absent>
+  x-request-id: <absent>
+  context keys added before request: []
+  body: <empty>
+  saved out: Response 200
+
+### exists HEAD
+HEAD /api/v1/users/exists/u-123
+  query: <absent>
+  authorization: <absent>
+  content-type: <absent>
+  x-request-id: <absent>
+  context keys added before request: []
+  body: <empty>
+  saved out: Response 200
+
+### exists GET
+GET /api/v1/users/exists/u-123
+  query: <absent>
+  authorization: <absent>
+  content-type: <absent>
+  x-request-id: <absent>
+  context keys added before request: []
+  body: <empty>
+  saved out: Response 200
+
+### update
+PUT /api/v1/users/update/u-123
+  query: <absent>
+  authorization: "Bearer t-abc"
+  content-type: "application/json"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: {
+  "email" : "E-mail@x.io",
+  "profile" : {
+    "first_name" : "First-N",
+    "last_name" : "Last-N"
+  },
+  "username" : "Uname-1"
+}
+  saved out: Response 200
+
+### update prefixed token
+PUT /api/v1/users/update/u-123
+  query: <absent>
+  authorization: "Bearer t-pre"
+  content-type: "application/json"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: {
+  "email" : "E-mail@x.io",
+  "profile" : {
+    "first_name" : "First-N",
+    "last_name" : "Last-N"
+  },
+  "username" : "Uname-1"
+}
+  saved out: Response 200
+
+### update empty token
+PUT /api/v1/users/update/u-123
+  query: <absent>
+  authorization: "Bearer"
+  content-type: "application/json"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: {
+  "email" : "E-mail@x.io",
+  "profile" : {
+    "first_name" : "First-N",
+    "last_name" : "Last-N"
+  },
+  "username" : "Uname-1"
+}
+  saved out: Response 200
+
+### update no auth
+PUT /api/v1/users/update/u-123
+  query: <absent>
+  authorization: <absent>
+  content-type: "application/json"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: {
+  "email" : "<email>",
+  "profile" : {
+    "first_name" : "<firstName>",
+    "last_name" : "<lastName>"
+  },
+  "username" : "<username>"
+}
+  saved out: Response 200
+
+### update invalid email
+PUT /api/v1/users/update/u-123
+  query: <absent>
+  authorization: "Bearer t-abc"
+  content-type: "application/json"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: {
+  "email" : "notanemail",
+  "profile" : {
+    "first_name" : "<firstName>",
+    "last_name" : "<lastName>"
+  },
+  "username" : "<username>"
+}
+  saved out: Response 200
+
+### patch firstName
+PATCH /api/v1/users/patch/u-123
+  query: <absent>
+  authorization: "Bearer t-abc"
+  content-type: "application/json"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: {
+  "profile" : {
+    "first_name" : "First-N",
+    "last_name" : "PatchedLastName"
+  }
+}
+  saved out: Response 200
+
+### patch email
+PATCH /api/v1/users/patch/u-123
+  query: <absent>
+  authorization: "Bearer t-abc"
+  content-type: "application/json"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: {
+  "email" : "E-mail@x.io"
+}
+  saved out: Response 200
+
+### patch username
+PATCH /api/v1/users/patch/u-123
+  query: <absent>
+  authorization: "Bearer t-abc"
+  content-type: "application/json"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: {
+  "username" : "Uname-1"
+}
+  saved out: Response 200
+
+### patch no auth
+PATCH /api/v1/users/patch/u-123
+  query: <absent>
+  authorization: <absent>
+  content-type: "application/json"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: {
+  "profile" : {
+    "first_name" : "<firstName>",
+    "last_name" : "<lastName>"
+  }
+}
+  saved out: Response 200
+
+### patch empty body
+PATCH /api/v1/users/patch/u-123
+  query: <absent>
+  authorization: "Bearer t-abc"
+  content-type: "application/json"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: { }
+  saved out: Response 200
+
+### delete
+DELETE /api/v1/users/delete/u-123
+  query: <absent>
+  authorization: "Bearer t-abc"
+  content-type: <absent>
+  x-request-id: <absent>
+  context keys added before request: []
+  body: <empty>
+  saved out: Response 200
+
+### delete prefixed token
+DELETE /api/v1/users/delete/u-123
+  query: <absent>
+  authorization: "Bearer t-pre"
+  content-type: <absent>
+  x-request-id: <absent>
+  context keys added before request: []
+  body: <empty>
+  saved out: Response 200
+
+### delete no auth
+DELETE /api/v1/users/delete/u-123
+  query: <absent>
+  authorization: <absent>
+  content-type: <absent>
+  x-request-id: <absent>
+  context keys added before request: []
+  body: <empty>
+  saved out: Response 200
+
+### logout
+POST /api/v1/users/logout/u-123
+  query: <absent>
+  authorization: "Bearer t-abc"
+  content-type: "application/x-www-form-urlencoded; charset=ISO-8859-1"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: <empty>
+  saved out: Response 200
+
+### logout empty token
+POST /api/v1/users/logout/u-123
+  query: <absent>
+  authorization: "Bearer"
+  content-type: "application/x-www-form-urlencoded; charset=ISO-8859-1"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: <empty>
+  saved out: Response 200
+
+### logout no auth
+POST /api/v1/users/logout/u-123
+  query: <absent>
+  authorization: <absent>
+  content-type: "application/x-www-form-urlencoded; charset=ISO-8859-1"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: <empty>
+  saved out: Response 200
+
+### raw delete []
+DELETE /api/v1/users/delete/u-123
+  query: <absent>
+  authorization: ""
+  content-type: <absent>
+  x-request-id: <absent>
+  context keys added before request: []
+  body: <empty>
+  saved out: Response 200
+
+### raw patch []
+PATCH /api/v1/users/patch/u-123
+  query: <absent>
+  authorization: ""
+  content-type: "application/json"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: {
+  "profile" : {
+    "first_name" : "First-N",
+    "last_name" : "RawAuthLast"
+  }
+}
+  saved out: Response 200
+
+### raw update []
+PUT /api/v1/users/update/u-123
+  query: <absent>
+  authorization: ""
+  content-type: "application/json"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: {
+  "email" : "<email>",
+  "profile" : {
+    "first_name" : "<firstName>",
+    "last_name" : "<lastName>"
+  },
+  "username" : "<username>"
+}
+  saved out: Response 200
+
+### raw logout []
+POST /api/v1/users/logout/u-123
+  query: <absent>
+  authorization: ""
+  content-type: "application/x-www-form-urlencoded; charset=ISO-8859-1"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: <empty>
+  saved out: Response 200
+
+### raw delete [Bearer ]
+DELETE /api/v1/users/delete/u-123
+  query: <absent>
+  authorization: "Bearer"
+  content-type: <absent>
+  x-request-id: <absent>
+  context keys added before request: []
+  body: <empty>
+  saved out: Response 200
+
+### raw patch [Bearer ]
+PATCH /api/v1/users/patch/u-123
+  query: <absent>
+  authorization: "Bearer"
+  content-type: "application/json"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: {
+  "profile" : {
+    "first_name" : "First-N",
+    "last_name" : "RawAuthLast"
+  }
+}
+  saved out: Response 200
+
+### raw update [Bearer ]
+PUT /api/v1/users/update/u-123
+  query: <absent>
+  authorization: "Bearer"
+  content-type: "application/json"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: {
+  "email" : "<email>",
+  "profile" : {
+    "first_name" : "<firstName>",
+    "last_name" : "<lastName>"
+  },
+  "username" : "<username>"
+}
+  saved out: Response 200
+
+### raw logout [Bearer ]
+POST /api/v1/users/logout/u-123
+  query: <absent>
+  authorization: "Bearer"
+  content-type: "application/x-www-form-urlencoded; charset=ISO-8859-1"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: <empty>
+  saved out: Response 200
+
+### raw delete [Bearer abc]
+DELETE /api/v1/users/delete/u-123
+  query: <absent>
+  authorization: "Bearer abc"
+  content-type: <absent>
+  x-request-id: <absent>
+  context keys added before request: []
+  body: <empty>
+  saved out: Response 200
+
+### raw patch [Bearer abc]
+PATCH /api/v1/users/patch/u-123
+  query: <absent>
+  authorization: "Bearer abc"
+  content-type: "application/json"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: {
+  "profile" : {
+    "first_name" : "First-N",
+    "last_name" : "RawAuthLast"
+  }
+}
+  saved out: Response 200
+
+### raw update [Bearer abc]
+PUT /api/v1/users/update/u-123
+  query: <absent>
+  authorization: "Bearer abc"
+  content-type: "application/json"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: {
+  "email" : "<email>",
+  "profile" : {
+    "first_name" : "<firstName>",
+    "last_name" : "<lastName>"
+  },
+  "username" : "<username>"
+}
+  saved out: Response 200
+
+### raw logout [Bearer abc]
+POST /api/v1/users/logout/u-123
+  query: <absent>
+  authorization: "Bearer abc"
+  content-type: "application/x-www-form-urlencoded; charset=ISO-8859-1"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: <empty>
+  saved out: Response 200
+
+### raw delete [tok]
+DELETE /api/v1/users/delete/u-123
+  query: <absent>
+  authorization: "tok"
+  content-type: <absent>
+  x-request-id: <absent>
+  context keys added before request: []
+  body: <empty>
+  saved out: Response 200
+
+### raw patch [tok]
+PATCH /api/v1/users/patch/u-123
+  query: <absent>
+  authorization: "tok"
+  content-type: "application/json"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: {
+  "profile" : {
+    "first_name" : "First-N",
+    "last_name" : "RawAuthLast"
+  }
+}
+  saved out: Response 200
+
+### raw update [tok]
+PUT /api/v1/users/update/u-123
+  query: <absent>
+  authorization: "tok"
+  content-type: "application/json"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: {
+  "email" : "<email>",
+  "profile" : {
+    "first_name" : "<firstName>",
+    "last_name" : "<lastName>"
+  },
+  "username" : "<username>"
+}
+  saved out: Response 200
+
+### raw logout [tok]
+POST /api/v1/users/logout/u-123
+  query: <absent>
+  authorization: "tok"
+  content-type: "application/x-www-form-urlencoded; charset=ISO-8859-1"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: <empty>
+  saved out: Response 200
+
+### mailbox empty
+POST /api/v1/mail/create
+  query: <absent>
+  authorization: <absent>
+  content-type: "application/json"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: { }
+  saved out: Response 200
+
+### mailbox local part
+POST /api/v1/mail/create
+  query: <absent>
+  authorization: <absent>
+  content-type: "application/json"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: {
+  "local_part" : "Local-Part"
+}
+  saved out: Response 200
+
+### mailbox domain
+POST /api/v1/mail/create
+  query: <absent>
+  authorization: <absent>
+  content-type: "application/json"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: {
+  "domain" : "dom.example"
+}
+  saved out: Response 200
+
+### mailbox domain + local part
+POST /api/v1/mail/create
+  query: <absent>
+  authorization: <absent>
+  content-type: "application/json"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: {
+  "domain" : "dom.example",
+  "local_part" : "Local-Part"
+}
+  saved out: Response 200
+
+### mailbox get
+GET /api/v1/mail/mb-tok
+  query: <absent>
+  authorization: <absent>
+  content-type: <absent>
+  x-request-id: <absent>
+  context keys added before request: []
+  body: <empty>
+  saved out: Response 200
+
+### messages
+GET /api/v1/mail/mb-tok/messages
+  query: <absent>
+  authorization: <absent>
+  content-type: <absent>
+  x-request-id: <absent>
+  context keys added before request: []
+  body: <empty>
+  saved out: Response 200
+
+### message
+GET /api/v1/mail/mb-tok/messages/m-1
+  query: <absent>
+  authorization: <absent>
+  content-type: <absent>
+  x-request-id: <absent>
+  context keys added before request: []
+  body: <empty>
+  saved out: Response 200
+
+### send
+POST /api/v1/mail/mb-tok/send
+  query: <absent>
+  authorization: <absent>
+  content-type: "application/json"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: {
+  "body" : "Body-1",
+  "from" : "From@x.io",
+  "subject" : "Subj-1"
+}
+  saved out: Response 200
+
+### send html
+POST /api/v1/mail/mb-tok/send
+  query: <absent>
+  authorization: <absent>
+  content-type: "application/json"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: {
+  "body" : "Body-1",
+  "from" : "From@x.io",
+  "html_body" : "<b>Hi</b>",
+  "subject" : "Subj-1"
+}
+  saved out: Response 200
+
+### send missing from
+POST /api/v1/mail/mb-tok/send
+  query: <absent>
+  authorization: <absent>
+  content-type: "application/json"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: {
+  "body" : "Test body text",
+  "subject" : "Test Subject"
+}
+  saved out: Response 200
+
+### send missing subject
+POST /api/v1/mail/mb-tok/send
+  query: <absent>
+  authorization: <absent>
+  content-type: "application/json"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: {
+  "body" : "Test body text",
+  "from" : "sender@test.com"
+}
+  saved out: Response 200
+
+### send missing body
+POST /api/v1/mail/mb-tok/send
+  query: <absent>
+  authorization: <absent>
+  content-type: "application/json"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: {
+  "from" : "sender@test.com",
+  "subject" : "Test Subject"
+}
+  saved out: Response 200
+
+### send missing none
+POST /api/v1/mail/mb-tok/send
+  query: <absent>
+  authorization: <absent>
+  content-type: "application/json"
+  x-request-id: <absent>
+  context keys added before request: []
+  body: {
+  "body" : "Test body text",
+  "from" : "sender@test.com",
+  "subject" : "Test Subject"
+}
+  saved out: Response 200
+
+### mailbox delete
+DELETE /api/v1/mail/mb-tok
+  query: <absent>
+  authorization: <absent>
+  content-type: <absent>
+  x-request-id: <absent>
+  context keys added before request: []
+  body: <empty>
+  saved out: Response 200
+
+### health
+GET /api/v1/health
+  query: <absent>
+  authorization: <absent>
+  content-type: <absent>
+  x-request-id: <absent>
+  context keys added before request: []
+  body: <empty>
+  saved out: Response 200
+
+### health request id
+GET /api/v1/health
+  query: <absent>
+  authorization: <absent>
+  content-type: <absent>
+  x-request-id: "req-1"
+  context keys added before request: []
+  body: <empty>
+  saved out: Response 200
+
+### options
+OPTIONS /api/v1/users/options
+  query: <absent>
+  authorization: <absent>
+  content-type: <absent>
+  x-request-id: <absent>
+  context keys added before request: []
+  body: <empty>
+  saved out: Response 200
+
