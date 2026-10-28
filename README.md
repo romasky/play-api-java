@@ -97,12 +97,20 @@ src/test/
 mvn test
 ```
 
-### Run specific tags
+### Run a single feature
 
 ```bash
-mvn test -Dcucumber.filter.tags="@CreateUser"
-mvn test -Dcucumber.filter.tags="@Smoke"
-mvn test -Dcucumber.filter.tags="@Run and not @Bug"
+mvn test -Dcucumber.features=classpath:tests/play_qa_api/LoginTests.feature
+```
+
+> `-Dcucumber.filter.tags` currently has **no effect**: the tag filter declared on
+> `RunnerForTest` (`@Run and not @Ignore and not @Bug and not @NotImplemented`) overrides it.
+> Narrow runs by feature file instead.
+
+### Check step bindings without calling the API
+
+```bash
+mvn test -Dcucumber.execution.dry-run=true
 ```
 
 ### Run against a different environment
@@ -116,6 +124,32 @@ mvn test -DbaseUrl="https://staging.play-qa.com"
 ```bash
 mvn allure:serve
 ```
+
+---
+
+## Quality Gates (ub-mode)
+
+The framework code itself is held to [ub-mode](https://github.com/unclebob/ub-mode) gates.
+They run **offline** — unit tests only, never the live API:
+
+```bash
+mvn -Pquality verify
+```
+
+| Gate | Tool | Bar | Report |
+|---|---|---|---|
+| Unit tests | JUnit 5 `*Test` classes next to the code | green | `target/surefire-reports` |
+| Crapper | JaCoCo + `tools/crap/Crap.java` | CRAP < 10 per method | stdout, `target/site/jacoco` |
+| Dryer | PMD CPD (test sources included) | no clone over the calibrated token threshold | `target/cpd.xml` |
+| Mutator | PIT | mutation ≥ 90 %, line coverage ≥ 90 % | `target/pit-reports/index.html` |
+
+Pins protect step-layer refactors: `StepCatalogPinTest` (every Gherkin expression) and
+`RequestPinTest` (every HTTP request a step sends, against a local server) compare with goldens
+in `src/test/resources/pins/`.
+
+Claude Code agents for this workflow live in `.claude/`: the `ub-mode` skill plus
+`ub-implementer`, `ub-refactorer`, `ub-gatekeeper` and `ub-scribe`. The action log and glossary
+are in `docs/ub-mode/`.
 
 ---
 
@@ -179,6 +213,9 @@ Tests run automatically on:
 - Manual trigger via GitHub Actions UI
 
 Allure results and Cucumber HTML reports are uploaded as build artifacts after each run.
+
+A separate offline job, `.github/workflows/quality.yml`, runs `mvn -Pquality verify` on every
+push and pull request. It does not depend on play-qa.com, so API outages never block it.
 
 ---
 
