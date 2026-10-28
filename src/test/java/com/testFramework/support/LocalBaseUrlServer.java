@@ -41,10 +41,15 @@ public final class LocalBaseUrlServer implements AutoCloseable {
 
     /** 200 with a JSON body; a HEAD reply carries the headers but no body. */
     public static void replyJson(HttpExchange exchange, String json) throws IOException {
+        reply(exchange, 200, json);
+    }
+
+    /** {@code status} with a JSON body; a HEAD reply carries the headers but no body. */
+    public static void reply(HttpExchange exchange, int status, String json) throws IOException {
         byte[] reply = json.getBytes(StandardCharsets.UTF_8);
         boolean head = "HEAD".equals(exchange.getRequestMethod());
         exchange.getResponseHeaders().add("Content-Type", "application/json");
-        exchange.sendResponseHeaders(200, head ? -1 : reply.length);
+        exchange.sendResponseHeaders(status, head ? -1 : reply.length);
         if (!head) exchange.getResponseBody().write(reply);
         exchange.close();
     }

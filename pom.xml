@@ -278,9 +278,11 @@
                             <includes>
                                 <include>com/testFramework/core/*</include>
                                 <include>com/testFramework/play_qa_api/*</include>
-                                <include>com/testFramework/steps/play_qa_api/BaseSteps*</include>
+                                <include>com/testFramework/steps/play_qa_api/*</include>
                             </includes>
                             <excludes>
+                                <!-- GoldenFile is pin-test support, not framework code -->
+                                <exclude>**/GoldenFile*</exclude>
                                 <!-- report matches class-file paths, agent matches class names -->
                                 <exclude>**/*Test.class</exclude>
                                 <exclude>**/*Test$*</exclude>
@@ -377,13 +379,23 @@
                             <targetClasses>
                                 <param>com.testFramework.core.*</param>
                                 <param>com.testFramework.play_qa_api.*</param>
-                                <param>com.testFramework.steps.play_qa_api.BaseSteps*</param>
+                                <param>com.testFramework.steps.play_qa_api.*</param>
                             </targetClasses>
                             <excludedClasses>
+                                <param>com.testFramework.steps.play_qa_api.GoldenFile*</param>
                                 <param>*Test</param>
                                 <param>*Test$*</param>
                                 <param>com.testFramework.play_qa_api.models.*</param>
                             </excludedClasses>
+                            <excludedMethods>
+                                <!--
+                                    Live-only: AccountsSteps' @Before rate-limit pauses (2 s / 13 s Thread.sleep
+                                    keyed to server limits). Their only behavior is waiting; an offline test would
+                                    either sleep 15 s per run or assert nothing. Proven by the live suite (no 429s).
+                                -->
+                                <param>paceCreateUserScenarios</param>
+                                <param>paceLoginScenarios</param>
+                            </excludedMethods>
                             <targetTests>
                                 <param>com.testFramework.*Test</param>
                             </targetTests>
