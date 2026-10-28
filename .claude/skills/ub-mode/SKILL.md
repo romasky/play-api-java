@@ -181,9 +181,10 @@ seem to conflict, the rule wins and the appendix is wrong — fix the appendix.
 | Gate | Command | Passes when |
 |---|---|---|
 | Unit tests only | `mvn -q -Pquality test -Djacoco.skip=true` | green |
-| **All gates** | `mvn -Pquality verify` | unit tests → JaCoCo → CRAP → CPD → PIT all green |
+| **All gates** | `mvn -Pquality verify` **and** `tools/dryer/dryer-gate.sh` | unit tests → JaCoCo → CRAP → CPD → PIT green; Dryer green |
 | Crapper | `java tools/crap/Crap.java target/site/jacoco/jacoco.xml 10` | every method CRAP < 10 |
-| Dryer | `mvn -Pquality pmd:cpd-check` (report: `target/cpd.xml`) | no duplication over the calibrated token threshold |
+| Dryer | `tools/dryer/dryer-gate.sh` (real unclebob/dryer, pinned; Python 3.11+) | no structural duplicate ≥ 0.8, except pairs of single-statement Cucumber bindings (accepted by rule, count printed) |
+| CPD clone check | `mvn -Pquality pmd:cpd-check` (report: `target/cpd.xml`) | no exact token clone ≥ 85 tokens — an extra check, **not** Dryer |
 | Mutator | part of `verify`; report `target/pit-reports/index.html` | mutation ≥ 90 %, coverage ≥ 90 %, aim for 100 % |
 | Step bindings (no network) | `mvn test -Dcucumber.execution.dry-run=true` | `Tests run: 152` (update the number when scenarios are added on purpose) |
 | One live feature | `mvn test -Dcucumber.features=classpath:tests/play_qa_api/<File>.feature` | green or only known `@Bug`s |

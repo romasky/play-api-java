@@ -73,7 +73,7 @@ The sections below define your concrete workflow, formats, and file conventions.
 
 - Full run: `mvn test`. Single feature: `mvn test -Dcucumber.features=classpath:tests/play_qa_api/LoginTests.feature` (the `@Run` filter still applies).
 - **`-Dcucumber.filter.tags` is ignored** — `RunnerForTest`'s `@ConfigurationParameter` overrides it (verified: `@NoSuchTag` still ran all 152). Narrow by feature file instead.
-- Step bindings without network: `mvn test -Dcucumber.execution.dry-run=true`. Offline framework gates (unit tests, CRAP, CPD, PIT): `mvn -Pquality verify`.
+- Step bindings without network: `mvn test -Dcucumber.execution.dry-run=true`. Offline framework gates (unit tests, CRAP, CPD, PIT): `mvn -Pquality verify`; Dryer: `tools/dryer/dryer-gate.sh`.
 - Reports: cucumber JSON at `target/cucumber-reports/CucumberTests.json`, Allure results under `target/allure-results`. Read these, don't guess pass/fail.
 - Distinguish **test failures** (assertion mismatch) from **server bugs** (API behaves wrong): a scenario that asserts the *correct* expected result and fails because the API is wrong is a server bug, not a broken test. Say which it is.
 

@@ -140,8 +140,11 @@ mvn allure:serve
 
 ## Quality Gates (ub-mode)
 
-The framework code itself is held to [ub-mode](https://github.com/unclebob/ub-mode) gates.
-They run **offline** — unit tests only, never the live API:
+The framework code itself is held to [ub-mode](https://github.com/unclebob/ub-mode) gates:
+`core`, `play_qa_api` (DTO models excluded) and **every** step class in `steps/play_qa_api`.
+The only exemption is PIT on the two rate-limit `@Before` hooks in `AccountsSteps`, which do
+nothing but call the (unit-tested) `BaseSteps.pause` — see the comment in `pom.xml`.
+The gates run **offline** — unit tests only, never the live API:
 
 ```bash
 mvn -Pquality verify
@@ -151,8 +154,21 @@ mvn -Pquality verify
 |---|---|---|---|
 | Unit tests | JUnit 5 `*Test` classes next to the code | green | `target/surefire-reports` |
 | Crapper | JaCoCo + `tools/crap/Crap.java` | CRAP < 10 per method | stdout, `target/site/jacoco` |
-| Dryer | PMD CPD (test sources included) | no clone over the calibrated token threshold | `target/cpd.xml` |
 | Mutator | PIT | mutation ≥ 90 %, line coverage ≥ 90 % | `target/pit-reports/index.html` |
+| CPD clone check | PMD CPD (test sources included) | no exact token clone ≥ 85 tokens | `target/cpd.xml` |
+
+**Dryer** — ub-mode's structural-duplication rule (similarity ≥ 0.8) — is the real
+[unclebob/dryer](https://github.com/unclebob/dryer), pinned to a commit. It needs Python 3.11+,
+so it runs as a separate command (CI runs it too):
+
+```bash
+tools/dryer/dryer-gate.sh
+```
+
+It fails on every candidate at ≥ 0.8 except one rule-based case: pairs where both forms are a
+Cucumber step or hook whose body is a single statement (Cucumber requires one method per
+expression, and that statement already calls the shared helper). CPD above is a cheap,
+Maven-native extra check for exact clones — it is **not** a substitute for Dryer.
 
 Pins protect step-layer refactors: `StepCatalogPinTest` (every Gherkin expression) and
 `RequestPinTest` (every HTTP request a step sends, against a local server) compare with goldens

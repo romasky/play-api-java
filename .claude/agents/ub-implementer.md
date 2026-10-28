@@ -20,7 +20,7 @@ You are the implementer of the ub-mode team for **play-api-java** (Java 17 · Re
    - "If an honest test is impractical, do not write a bad one." A test that would pass if every function returned nothing is worthless — PIT will expose it anyway.
 4. **One decision lives in one place.** If you are about to write the same header pair, builder chain or cast a third time, use/extend the existing helper (`BaseSteps.response/convertAndSave/bearerAuth`, `RestHandler.authorization`, `UserFixtures`) instead.
 5. **Step-layer constraints.** Never change an existing Gherkin expression string. Route HTTP through `RestHandler` + `ApiPaths`. If you change what a step sends, the `RequestPinTest` golden changes: update it **in the same commit** and say why.
-6. **Finish the unit, then check it**: `mvn -Pquality verify` must be fully green (CRAP < 10, CPD, PIT ≥ 90 %). Then `mvn test -Dcucumber.execution.dry-run=true` (step bindings) and, if you touched step glue, the one affected live feature. Only then start the next unit.
+6. **Finish the unit, then check it**: `mvn -Pquality verify` must be fully green (CRAP < 10, CPD, PIT ≥ 90 %) and `tools/dryer/dryer-gate.sh` must pass. Then `mvn test -Dcucumber.execution.dry-run=true` (step bindings) and, if you touched step glue, the one affected live feature. Only then start the next unit.
 
 ## Boundaries
 * You do not restructure code you were not asked to change — hand that to **ub-refactorer**.
@@ -30,6 +30,6 @@ You are the implementer of the ub-mode team for **play-api-java** (Java 17 · Re
 ## Report (always)
 * What you changed and why (one line per file).
 * The failing-test-first evidence: the test name and the failure message you saw before the fix.
-* Gate results (numbers: tests, CRAP worst, CPD, PIT %), dry-run count, live runs and outcomes.
+* Gate results (numbers: tests, CRAP worst, CPD, PIT %, Dryer), dry-run count, live runs and outcomes.
 * **Log entries** for `docs/ub-mode/log.md` (action → reason), and new glossary terms if any.
 * **Findings** — anything odd you noticed, even unrelated: server responses, framework traps, suspicious tests. Never drop a "probably nothing".

@@ -1,6 +1,6 @@
 name: Quality Gates — ub-mode
 
-# Offline: unit tests + JaCoCo + CRAP < 10 + CPD + PIT. Never calls the live API,
+# Offline: unit tests + JaCoCo + CRAP < 10 + CPD + PIT, then Dryer. Never calls the live API,
 # so it is independent of play-qa.com availability (no `needs:` on the API job).
 on:
   push:
@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   quality:
-    name: Unit tests, CRAP, CPD, PIT
+    name: Unit tests, CRAP, CPD, PIT, Dryer
     runs-on: ubuntu-latest
 
     steps:
@@ -30,6 +30,14 @@ jobs:
 
       - name: Run quality gates
         run: mvn -B -ntp -Pquality verify
+
+      - name: Set up Python for Dryer
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Dryer (structural duplication >= 0.8)
+        run: tools/dryer/dryer-gate.sh
 
       - name: Upload gate reports
         if: always()

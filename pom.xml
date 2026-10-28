@@ -334,6 +334,8 @@
                         <configuration>
                             <includeTests>true</includeTests>
                             <!--
+                                An extra exact-token clone check, NOT ub-mode's Dryer rule: structural
+                                duplication >= 0.8 is gated by tools/dryer/dryer-gate.sh (real unclebob/dryer).
                                 Calibrated at 85 (was 60). After the step-layer dedup every remaining clone
                                 at 60-84 tokens is incidental: CPD (with identifiers and literals ignored)
                                 matches runs of adjacent one-line steps (Convert / Save field / typed-cast
@@ -389,9 +391,9 @@
                             </excludedClasses>
                             <excludedMethods>
                                 <!--
-                                    Live-only: AccountsSteps' @Before rate-limit pauses (2 s / 13 s Thread.sleep
-                                    keyed to server limits). Their only behavior is waiting; an offline test would
-                                    either sleep 15 s per run or assert nothing. Proven by the live suite (no 429s).
+                                    Live-only: AccountsSteps' @Before rate-limit hooks only call BaseSteps.pause with
+                                    the server-limit constants (2 s / 13 s). pause itself is unit-tested; killing a
+                                    mutant here would mean sleeping 15 s per run. Proven by the live suite (no 429s).
                                 -->
                                 <param>paceCreateUserScenarios</param>
                                 <param>paceLoginScenarios</param>
