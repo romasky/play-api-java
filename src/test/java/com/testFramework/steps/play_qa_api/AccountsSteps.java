@@ -45,11 +45,7 @@ public class AccountsSteps {
 
     @Given("Login with email {string} password {string} and save token as {string}")
     public void loginAndSaveToken(String emailVar, String passwordVar, String tokenVar) {
-        LoginReq req = LoginReq.builder()
-                .email(ctx.str(emailVar))
-                .password(ctx.str(passwordVar))
-                .build();
-        Response response = rest.post(ApiPaths.LOGIN, req);
+        Response response = login(emailVar, passwordVar);
         Assertions.assertEquals(200, response.getStatusCode(),
                 "Login failed: " + response.asString());
         ctx.save(tokenVar, response.as(LoginResp.class).getAccessToken());
@@ -57,11 +53,14 @@ public class AccountsSteps {
 
     @Given("Login with email {string} password {string} and save raw response as {string}")
     public void loginAndSaveResponse(String emailVar, String passwordVar, String varName) {
-        LoginReq req = LoginReq.builder()
+        ctx.save(varName, login(emailVar, passwordVar));
+    }
+
+    private Response login(String emailVar, String passwordVar) {
+        return rest.post(ApiPaths.LOGIN, LoginReq.builder()
                 .email(ctx.str(emailVar))
                 .password(ctx.str(passwordVar))
-                .build();
-        ctx.save(varName, rest.post(ApiPaths.LOGIN, req));
+                .build());
     }
 
     @Given("Login with no body and save response as {string}")
@@ -364,60 +363,49 @@ public class AccountsSteps {
     public void updateUser(String idVar, String tokenVar,
                            String firstNameVar, String lastNameVar,
                            String emailVar, String usernameVar, String varName) {
-        ctx.save(varName, rest.put(ApiPaths.usersUpdate(ctx.str(idVar)),
-                CreateUserReq.builder()
+        sendPut(idVar, varName, CreateUserReq.builder()
                         .email(ctx.str(emailVar))
                         .username(ctx.str(usernameVar))
                         .profile(namedProfile(firstNameVar, lastNameVar).build())
                         .build(),
-                ctx.bearerAuth(tokenVar)));
+                ctx.bearerAuth(tokenVar));
     }
 
     @When("Update user {string} with no auth header and save response as {string}")
     public void updateUserNoAuth(String idVar, String varName) {
-        ctx.save(varName, rest.put(ApiPaths.usersUpdate(ctx.str(idVar)),
-                UserFixtures.randomUpdate().build()));
+        sendPut(idVar, varName, UserFixtures.randomUpdate().build());
     }
 
     @When("Update user {string} with token {string} and invalid email and save response as {string}")
     public void updateUserInvalidEmail(String idVar, String tokenVar, String varName) {
-        ctx.save(varName, rest.put(ApiPaths.usersUpdate(ctx.str(idVar)),
-                UserFixtures.randomUpdate().email("notanemail").build(),
-                ctx.bearerAuth(tokenVar)));
+        sendPut(idVar, varName, UserFixtures.randomUpdate().email("notanemail").build(), ctx.bearerAuth(tokenVar));
     }
 
     @When("Patch user {string} token {string} firstName {string} and save response as {string}")
     public void patchUser(String idVar, String tokenVar, String firstNameVar, String varName) {
-        ctx.save(varName, rest.patch(ApiPaths.usersPatch(ctx.str(idVar)),
-                profilePatch(firstNameVar, "PatchedLastName"),
-                ctx.bearerAuth(tokenVar)));
+        sendPatch(idVar, varName, profilePatch(firstNameVar, "PatchedLastName"), ctx.bearerAuth(tokenVar));
     }
 
     @When("Patch user {string} token {string} email {string} and save response as {string}")
     public void patchUserEmail(String idVar, String tokenVar, String emailVar, String varName) {
-        ctx.save(varName, rest.patch(ApiPaths.usersPatch(ctx.str(idVar)),
-                CreateUserReq.builder().email(ctx.str(emailVar)).build(),
-                ctx.bearerAuth(tokenVar)));
+        sendPatch(idVar, varName, CreateUserReq.builder().email(ctx.str(emailVar)).build(),
+                ctx.bearerAuth(tokenVar));
     }
 
     @When("Patch user {string} token {string} username {string} and save response as {string}")
     public void patchUserUsername(String idVar, String tokenVar, String usernameVar, String varName) {
-        ctx.save(varName, rest.patch(ApiPaths.usersPatch(ctx.str(idVar)),
-                CreateUserReq.builder().username(ctx.str(usernameVar)).build(),
-                ctx.bearerAuth(tokenVar)));
+        sendPatch(idVar, varName, CreateUserReq.builder().username(ctx.str(usernameVar)).build(),
+                ctx.bearerAuth(tokenVar));
     }
 
     @When("Patch user {string} with no auth header and save response as {string}")
     public void patchUserNoAuth(String idVar, String varName) {
-        ctx.save(varName, rest.patch(ApiPaths.usersPatch(ctx.str(idVar)),
-                CreateUserReq.builder().profile(UserFixtures.randomProfile().build()).build()));
+        sendPatch(idVar, varName, CreateUserReq.builder().profile(UserFixtures.randomProfile().build()).build());
     }
 
     @When("Patch user {string} with empty body token {string} and save response as {string}")
     public void patchUserEmptyBody(String idVar, String tokenVar, String varName) {
-        ctx.save(varName, rest.patch(ApiPaths.usersPatch(ctx.str(idVar)),
-                CreateUserReq.builder().build(),
-                ctx.bearerAuth(tokenVar)));
+        sendPatch(idVar, varName, CreateUserReq.builder().build(), ctx.bearerAuth(tokenVar));
     }
 
     /** PATCH body touching only the profile name; the caller picks the last name. */
@@ -431,24 +419,22 @@ public class AccountsSteps {
 
     @When("Delete user {string} with token {string} and save response as {string}")
     public void deleteUser(String idVar, String tokenVar, String varName) {
-        ctx.save(varName, rest.delete(ApiPaths.usersDelete(ctx.str(idVar)),
-                ctx.bearerAuth(tokenVar)));
+        sendDelete(idVar, varName, ctx.bearerAuth(tokenVar));
     }
 
     @When("Delete user {string} with no auth header and save response as {string}")
     public void deleteUserNoAuth(String idVar, String varName) {
-        ctx.save(varName, rest.delete(ApiPaths.usersDelete(ctx.str(idVar))));
+        sendDelete(idVar, varName);
     }
 
     @When("Logout user {string} with token {string} and save response as {string}")
     public void logoutUser(String idVar, String tokenVar, String varName) {
-        ctx.save(varName, rest.postNoBody(ApiPaths.usersLogout(ctx.str(idVar)),
-                ctx.bearerAuth(tokenVar)));
+        sendLogout(idVar, varName, ctx.bearerAuth(tokenVar));
     }
 
     @When("Logout user {string} with no auth header and save response as {string}")
     public void logoutUserNoAuth(String idVar, String varName) {
-        ctx.save(varName, rest.postNoBody(ApiPaths.usersLogout(ctx.str(idVar))));
+        sendLogout(idVar, varName);
     }
 
     // ── Raw Authorization header (security tests) ─────────────────────
@@ -458,28 +444,40 @@ public class AccountsSteps {
 
     @When("Delete user {string} with raw auth header {string} and save response as {string}")
     public void deleteUserRawAuth(String idVar, String rawHeader, String varName) {
-        ctx.save(varName, rest.delete(ApiPaths.usersDelete(ctx.str(idVar)),
-                RestHandler.authorization(rawHeader)));
+        sendDelete(idVar, varName, RestHandler.authorization(rawHeader));
     }
 
     @When("Patch user {string} with raw auth header {string} firstName {string} and save response as {string}")
     public void patchUserRawAuth(String idVar, String rawHeader, String firstNameVar, String varName) {
-        ctx.save(varName, rest.patch(ApiPaths.usersPatch(ctx.str(idVar)),
-                profilePatch(firstNameVar, "RawAuthLast"),
-                RestHandler.authorization(rawHeader)));
+        sendPatch(idVar, varName, profilePatch(firstNameVar, "RawAuthLast"), RestHandler.authorization(rawHeader));
     }
 
     @When("Update user {string} with raw auth header {string} and save response as {string}")
     public void updateUserRawAuth(String idVar, String rawHeader, String varName) {
-        ctx.save(varName, rest.put(ApiPaths.usersUpdate(ctx.str(idVar)),
-                UserFixtures.randomUpdate().build(),
-                RestHandler.authorization(rawHeader)));
+        sendPut(idVar, varName, UserFixtures.randomUpdate().build(), RestHandler.authorization(rawHeader));
     }
 
     @When("Logout user {string} with raw auth header {string} and save response as {string}")
     public void logoutUserRawAuth(String idVar, String rawHeader, String varName) {
-        ctx.save(varName, rest.postNoBody(ApiPaths.usersLogout(ctx.str(idVar)),
-                RestHandler.authorization(rawHeader)));
+        sendLogout(idVar, varName, RestHandler.authorization(rawHeader));
+    }
+
+    // ── Per-user requests: resolve the id var, send, save the raw response ──
+
+    private void sendPut(String idVar, String varName, CreateUserReq body, String... headers) {
+        ctx.save(varName, rest.put(ApiPaths.usersUpdate(ctx.str(idVar)), body, headers));
+    }
+
+    private void sendPatch(String idVar, String varName, CreateUserReq body, String... headers) {
+        ctx.save(varName, rest.patch(ApiPaths.usersPatch(ctx.str(idVar)), body, headers));
+    }
+
+    private void sendDelete(String idVar, String varName, String... headers) {
+        ctx.save(varName, rest.delete(ApiPaths.usersDelete(ctx.str(idVar)), headers));
+    }
+
+    private void sendLogout(String idVar, String varName, String... headers) {
+        ctx.save(varName, rest.postNoBody(ApiPaths.usersLogout(ctx.str(idVar)), headers));
     }
 
     // ── Error assertions ─────────────────────────────────────────────
