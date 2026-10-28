@@ -3,6 +3,7 @@ package com.testFramework.steps.play_qa_api;
 import com.testFramework.core.Generator;
 import com.testFramework.core.RestHandler;
 import com.testFramework.play_qa_api.ApiPaths;
+import com.testFramework.play_qa_api.UserFixtures;
 import com.testFramework.play_qa_api.models.createUser.*;
 import com.testFramework.play_qa_api.models.createUser.response.CreateUserResp;
 import com.testFramework.play_qa_api.models.createUser.response.UserResp;
@@ -99,119 +100,62 @@ public class AccountsSteps {
     @When("Create user with email {string} username {string} password {string} firstName {string} lastName {string} and save response as {string}")
     public void createUser(String emailVar, String usernameVar, String passwordVar,
                            String firstNameVar, String lastNameVar, String varName) {
-        ctx.save(varName, rest.post(ApiPaths.USERS_CREATE, CreateUserReq.builder()
-                .email(ctx.str(emailVar))
-                .username(ctx.str(usernameVar))
-                .password(ctx.str(passwordVar))
-                .profile(ProfileReq.builder()
-                        .firstName(ctx.str(firstNameVar))
-                        .lastName(ctx.str(lastNameVar))
-                        .build())
-                .build()));
+        postCreateUser(varName, credentials(emailVar, usernameVar, passwordVar)
+                .profile(namedProfile(firstNameVar, lastNameVar).build())
+                .build());
     }
 
     @When("Create user with email {string} username {string} password {string} firstName {string} lastName {string} gender {string} and save response as {string}")
     public void createUserWithGender(String emailVar, String usernameVar, String passwordVar,
                                      String firstNameVar, String lastNameVar, String genderVar, String varName) {
-        ctx.save(varName, rest.post(ApiPaths.USERS_CREATE, CreateUserReq.builder()
-                .email(ctx.str(emailVar))
-                .username(ctx.str(usernameVar))
-                .password(ctx.str(passwordVar))
-                .profile(ProfileReq.builder()
-                        .firstName(ctx.str(firstNameVar))
-                        .lastName(ctx.str(lastNameVar))
-                        .gender(ctx.str(genderVar))
-                        .build())
-                .build()));
+        postCreateUser(varName, credentials(emailVar, usernameVar, passwordVar)
+                .profile(namedProfile(firstNameVar, lastNameVar).gender(ctx.str(genderVar)).build())
+                .build());
     }
 
     @When("Create user with employment status {string} and save response as {string}")
     public void createUserWithEmploymentStatus(String statusVar, String varName) {
-        ctx.save(varName, rest.post(ApiPaths.USERS_CREATE, CreateUserReq.builder()
-                .email(Generator.email())
-                .username(Generator.username())
-                .password(Generator.password())
-                .profile(ProfileReq.builder()
-                        .firstName(Generator.firstName())
-                        .lastName(Generator.lastName())
-                        .build())
-                .employment(EmploymentReq.builder()
-                        .status(ctx.str(statusVar))
-                        .build())
-                .build()));
+        postCreateUser(varName, UserFixtures.randomUser()
+                .employment(EmploymentReq.builder().status(ctx.str(statusVar)).build())
+                .build());
     }
 
     @When("Create user with theme {string} and save response as {string}")
     public void createUserWithTheme(String themeVar, String varName) {
-        ctx.save(varName, rest.post(ApiPaths.USERS_CREATE, CreateUserReq.builder()
-                .email(Generator.email())
-                .username(Generator.username())
-                .password(Generator.password())
-                .profile(ProfileReq.builder()
-                        .firstName(Generator.firstName())
-                        .lastName(Generator.lastName())
-                        .build())
-                .settings(SettingsReq.builder()
-                        .theme(ctx.str(themeVar))
-                        .build())
-                .build()));
+        postCreateUser(varName, UserFixtures.randomUser()
+                .settings(SettingsReq.builder().theme(ctx.str(themeVar)).build())
+                .build());
     }
 
     @When("Create user with username length {int} and save response as {string}")
     public void createUserWithUsernameLength(int length, String varName) {
-        ctx.save(varName, rest.post(ApiPaths.USERS_CREATE, CreateUserReq.builder()
-                .email(Generator.email())
+        postCreateUser(varName, UserFixtures.randomUser()
                 .username(Generator.alphanumericString(length).toLowerCase())
-                .password(Generator.password())
-                .profile(ProfileReq.builder()
-                        .firstName(Generator.firstName())
-                        .lastName(Generator.lastName())
-                        .build())
-                .build()));
+                .build());
     }
 
     @When("Create user with interests {string} and save response as {string}")
     public void createUserWithInterests(String interestsVar, String varName) {
         String raw = ctx.str(interestsVar);
         List<String> interests = raw.isBlank() ? List.of() : List.of(raw.split(","));
-        ctx.save(varName, rest.post(ApiPaths.USERS_CREATE, CreateUserReq.builder()
-                .email(Generator.email())
-                .username(Generator.username())
-                .password(Generator.password())
-                .profile(ProfileReq.builder()
-                        .firstName(Generator.firstName())
-                        .lastName(Generator.lastName())
-                        .interests(interests)
-                        .build())
-                .build()));
+        postCreateUser(varName, UserFixtures.randomUser()
+                .profile(UserFixtures.randomProfile().interests(interests).build())
+                .build());
     }
 
     @When("Create user with bio of length {int} and save response as {string}")
     public void createUserWithBioLength(int length, String varName) {
-        ctx.save(varName, rest.post(ApiPaths.USERS_CREATE, CreateUserReq.builder()
-                .email(Generator.email())
-                .username(Generator.username())
-                .password(Generator.password())
-                .profile(ProfileReq.builder()
-                        .firstName(Generator.firstName())
-                        .lastName(Generator.lastName())
-                        .bio(Generator.alphanumericString(length))
-                        .build())
-                .build()));
+        postCreateUser(varName, UserFixtures.randomUser()
+                .profile(UserFixtures.randomProfile().bio(Generator.alphanumericString(length)).build())
+                .build());
     }
 
     @When("Create user with firstName length {int} and save response as {string}")
     public void createUserWithFirstNameLength(int length, String varName) {
         String name = length > 0 ? Generator.alphanumericString(length) : "";
-        ctx.save(varName, rest.post(ApiPaths.USERS_CREATE, CreateUserReq.builder()
-                .email(Generator.email())
-                .username(Generator.username())
-                .password(Generator.password())
-                .profile(ProfileReq.builder()
-                        .firstName(name)
-                        .lastName(Generator.lastName())
-                        .build())
-                .build()));
+        postCreateUser(varName, UserFixtures.randomUser()
+                .profile(UserFixtures.randomProfile().firstName(name).build())
+                .build());
     }
 
     @When("Create minimal user and save response as {string}")
@@ -220,26 +164,13 @@ public class AccountsSteps {
         String password = Generator.password();
         ctx.save("generatedEmail", email);
         ctx.save("generatedPassword", password);
-        ctx.save(varName, rest.post(ApiPaths.USERS_CREATE, CreateUserReq.builder()
-                .email(email)
-                .username(Generator.username())
-                .password(password)
-                .profile(ProfileReq.builder()
-                        .firstName(Generator.firstName())
-                        .lastName(Generator.lastName())
-                        .build())
-                .build()));
+        postCreateUser(varName, UserFixtures.randomUser().email(email).password(password).build());
     }
 
     @When("Create full user with all fields and save response as {string}")
     public void createFullUser(String varName) {
-        ctx.save(varName, rest.post(ApiPaths.USERS_CREATE, CreateUserReq.builder()
-                .email(Generator.email())
-                .username(Generator.username())
-                .password(Generator.password())
-                .profile(ProfileReq.builder()
-                        .firstName(Generator.firstName())
-                        .lastName(Generator.lastName())
+        postCreateUser(varName, UserFixtures.randomUser()
+                .profile(UserFixtures.randomProfile()
                         .gender("male")
                         .bio("Test user bio")
                         .build())
@@ -261,7 +192,26 @@ public class AccountsSteps {
                         .theme("dark")
                         .notificationsEnabled(true)
                         .build())
-                .build()));
+                .build());
+    }
+
+    private void postCreateUser(String varName, CreateUserReq body) {
+        ctx.save(varName, rest.post(ApiPaths.USERS_CREATE, body));
+    }
+
+    /** email / username / password resolved from context (literal fallback). */
+    private CreateUserReq.CreateUserReqBuilder credentials(String emailVar, String usernameVar, String passwordVar) {
+        return CreateUserReq.builder()
+                .email(ctx.str(emailVar))
+                .username(ctx.str(usernameVar))
+                .password(ctx.str(passwordVar));
+    }
+
+    /** first / last name resolved from context (literal fallback). */
+    private ProfileReq.ProfileReqBuilder namedProfile(String firstNameVar, String lastNameVar) {
+        return ProfileReq.builder()
+                .firstName(ctx.str(firstNameVar))
+                .lastName(ctx.str(lastNameVar));
     }
 
     @Then("Convert create user response {string} to CreateUserResp and save as {string}")
