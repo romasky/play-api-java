@@ -1,5 +1,6 @@
 package com.testFramework.steps.play_qa_api;
 
+import com.testFramework.support.AllureFixture;
 import com.testFramework.support.StepContext;
 import io.cucumber.java.Scenario;
 import org.junit.jupiter.api.Test;
@@ -29,9 +30,12 @@ class CommonStepsTest {
     // ── hook ─────────────────────────────────────────────────────────
 
     @Test
-    void beforeHookMakesTheScenarioTheScopeOfLocalVariables() throws ReflectiveOperationException {
-        common.before(scenarioNamed("Login works"));
+    void beforeHookMakesTheScenarioTheScopeOfLocalVariables() throws Exception {
+        Scenario scenario = scenarioNamed("Login works");
 
+        String hookName = AllureFixture.nameAfter(() -> common.before(scenario));
+
+        assertEquals("Setup: init scenario context", hookName);
         assertEquals("Login works", ScenarioContext.scenarioName);
         ctx.save("k", "v");
         assertEquals("v", ScenarioContext.local.get("Login works").get("k"));

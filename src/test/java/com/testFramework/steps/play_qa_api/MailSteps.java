@@ -76,7 +76,7 @@ public class MailSteps {
     @Then("Assert CreateMailboxResp {string} token is UUID format")
     public void assertMailboxTokenIsUUID(String varName) {
         String token = ctx.required(varName, CreateMailboxResp.class).getToken();
-        Assertions.assertDoesNotThrow(() -> UUID.fromString(token),
+        Assertions.assertDoesNotThrow(() -> { UUID.fromString(token); },
                 "Token '" + token + "' is not a valid UUID");
     }
 

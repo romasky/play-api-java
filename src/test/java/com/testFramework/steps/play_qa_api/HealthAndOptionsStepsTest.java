@@ -34,8 +34,8 @@ class HealthAndOptionsStepsTest {
 
         assertDoesNotThrow(() -> health.assertHealthStatusOk("ok"));
         failsWith("expected: <ok> but was: <down>", () -> health.assertHealthStatusOk("down"));
-        failsWith("time field should not be null", () -> health.assertHealthStatusOk("noTime"));
-        failsWith("time field should not be blank", () -> health.assertHealthStatusOk("blankTime"));
+        failsWith("time field should not be null or blank: null", () -> health.assertHealthStatusOk("noTime"));
+        failsWith("time field should not be null or blank:  ", () -> health.assertHealthStatusOk("blankTime"));
     }
 
     @Test

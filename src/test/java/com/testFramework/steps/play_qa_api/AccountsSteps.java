@@ -149,7 +149,7 @@ public class AccountsSteps {
 
     @When("Create user with firstName length {int} and save response as {string}")
     public void createUserWithFirstNameLength(int length, String varName) {
-        String name = length > 0 ? Generator.alphanumericString(length) : "";
+        String name = Generator.alphanumericString(Math.max(length, 0)); // negative length → ""
         postCreateUser(varName, UserFixtures.randomUser()
                 .profile(UserFixtures.randomProfile().firstName(name).build())
                 .build());

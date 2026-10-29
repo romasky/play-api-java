@@ -32,7 +32,7 @@ public class HealthSteps {
     public void assertHealthStatusOk(String varName) {
         HealthResp resp = ctx.required(varName, HealthResp.class);
         Assertions.assertEquals("ok", resp.getStatus());
-        Assertions.assertNotNull(resp.getTime(), "time field should not be null");
-        Assertions.assertFalse(resp.getTime().isBlank(), "time field should not be blank");
+        String time = resp.getTime();
+        Assertions.assertTrue(time != null && !time.isBlank(), "time field should not be null or blank: " + time);
     }
 }

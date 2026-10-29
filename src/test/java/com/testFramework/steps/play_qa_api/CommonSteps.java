@@ -188,9 +188,8 @@ public class CommonSteps {
 
     @Then("Assert {string} not null")
     public void assertNotNull(String contextKey) {
-        Object value = ctx.get(contextKey, true);
-        Assertions.assertNotNull(value, contextKey + " should not be null");
-        Assertions.assertNotEquals("null", String.valueOf(value));
+        // get(..., true) already fails on a missing (null) variable; what is left is a stored "null"
+        Assertions.assertNotEquals("null", String.valueOf(ctx.get(contextKey, true)));
     }
 
     @Then("Assert {string} equals {string}")

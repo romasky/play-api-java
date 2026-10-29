@@ -84,11 +84,10 @@ public class Generator {
         return randomFrom(pool.toString(), length);
     }
 
+    /** A bounded stream rather than a counted loop: a mutated loop bound can only hang, never be killed. */
     private static String randomFrom(String chars, int length) {
-        StringBuilder sb = new StringBuilder(length);
-        for (int i = 0; i < length; i++) {
-            sb.append(chars.charAt(ThreadLocalRandom.current().nextInt(chars.length())));
-        }
-        return sb.toString();
+        return ThreadLocalRandom.current().ints(length, 0, chars.length())
+                .collect(StringBuilder::new, (sb, i) -> sb.append(chars.charAt(i)), StringBuilder::append)
+                .toString();
     }
 }

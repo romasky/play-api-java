@@ -1,6 +1,7 @@
 package com.testFramework.steps.play_qa_api;
 
 import com.testFramework.play_qa_api.models.health.HealthResp;
+import com.testFramework.support.AllureFixture;
 import io.restassured.builder.ResponseBuilder;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.AfterEach;
@@ -210,12 +211,17 @@ class BaseStepsTest {
     }
 
     @Test
-    void pauseWaitsAtLeastTheGivenTime() throws InterruptedException {
+    void pauseWaitsAtLeastTheGivenTime() throws Exception {
         long start = System.nanoTime();
 
-        BaseSteps.pause("Unit", 50);
+        AllureFixture.nameAfter(() -> BaseSteps.pause("Unit", 50));
 
         assertTrue(System.nanoTime() - start >= 50_000_000L, "pause returned before 50 ms");
+    }
+
+    @Test
+    void pauseLabelsTheHookInTheReport() throws Exception {
+        assertEquals("Rate limit pause: Unit (0s)", AllureFixture.nameAfter(() -> BaseSteps.pause("Unit", 0)));
     }
 
     private static Response jsonResponse(String body) {
