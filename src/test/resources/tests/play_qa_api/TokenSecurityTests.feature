@@ -134,6 +134,6 @@ Feature: Token Security
     And Convert create user response "userBResp" to CreateUserResp and save as "userB"
     And Save field accessToken from CreateUserResp "userB" as "userBToken"
     When Logout user "userAId" with token "userBToken" and save response as "logoutResp"
-    Then Get and check status code 401 from "logoutResp"
+    Then Get and check status code 403 from "logoutResp"
     And Convert error response "logoutResp" to ErrorResp and save as "error"
-    And Assert error code is "INVALID_TOKEN" in "error"
+    And Assert error code is "FORBIDDEN" in "error"

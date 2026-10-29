@@ -1,0 +1,135 @@
+hook  Before value="" order=10000 CommonSteps.before(Scenario)
+hook  Before value="@allure.label.subSuite:Login" order=10000 AccountsSteps.paceLoginScenarios()
+hook  Before value="@allure.label.suite:User_Management" order=10000 AccountsSteps.paceCreateUserScenarios()
+step  Given "Generate email and save as {string}" (String) CommonSteps
+step  Given "Generate fake mongo id and save as {string}" (String) CommonSteps
+step  Given "Generate fake uuid and save as {string}" (String) CommonSteps
+step  Given "Generate first name and save as {string}" (String) CommonSteps
+step  Given "Generate invalid email and save as {string}" (String) CommonSteps
+step  Given "Generate last name and save as {string}" (String) CommonSteps
+step  Given "Generate message body and save as {string}" (String) CommonSteps
+step  Given "Generate message subject and save as {string}" (String) CommonSteps
+step  Given "Generate password and save as {string}" (String) CommonSteps
+step  Given "Generate phone number and save as {string}" (String) CommonSteps
+step  Given "Generate sender email and save as {string}" (String) CommonSteps
+step  Given "Generate short password and save as {string}" (String) CommonSteps
+step  Given "Generate string length {int} latin {string} numeric {string} and save as {string}" (int,String,String,String) CommonSteps
+step  Given "Generate string of length {int} and save as {string}" (int,String) CommonSteps
+step  Given "Generate username and save as {string}" (String) CommonSteps
+step  Given "Get current date and save as {string}" (String) CommonSteps
+step  Given "Login with email {string} password {string} and save raw response as {string}" (String,String,String) AccountsSteps
+step  Given "Login with email {string} password {string} and save token as {string}" (String,String,String) AccountsSteps
+step  Given "Login with no body and save response as {string}" (String) AccountsSteps
+step  Given "Save string {string} as {string}" (String,String) CommonSteps
+step  Then "Assert CreateMailboxResp {string} email contains domain {string}" (String,String) MailSteps
+step  Then "Assert CreateMailboxResp {string} email starts with {string}" (String,String) MailSteps
+step  Then "Assert CreateMailboxResp {string} has all required fields" (String) MailSteps
+step  Then "Assert CreateMailboxResp {string} token is UUID format" (String) MailSteps
+step  Then "Assert CreateUserResp {string} has access token not null" (String) AccountsSteps
+step  Then "Assert CreateUserResp {string} has email {string}" (String,String) AccountsSteps
+step  Then "Assert CreateUserResp {string} has username {string}" (String,String) AccountsSteps
+step  Then "Assert CreateUserResp {string} metadata is_active is true" (String) AccountsSteps
+step  Then "Assert CreateUserResp {string} metadata is_verified is false" (String) AccountsSteps
+step  Then "Assert CreateUserResp {string} metadata login_count is 0" (String) AccountsSteps
+step  Then "Assert UserResp {string} has all core fields" (String) AccountsSteps
+step  Then "Assert UserResp {string} id equals {string}" (String,String) AccountsSteps
+step  Then "Assert error code is {string} in {string}" (String,String) AccountsSteps
+step  Then "Assert error message contains {string} in {string}" (String,String) AccountsSteps
+step  Then "Assert error response has request_id in {string}" (String) AccountsSteps
+step  Then "Assert error validation array is not empty in {string}" (String) AccountsSteps
+step  Then "Assert health status is ok in {string}" (String) HealthSteps
+step  Then "Assert login response {string} has all required fields" (String) AccountsSteps
+step  Then "Assert mailbox {string} token matches {string}" (String,String) MailSteps
+step  Then "Assert message {string} has from {string}" (String,String) MailSteps
+step  Then "Assert message {string} has full body not null" (String) MailSteps
+step  Then "Assert message {string} has subject {string}" (String,String) MailSteps
+step  Then "Assert messages list {string} count is greater than {int}" (String,int) MailSteps
+step  Then "Assert messages list {string} count is {int}" (String,int) MailSteps
+step  Then "Assert messages list {string} items have no body field" (String) MailSteps
+step  Then "Assert options allowed methods contains {string} in {string}" (String,String) OptionsSteps
+step  Then "Assert options allowed methods has {int} items in {string}" (int,String) OptionsSteps
+step  Then "Assert options authentication type is {string} in {string}" (String,String) OptionsSteps
+step  Then "Assert options endpoints map is not empty in {string}" (String) OptionsSteps
+step  Then "Assert response body contains {string} in {string}" (String,String) CommonSteps
+step  Then "Assert response body does not contain {string} in {string}" (String,String) CommonSteps
+step  Then "Assert response header {string} contains {string} in {string}" (String,String,String) CommonSteps
+step  Then "Assert response header {string} equals {string} in {string}" (String,String,String) CommonSteps
+step  Then "Assert response header {string} is present in {string}" (String,String) CommonSteps
+step  Then "Assert response is not a server error in {string}" (String) CommonSteps
+step  Then "Assert status code is one of {string} in {string}" (String,String) CommonSteps
+step  Then "Assert user exists header is {string} in response {string}" (String,String) AccountsSteps
+step  Then "Assert users list {string} count is at most {int}" (String,int) AccountsSteps
+step  Then "Assert users list {string} has pagination fields" (String) AccountsSteps
+step  Then "Assert users list {string} page is {int}" (String,int) AccountsSteps
+step  Then "Assert users list {string} per page is {int}" (String,int) AccountsSteps
+step  Then "Assert {string} contains {string}" (String,String) CommonSteps
+step  Then "Assert {string} equals {string}" (String,String) CommonSteps
+step  Then "Assert {string} matches regex {string}" (String,String) CommonSteps
+step  Then "Assert {string} not null" (String) CommonSteps
+step  Then "Convert create mailbox response {string} to CreateMailboxResp and save as {string}" (String,String) MailSteps
+step  Then "Convert create user response {string} to CreateUserResp and save as {string}" (String,String) AccountsSteps
+step  Then "Convert error response {string} to ErrorResp and save as {string}" (String,String) AccountsSteps
+step  Then "Convert get mailbox response {string} to CreateMailboxResp and save as {string}" (String,String) MailSteps
+step  Then "Convert get user response {string} to UserResp and save as {string}" (String,String) AccountsSteps
+step  Then "Convert health response {string} to HealthResp and save as {string}" (String,String) HealthSteps
+step  Then "Convert login response {string} to LoginResp and save as {string}" (String,String) AccountsSteps
+step  Then "Convert message response {string} to MessageResp and save as {string}" (String,String) MailSteps
+step  Then "Convert messages list response {string} to MessagesListResp and save as {string}" (String,String) MailSteps
+step  Then "Convert options response {string} to UserOptionsResp and save as {string}" (String,String) OptionsSteps
+step  Then "Convert send message response {string} to MessageResp and save as {string}" (String,String) MailSteps
+step  Then "Convert users list response {string} to UsersListResp and save as {string}" (String,String) AccountsSteps
+step  Then "Print response {string}" (String) CommonSteps
+step  Then "Save field accessToken from CreateUserResp {string} as {string}" (String,String) AccountsSteps
+step  Then "Save field accessToken from LoginResp {string} as {string}" (String,String) AccountsSteps
+step  Then "Save field emailAddress from CreateMailboxResp {string} as {string}" (String,String) MailSteps
+step  Then "Save field id from CreateUserResp {string} as {string}" (String,String) AccountsSteps
+step  Then "Save field id from MessageResp {string} as {string}" (String,String) MailSteps
+step  Then "Save field token from CreateMailboxResp {string} as {string}" (String,String) MailSteps
+step  Then "Save field userId from LoginResp {string} as {string}" (String,String) AccountsSteps
+step  Then "Save first message id from messages list {string} as {string}" (String,String) MailSteps
+step  When "Check user exists GET by id {string} and save response as {string}" (String,String) AccountsSteps
+step  When "Check user exists by id {string} and save response as {string}" (String,String) AccountsSteps
+step  When "Create full user with all fields and save response as {string}" (String) AccountsSteps
+step  When "Create mailbox with domain {string} and save response as {string}" (String,String) MailSteps
+step  When "Create mailbox with domain {string} local part {string} and save response as {string}" (String,String,String) MailSteps
+step  When "Create mailbox with empty body and save response as {string}" (String) MailSteps
+step  When "Create mailbox with local part {string} and save response as {string}" (String,String) MailSteps
+step  When "Create minimal user and save response as {string}" (String) AccountsSteps
+step  When "Create user with bio of length {int} and save response as {string}" (int,String) AccountsSteps
+step  When "Create user with email {string} username {string} password {string} firstName {string} lastName {string} and save response as {string}" (String,String,String,String,String,String) AccountsSteps
+step  When "Create user with email {string} username {string} password {string} firstName {string} lastName {string} gender {string} and save response as {string}" (String,String,String,String,String,String,String) AccountsSteps
+step  When "Create user with employment status {string} and save response as {string}" (String,String) AccountsSteps
+step  When "Create user with firstName length {int} and save response as {string}" (int,String) AccountsSteps
+step  When "Create user with interests {string} and save response as {string}" (String,String) AccountsSteps
+step  When "Create user with theme {string} and save response as {string}" (String,String) AccountsSteps
+step  When "Create user with username length {int} and save response as {string}" (int,String) AccountsSteps
+step  When "Delete mailbox {string} and save response as {string}" (String,String) MailSteps
+step  When "Delete user {string} with no auth header and save response as {string}" (String,String) AccountsSteps
+step  When "Delete user {string} with raw auth header {string} and save response as {string}" (String,String,String) AccountsSteps
+step  When "Delete user {string} with token {string} and save response as {string}" (String,String,String) AccountsSteps
+step  When "Get and check status code {int} from {string}" (int,String) CommonSteps
+step  When "Get health and save response as {string}" (String) HealthSteps
+step  When "Get health with request id {string} and save response as {string}" (String,String) HealthSteps
+step  When "Get mailbox by token {string} and save response as {string}" (String,String) MailSteps
+step  When "Get message {string} from mailbox {string} and save response as {string}" (String,String,String) MailSteps
+step  When "Get messages for mailbox {string} and save response as {string}" (String,String) MailSteps
+step  When "Get user by id {string} and save response as {string}" (String,String) AccountsSteps
+step  When "Get users list and save response as {string}" (String) AccountsSteps
+step  When "Get users list page {string} perPage {string} and save response as {string}" (String,String,String) AccountsSteps
+step  When "Logout user {string} with no auth header and save response as {string}" (String,String) AccountsSteps
+step  When "Logout user {string} with raw auth header {string} and save response as {string}" (String,String,String) AccountsSteps
+step  When "Logout user {string} with token {string} and save response as {string}" (String,String,String) AccountsSteps
+step  When "Patch user {string} token {string} email {string} and save response as {string}" (String,String,String,String) AccountsSteps
+step  When "Patch user {string} token {string} firstName {string} and save response as {string}" (String,String,String,String) AccountsSteps
+step  When "Patch user {string} token {string} username {string} and save response as {string}" (String,String,String,String) AccountsSteps
+step  When "Patch user {string} with empty body token {string} and save response as {string}" (String,String,String) AccountsSteps
+step  When "Patch user {string} with no auth header and save response as {string}" (String,String) AccountsSteps
+step  When "Patch user {string} with raw auth header {string} firstName {string} and save response as {string}" (String,String,String,String) AccountsSteps
+step  When "Send OPTIONS request to users and save response as {string}" (String) OptionsSteps
+step  When "Send message to mailbox {string} from {string} subject {string} body {string} and save response as {string}" (String,String,String,String,String) MailSteps
+step  When "Send message with html to mailbox {string} from {string} subject {string} body {string} htmlBody {string} and save response as {string}" (String,String,String,String,String,String) MailSteps
+step  When "Send message with missing field {string} to mailbox {string} and save response as {string}" (String,String,String) MailSteps
+step  When "Update user {string} token {string} firstName {string} lastName {string} email {string} username {string} and save response as {string}" (String,String,String,String,String,String,String) AccountsSteps
+step  When "Update user {string} with no auth header and save response as {string}" (String,String) AccountsSteps
+step  When "Update user {string} with raw auth header {string} and save response as {string}" (String,String,String) AccountsSteps
+step  When "Update user {string} with token {string} and invalid email and save response as {string}" (String,String,String) AccountsSteps

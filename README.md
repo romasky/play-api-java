@@ -12,6 +12,7 @@
 - **BDD Scenarios** — human-readable Cucumber `.feature` files covering positive and negative paths.
 - **Allure Reports** — rich HTML reports with step-level detail, published automatically to GitHub Pages.
 - **Temp Mail flows** — end-to-end mailbox tests (create → send → list/read → delete) driven directly through the `play-qa.com` mail API in `MailSteps` (no Selenium needed).
+- **Security coverage** — auth-bypass and cross-account (IDOR) guards on mutating endpoints: empty / malformed Bearer tokens and revoked-token attacks are asserted to return `401` (see `TokenSecurityTests.feature`).
 - **CI/CD** — GitHub Actions runs tests on every push, PR, and daily at 08:00 UTC.
 
 ---
@@ -42,10 +43,13 @@ src/test/
 │   │   ├── Generator.java              # Random data generation
 │   │   ├── PropertyHandler.java        # Config loading (config.properties)
 │   │   ├── RestHandler.java            # Rest Assured wrapper (all HTTP methods)
-│   │   └── RunMode.java                # PROD/DEV enum
+│   │   └── *Test.java                  # Unit tests (run by -Pquality)
+│   ├── support/
+│   │   └── LocalBaseUrlServer.java     # Local HTTP recorder for unit/pin tests
 │   ├── play_qa_api/
 │   │   ├── ApiPaths.java               # All API endpoint paths
 │   │   ├── Constants.java              # Shared constants (enums, timeouts)
+│   │   ├── UserFixtures.java           # Request bodies for create/update/patch user
 │   │   └── models/
 │   │       ├── createUser/             # Request DTOs: CreateUserReq, ProfileReq, ...
 │   │       │   └── response/           # Response DTOs: CreateUserResp, UserResp, ...
@@ -61,11 +65,17 @@ src/test/
 │       ├── CommonSteps.java            # Generic reusable steps (generate data, assert)
 │       ├── HealthSteps.java            # Health endpoint step definitions
 │       ├── MailSteps.java              # Mail API step definitions
-│       └── OptionsSteps.java           # User options step definitions
+│       ├── OptionsSteps.java           # User options step definitions
+│       ├── GoldenFile.java             # Golden-file helper for pin tests
+│       ├── StepCatalogPinTest.java     # Pins every step expression
+│       ├── RequestPinTest.java         # Pins every outgoing request
+│       └── BaseStepsTest.java          # Pins the scenario-context contract
 └── resources/
-    ├── config.properties               # Base URL, timeouts, run mode
+    ├── config.properties               # Base URL, timeouts
     ├── cucumber.properties             # Cucumber publish settings
     ├── junit-platform.properties       # Cucumber plugin and glue config
+    ├── categories.json                 # Allure failure categories
+    ├── pins/                           # Goldens: step-catalog.txt, requests.txt
     └── tests/play_qa_api/
         ├── CreateUserTests.feature     # POST /users/create scenarios
         ├── DeleteUserTests.feature     # DELETE /users/delete/:id scenarios
@@ -77,8 +87,10 @@ src/test/
         ├── MailTests.feature           # Mail API scenarios
         ├── OptionsTests.feature        # OPTIONS /users/options scenarios
         ├── PatchUserTests.feature      # PATCH /users/patch/:id scenarios
+        ├── TokenSecurityTests.feature  # Auth-bypass / IDOR guards on mutating endpoints
         ├── UpdateUserTests.feature     # PUT /users/update/:id scenarios
         └── UserExistsTests.feature     # HEAD /users/exists/:id scenarios
+tools/crap/Crap.java                    # CRAP gate over the JaCoCo report (-Pquality)
 ```
 
 ---
@@ -96,12 +108,20 @@ src/test/
 mvn test
 ```
 
-### Run specific tags
+### Run a single feature
 
 ```bash
-mvn test -Dcucumber.filter.tags="@CreateUser"
-mvn test -Dcucumber.filter.tags="@Smoke"
-mvn test -Dcucumber.filter.tags="@Run and not @Bug"
+mvn test -Dcucumber.features=classpath:tests/play_qa_api/LoginTests.feature
+```
+
+> `-Dcucumber.filter.tags` currently has **no effect**: the tag filter declared on
+> `RunnerForTest` (`@Run and not @Ignore and not @Bug and not @NotImplemented`) overrides it.
+> Narrow runs by feature file instead.
+
+### Check step bindings without calling the API
+
+```bash
+mvn test -Dcucumber.execution.dry-run=true
 ```
 
 ### Run against a different environment
@@ -115,6 +135,48 @@ mvn test -DbaseUrl="https://staging.play-qa.com"
 ```bash
 mvn allure:serve
 ```
+
+---
+
+## Quality Gates (ub-mode)
+
+The framework code itself is held to [ub-mode](https://github.com/unclebob/ub-mode) gates:
+`core`, `play_qa_api` (DTO models excluded) and **every** step class in `steps/play_qa_api`.
+The only exemption is PIT on the two rate-limit `@Before` hooks in `AccountsSteps`, which do
+nothing but call the (unit-tested) `BaseSteps.pause` — see the comment in `pom.xml`.
+The gates run **offline** — unit tests only, never the live API:
+
+```bash
+mvn -Pquality verify
+```
+
+| Gate | Tool | Bar | Report |
+|---|---|---|---|
+| Unit tests | JUnit 5 `*Test` classes next to the code | green | `target/surefire-reports` |
+| Crapper | JaCoCo + `tools/crap/Crap.java` | CRAP < 10 per method | stdout, `target/site/jacoco` |
+| Mutator | PIT + `tools/pit/MutationGate.java` | **every** mutant `KILLED` (no survivor, no uncovered, no timeout/error); line coverage ≥ 90 % | `target/pit-reports/index.html` |
+| CPD clone check | PMD CPD (test sources included) | no exact token clone ≥ 85 tokens | `target/cpd.xml` |
+
+**Dryer** — ub-mode's structural-duplication rule (similarity ≥ 0.8) — is the real
+[unclebob/dryer](https://github.com/unclebob/dryer), pinned to a commit. It needs Python 3.11+,
+so it runs as a separate command (CI runs it too):
+
+```bash
+tools/dryer/dryer-gate.sh
+```
+
+It fails on every candidate at ≥ 0.8 except one rule-based case: pairs where both forms are a
+Cucumber step or hook whose body is a single statement (Cucumber requires one method per
+expression, and that statement already calls the shared helper). CPD above is a cheap,
+Maven-native extra check for exact clones — it is **not** a substitute for Dryer.
+
+Pins protect step-layer refactors: `StepCatalogPinTest` (every Gherkin expression) and
+`RequestPinTest` (every HTTP request a step sends, against a local server) compare with goldens
+in `src/test/resources/pins/`.
+
+Claude Code agents for this workflow live in `.claude/`: the `ub-mode` skill plus
+`ub-implementer`, `ub-refactorer`, `ub-gatekeeper` and `ub-scribe`. The action log and glossary
+are in `docs/ub-mode/`.
 
 ---
 
@@ -178,6 +240,9 @@ Tests run automatically on:
 - Manual trigger via GitHub Actions UI
 
 Allure results and Cucumber HTML reports are uploaded as build artifacts after each run.
+
+A separate offline job, `.github/workflows/quality.yml`, runs `mvn -Pquality verify` on every
+push and pull request. It does not depend on play-qa.com, so API outages never block it.
 
 ---
 

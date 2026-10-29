@@ -21,11 +21,13 @@ public class CommonSteps {
 
     @Before
     public void before(Scenario scenario) {
-        ScenarioContext.current = scenario;
+        ScenarioContext.scenarioName = scenario.getName();
         BaseSteps.renameCurrentHook("Setup: init scenario context");
     }
 
     // ── Data generation ──────────────────────────────────────────────
+    // CPD-OFF: one-line "Generate X and save as" steps — each is already clear and local;
+    // CPD sees only their shared annotation/save shape (ub-mode: leave clear, local code).
 
     @Given("Save string {string} as {string}")
     public void saveString(String value, String contextKey) {
@@ -113,6 +115,8 @@ public class CommonSteps {
         ctx.save(currentDate, new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
     }
 
+    // CPD-ON
+
     // ── Status code assertions ────────────────────────────────────────
 
     @When("Get and check status code {int} from {string}")
@@ -122,7 +126,7 @@ public class CommonSteps {
 
     @Then("Assert status code is one of {string} in {string}")
     public void assertStatusCodeOneOf(String csvCodes, String responseVar) {
-        Response response = (Response) ctx.get(responseVar, true);
+        Response response = ctx.response(responseVar);
         int actual = response.getStatusCode();
         java.util.List<Integer> allowed = java.util.Arrays.stream(csvCodes.split(","))
                 .map(String::trim).map(Integer::parseInt).toList();
@@ -132,7 +136,7 @@ public class CommonSteps {
 
     @Then("Assert response is not a server error in {string}")
     public void assertNotServerError(String responseVar) {
-        Response response = (Response) ctx.get(responseVar, true);
+        Response response = ctx.response(responseVar);
         int actual = response.getStatusCode();
         Assertions.assertTrue(actual < 500,
                 "Expected non-5xx but got " + actual + ". Body: " + response.asString());
@@ -142,7 +146,7 @@ public class CommonSteps {
 
     @Then("Assert response header {string} equals {string} in {string}")
     public void assertHeaderEquals(String header, String expected, String responseVar) {
-        Response response = (Response) ctx.get(responseVar, true);
+        Response response = ctx.response(responseVar);
         String actual = response.getHeader(header);
         Assertions.assertEquals(expected, actual,
                 "Header '" + header + "' mismatch. Response: " + response.asString());
@@ -150,7 +154,7 @@ public class CommonSteps {
 
     @Then("Assert response header {string} contains {string} in {string}")
     public void assertHeaderContains(String header, String expected, String responseVar) {
-        Response response = (Response) ctx.get(responseVar, true);
+        Response response = ctx.response(responseVar);
         String actual = response.getHeader(header);
         Assertions.assertNotNull(actual, "Header '" + header + "' is missing");
         Assertions.assertTrue(actual.contains(expected),
@@ -159,7 +163,7 @@ public class CommonSteps {
 
     @Then("Assert response header {string} is present in {string}")
     public void assertHeaderPresent(String header, String responseVar) {
-        Response response = (Response) ctx.get(responseVar, true);
+        Response response = ctx.response(responseVar);
         String actual = response.getHeader(header);
         Assertions.assertNotNull(actual, "Header '" + header + "' is missing in response");
         Assertions.assertFalse(actual.isBlank(), "Header '" + header + "' is blank");
@@ -170,23 +174,22 @@ public class CommonSteps {
     @Then("Assert response body contains {string} in {string}")
     public void assertBodyContains(String expected, String responseVar) {
         String resolved = ctx.str(expected);
-        Response response = (Response) ctx.get(responseVar, true);
+        Response response = ctx.response(responseVar);
         Assertions.assertTrue(response.asString().contains(resolved),
                 "Body does not contain '" + resolved + "'. Body: " + response.asString());
     }
 
     @Then("Assert response body does not contain {string} in {string}")
     public void assertBodyNotContains(String unexpected, String responseVar) {
-        Response response = (Response) ctx.get(responseVar, true);
+        Response response = ctx.response(responseVar);
         Assertions.assertFalse(response.asString().contains(unexpected),
                 "Body should NOT contain '" + unexpected + "'. Body: " + response.asString());
     }
 
     @Then("Assert {string} not null")
     public void assertNotNull(String contextKey) {
-        Object value = ctx.get(contextKey, true);
-        Assertions.assertNotNull(value, contextKey + " should not be null");
-        Assertions.assertNotEquals("null", String.valueOf(value));
+        // get(..., true) already fails on a missing (null) variable; what is left is a stored "null"
+        Assertions.assertNotEquals("null", String.valueOf(ctx.get(contextKey, true)));
     }
 
     @Then("Assert {string} equals {string}")

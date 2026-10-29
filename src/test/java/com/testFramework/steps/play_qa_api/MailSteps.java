@@ -45,24 +45,26 @@ public class MailSteps {
                         .build()));
     }
 
+    // CPD-OFF: one-line Convert / Save-field steps — same shape as the MessageResp ones below, different DTO; clear and local
     @Then("Convert create mailbox response {string} to CreateMailboxResp and save as {string}")
     public void convertCreateMailboxResp(String rawVar, String saveAs) {
-        ctx.save(saveAs, ((Response) ctx.get(rawVar, true)).as(CreateMailboxResp.class));
+        ctx.convertAndSave(rawVar, CreateMailboxResp.class, saveAs);
     }
 
     @Then("Save field token from CreateMailboxResp {string} as {string}")
     public void saveMailboxToken(String varName, String saveAs) {
-        ctx.save(saveAs, ((CreateMailboxResp) ctx.get(varName, true)).getToken());
+        ctx.save(saveAs, ctx.required(varName, CreateMailboxResp.class).getToken());
     }
 
     @Then("Save field emailAddress from CreateMailboxResp {string} as {string}")
     public void saveMailboxEmail(String varName, String saveAs) {
-        ctx.save(saveAs, ((CreateMailboxResp) ctx.get(varName, true)).getEmailAddress());
+        ctx.save(saveAs, ctx.required(varName, CreateMailboxResp.class).getEmailAddress());
     }
+    // CPD-ON
 
     @Then("Assert CreateMailboxResp {string} has all required fields")
     public void assertCreateMailboxFields(String varName) {
-        CreateMailboxResp resp = (CreateMailboxResp) ctx.get(varName, true);
+        CreateMailboxResp resp = ctx.required(varName, CreateMailboxResp.class);
         Assertions.assertNotNull(resp.getId(), "id is null");
         Assertions.assertNotNull(resp.getToken(), "token is null");
         Assertions.assertNotNull(resp.getEmailAddress(), "email_address is null");
@@ -73,21 +75,21 @@ public class MailSteps {
 
     @Then("Assert CreateMailboxResp {string} token is UUID format")
     public void assertMailboxTokenIsUUID(String varName) {
-        String token = ((CreateMailboxResp) ctx.get(varName, true)).getToken();
-        Assertions.assertDoesNotThrow(() -> UUID.fromString(token),
+        String token = ctx.required(varName, CreateMailboxResp.class).getToken();
+        Assertions.assertDoesNotThrow(() -> { UUID.fromString(token); },
                 "Token '" + token + "' is not a valid UUID");
     }
 
     @Then("Assert CreateMailboxResp {string} email contains domain {string}")
     public void assertMailboxEmailContainsDomain(String varName, String domainVar) {
-        CreateMailboxResp resp = (CreateMailboxResp) ctx.get(varName, true);
+        CreateMailboxResp resp = ctx.required(varName, CreateMailboxResp.class);
         Assertions.assertTrue(resp.getEmailAddress().endsWith("@" + ctx.str(domainVar)),
                 "Email '" + resp.getEmailAddress() + "' does not end with '@" + ctx.str(domainVar) + "'");
     }
 
     @Then("Assert CreateMailboxResp {string} email starts with {string}")
     public void assertMailboxEmailStartsWith(String varName, String localPartVar) {
-        CreateMailboxResp resp = (CreateMailboxResp) ctx.get(varName, true);
+        CreateMailboxResp resp = ctx.required(varName, CreateMailboxResp.class);
         Assertions.assertTrue(resp.getEmailAddress().startsWith(ctx.str(localPartVar)),
                 "Email '" + resp.getEmailAddress() + "' does not start with '" + ctx.str(localPartVar) + "'");
     }
@@ -101,12 +103,12 @@ public class MailSteps {
 
     @Then("Convert get mailbox response {string} to CreateMailboxResp and save as {string}")
     public void convertGetMailboxResp(String rawVar, String saveAs) {
-        ctx.save(saveAs, ((Response) ctx.get(rawVar, true)).as(CreateMailboxResp.class));
+        ctx.convertAndSave(rawVar, CreateMailboxResp.class, saveAs);
     }
 
     @Then("Assert mailbox {string} token matches {string}")
     public void assertMailboxTokenMatches(String varName, String expectedTokenVar) {
-        CreateMailboxResp resp = (CreateMailboxResp) ctx.get(varName, true);
+        CreateMailboxResp resp = ctx.required(varName, CreateMailboxResp.class);
         Assertions.assertEquals(ctx.str(expectedTokenVar), resp.getToken());
     }
 
@@ -119,19 +121,19 @@ public class MailSteps {
 
     @Then("Convert messages list response {string} to MessagesListResp and save as {string}")
     public void convertMessagesListResp(String rawVar, String saveAs) {
-        ctx.save(saveAs, ((Response) ctx.get(rawVar, true)).as(MessagesListResp.class));
+        ctx.convertAndSave(rawVar, MessagesListResp.class, saveAs);
     }
 
     @Then("Assert messages list {string} count is {int}")
     public void assertMessagesCount(String varName, int expected) {
-        MessagesListResp resp = (MessagesListResp) ctx.get(varName, true);
+        MessagesListResp resp = ctx.required(varName, MessagesListResp.class);
         Assertions.assertEquals(expected, resp.getCount(),
                 "Messages count mismatch");
     }
 
     @Then("Assert messages list {string} count is greater than {int}")
     public void assertMessagesCountGreaterThan(String varName, int min) {
-        MessagesListResp resp = (MessagesListResp) ctx.get(varName, true);
+        MessagesListResp resp = ctx.required(varName, MessagesListResp.class);
         Assertions.assertTrue(resp.getCount() > min,
                 "Expected count > " + min + " but got " + resp.getCount());
     }
@@ -141,7 +143,7 @@ public class MailSteps {
         // The list endpoint returns only body_preview per item; the full body / html_body
         // are exposed solely by the single-message endpoint. Verify via the typed DTO
         // that no list item carries a full body or html_body.
-        MessagesListResp resp = ((Response) ctx.get(varName, true)).as(MessagesListResp.class);
+        MessagesListResp resp = ctx.response(varName).as(MessagesListResp.class);
         Assertions.assertNotNull(resp.getMessages(), "messages list is null");
         for (MessageResp msg : resp.getMessages()) {
             Assertions.assertNull(msg.getBody(),
@@ -153,7 +155,7 @@ public class MailSteps {
 
     @Then("Save first message id from messages list {string} as {string}")
     public void saveFirstMessageId(String varName, String saveAs) {
-        MessagesListResp resp = (MessagesListResp) ctx.get(varName, true);
+        MessagesListResp resp = ctx.required(varName, MessagesListResp.class);
         Assertions.assertFalse(resp.getMessages().isEmpty(), "Messages list is empty");
         ctx.save(saveAs, resp.getMessages().get(0).getId());
     }
@@ -167,24 +169,24 @@ public class MailSteps {
 
     @Then("Convert message response {string} to MessageResp and save as {string}")
     public void convertMessageResp(String rawVar, String saveAs) {
-        ctx.save(saveAs, ((Response) ctx.get(rawVar, true)).as(MessageResp.class));
+        ctx.convertAndSave(rawVar, MessageResp.class, saveAs);
     }
 
     @Then("Assert message {string} has full body not null")
     public void assertMessageHasBody(String varName) {
-        MessageResp msg = (MessageResp) ctx.get(varName, true);
+        MessageResp msg = ctx.required(varName, MessageResp.class);
         Assertions.assertNotNull(msg.getBody(), "body is null");
     }
 
     @Then("Assert message {string} has subject {string}")
     public void assertMessageSubject(String varName, String expectedVar) {
-        MessageResp msg = (MessageResp) ctx.get(varName, true);
+        MessageResp msg = ctx.required(varName, MessageResp.class);
         Assertions.assertEquals(ctx.str(expectedVar), msg.getSubject());
     }
 
     @Then("Assert message {string} has from {string}")
     public void assertMessageFrom(String varName, String expectedVar) {
-        MessageResp msg = (MessageResp) ctx.get(varName, true);
+        MessageResp msg = ctx.required(varName, MessageResp.class);
         Assertions.assertEquals(ctx.str(expectedVar), msg.getFrom());
     }
 
@@ -223,12 +225,12 @@ public class MailSteps {
 
     @Then("Convert send message response {string} to MessageResp and save as {string}")
     public void convertSendMessageResp(String rawVar, String saveAs) {
-        ctx.save(saveAs, ((Response) ctx.get(rawVar, true)).as(MessageResp.class));
+        ctx.convertAndSave(rawVar, MessageResp.class, saveAs);
     }
 
     @Then("Save field id from MessageResp {string} as {string}")
     public void saveMessageId(String varName, String saveAs) {
-        ctx.save(saveAs, ((MessageResp) ctx.get(varName, true)).getId());
+        ctx.save(saveAs, ctx.required(varName, MessageResp.class).getId());
     }
 
     // ── Delete mailbox ───────────────────────────────────────────────

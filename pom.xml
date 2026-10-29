@@ -26,7 +26,7 @@
 
         <!-- Allure -->
         <allure.version>2.29.1</allure.version>
-        <aspectj.version>1.9.22</aspectj.version>
+        <aspectj.version>1.9.26</aspectj.version>
 
         <!-- Lombok -->
         <lombok.version>1.18.38</lombok.version>
@@ -59,6 +59,12 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit5.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
             <version>${junit5.version}</version>
             <scope>test</scope>
         </dependency>
@@ -134,6 +140,8 @@
     </dependencies>
 
     <build>
+        <!-- All framework code lives in src/test; JaCoCo and PIT read classes from outputDirectory -->
+        <outputDirectory>${project.build.testOutputDirectory}</outputDirectory>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -171,6 +179,10 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${surefire.version}</version>
                 <configuration>
+                    <!-- Default `mvn test` = live API suite only; unit tests run under -Pquality -->
+                    <includes>
+                        <include>**/RunnerForTest.java</include>
+                    </includes>
                     <argLine>
                         -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
                     </argLine>
@@ -221,4 +233,241 @@
             </plugin>
         </plugins>
     </build>
+
+    <!--
+        ub-mode quality gates (offline, no live API):
+        mvn -Pquality verify  →  unit tests + JaCoCo → CRAP < 10 → CPD → PIT
+    -->
+    <profiles>
+        <profile>
+            <id>quality</id>
+            <properties>
+                <jacoco.argLine></jacoco.argLine>
+                <crap.threshold>10</crap.threshold>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>default-test</id>
+                                <configuration>
+                                    <includes combine.self="override">
+                                        <include>**/*Test.java</include>
+                                    </includes>
+                                    <excludes combine.self="override">
+                                        <exclude>**/RunnerForTest.java</exclude>
+                                    </excludes>
+                                    <argLine>@{jacoco.argLine} -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"</argLine>
+                                    <systemPropertyVariables combine.self="override">
+                                        <allure.results.directory>${project.build.directory}/allure-results-unit</allure.results.directory>
+                                    </systemPropertyVariables>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>0.8.15</version>
+                        <configuration>
+                            <propertyName>jacoco.argLine</propertyName>
+                            <includes>
+                                <include>com/testFramework/core/*</include>
+                                <include>com/testFramework/play_qa_api/*</include>
+                                <include>com/testFramework/steps/play_qa_api/*</include>
+                            </includes>
+                            <excludes>
+                                <!-- GoldenFile is pin-test support, not framework code -->
+                                <exclude>**/GoldenFile*</exclude>
+                                <!-- report matches class-file paths, agent matches class names -->
+                                <exclude>**/*Test.class</exclude>
+                                <exclude>**/*Test$*</exclude>
+                                <exclude>**/*Test</exclude>
+                            </excludes>
+                            <formats>
+                                <format>XML</format>
+                                <format>HTML</format>
+                            </formats>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>agent</id>
+                                <goals><goal>prepare-agent</goal></goals>
+                            </execution>
+                            <execution>
+                                <id>report</id>
+                                <phase>verify</phase>
+                                <goals><goal>report</goal></goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>3.5.0</version>
+                        <executions>
+                            <execution>
+                                <id>crap-gate</id>
+                                <phase>verify</phase>
+                                <goals><goal>exec</goal></goals>
+                                <configuration>
+                                    <executable>${java.home}/bin/java</executable>
+                                    <arguments>
+                                        <argument>${project.basedir}/tools/crap/Crap.java</argument>
+                                        <argument>${project.build.directory}/site/jacoco/jacoco.xml</argument>
+                                        <argument>${crap.threshold}</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <!-- every PIT mutation must be KILLED; thresholds alone let survivors and timeouts pass -->
+                                <id>mutation-gate</id>
+                                <phase>verify</phase>
+                                <goals><goal>exec</goal></goals>
+                                <configuration>
+                                    <executable>${java.home}/bin/java</executable>
+                                    <arguments>
+                                        <argument>${project.basedir}/tools/pit/MutationGate.java</argument>
+                                        <argument>${project.build.directory}/pit-reports/mutations.xml</argument>
+                                        <!-- one re-run only when PIT failed to analyse a mutant (see MutationGate) -->
+                                        <argument>--rerun</argument>
+                                        <argument>${maven.home}/bin/mvn</argument>
+                                        <argument>-B</argument>
+                                        <argument>-ntp</argument>
+                                        <argument>-q</argument>
+                                        <argument>-f</argument>
+                                        <argument>${project.basedir}/pom.xml</argument>
+                                        <argument>-Pquality</argument>
+                                        <argument>-Djacoco.skip=true</argument>
+                                        <argument>org.pitest:pitest-maven:mutationCoverage</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-pmd-plugin</artifactId>
+                        <version>3.28.0</version>
+                        <configuration>
+                            <includeTests>true</includeTests>
+                            <!--
+                                An extra exact-token clone check, NOT ub-mode's Dryer rule: structural
+                                duplication >= 0.8 is gated by tools/dryer/dryer-gate.sh (real unclebob/dryer).
+                                Calibrated at 85 (was 60). After the step-layer dedup every remaining clone
+                                at 60-84 tokens is incidental: CPD (with identifiers and literals ignored)
+                                matches runs of adjacent one-line steps (Convert / Save field / typed-cast
+                                asserts), RestHandler verbs, ApiPaths and Generator one-liners, and step-class
+                                boilerplate. Checked against the pre-dedup code (c721bee): at 85 CPD still
+                                flags the copy-pasted create-user (99 tokens) and update-user (87 tokens)
+                                builder chains, so a new clone of that shape fails the build. Shorter
+                                random-user chains (~60-80 tokens) need review, not this gate.
+                                Outliers above 85 that are clear and local (the "Generate X" steps, pin data
+                                tables) are fenced with // CPD-OFF ... // CPD-ON plus a reason, rather than
+                                raising this number further.
+                            -->
+                            <minimumTokens>85</minimumTokens>
+                            <ignoreIdentifiers>true</ignoreIdentifiers>
+                            <ignoreLiterals>true</ignoreLiterals>
+                            <ignoreAnnotations>true</ignoreAnnotations>
+                            <excludes>
+                                <exclude>**/play_qa_api/models/**</exclude>
+                            </excludes>
+                            <printFailingErrors>true</printFailingErrors>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>cpd</id>
+                                <phase>verify</phase>
+                                <goals><goal>cpd-check</goal></goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.pitest</groupId>
+                        <artifactId>pitest-maven</artifactId>
+                        <version>1.25.7</version>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.pitest</groupId>
+                                <artifactId>pitest-junit5-plugin</artifactId>
+                                <version>1.2.3</version>
+                            </dependency>
+                        </dependencies>
+                        <configuration>
+                            <targetClasses>
+                                <param>com.testFramework.core.*</param>
+                                <param>com.testFramework.play_qa_api.*</param>
+                                <param>com.testFramework.steps.play_qa_api.*</param>
+                            </targetClasses>
+                            <excludedClasses>
+                                <param>com.testFramework.steps.play_qa_api.GoldenFile*</param>
+                                <param>*Test</param>
+                                <param>*Test$*</param>
+                                <param>com.testFramework.play_qa_api.models.*</param>
+                            </excludedClasses>
+                            <excludedMethods>
+                                <!--
+                                    Live-only: AccountsSteps' @Before rate-limit hooks only call BaseSteps.pause with
+                                    the server-limit constants (2 s / 13 s). pause itself is unit-tested; killing a
+                                    mutant here would mean sleeping 15 s per run. Proven by the live suite (no 429s).
+                                -->
+                                <param>paceCreateUserScenarios</param>
+                                <param>paceLoginScenarios</param>
+                            </excludedMethods>
+                            <targetTests>
+                                <param>com.testFramework.*Test</param>
+                            </targetTests>
+                            <excludedTestClasses>
+                                <param>com.testFramework.RunnerForTest</param>
+                            </excludedTestClasses>
+                            <avoidCallsTo>
+                                <avoidCallsTo>io.qameta.allure</avoidCallsTo>
+                                <avoidCallsTo>org.slf4j</avoidCallsTo>
+                            </avoidCallsTo>
+                            <mutators>
+                                <mutator>STRONGER</mutator>
+                            </mutators>
+                            <mutationThreshold>90</mutationThreshold>
+                            <coverageThreshold>90</coverageThreshold>
+                            <timestampedReports>false</timestampedReports>
+                            <outputFormats>
+                                <param>XML</param>
+                                <param>HTML</param>
+                            </outputFormats>
+                            <!--
+                                1, not 4: with 2+ concurrent minions about every second run lost one minion JVM
+                                ("Minion did not start or died during analysis", no output, a random mutant set to
+                                RUN_ERROR) — independent of JDK (17/26), AspectJ agent and PIT version (1.25.7/1.30.1).
+                                9 single-threaded runs: 0 deaths. Costs ~1 extra minute.
+                            -->
+                            <threads>1</threads>
+                            <!--
+                                A fresh minion JVM cold-starts RestAssured/Groovy and the AspectJ weaver; with 4 threads
+                                that exceeded PIT's default 4 s allowance and produced random TIMED_OUT/RUN_ERROR results
+                                (a different set every run), which the mutation-gate rejects. A real infinite loop still
+                                times out — at 20 s instead of 4 s.
+                            -->
+                            <timeoutConstant>20000</timeoutConstant>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>mutation</id>
+                                <!-- before verify, so the mutation-gate (exec, verify) reads a fresh report -->
+                                <phase>integration-test</phase>
+                                <goals><goal>mutationCoverage</goal></goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

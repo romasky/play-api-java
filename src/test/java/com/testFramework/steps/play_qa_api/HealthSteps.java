@@ -25,15 +25,14 @@ public class HealthSteps {
 
     @Then("Convert health response {string} to HealthResp and save as {string}")
     public void convertHealthResponse(String rawVar, String saveAs) {
-        Response resp = (Response) ctx.get(rawVar, true);
-        ctx.save(saveAs, resp.as(HealthResp.class));
+        ctx.convertAndSave(rawVar, HealthResp.class, saveAs);
     }
 
     @Then("Assert health status is ok in {string}")
     public void assertHealthStatusOk(String varName) {
-        HealthResp resp = (HealthResp) ctx.get(varName, true);
+        HealthResp resp = ctx.required(varName, HealthResp.class);
         Assertions.assertEquals("ok", resp.getStatus());
-        Assertions.assertNotNull(resp.getTime(), "time field should not be null");
-        Assertions.assertFalse(resp.getTime().isBlank(), "time field should not be blank");
+        String time = resp.getTime();
+        Assertions.assertTrue(time != null && !time.isBlank(), "time field should not be null or blank: " + time);
     }
 }

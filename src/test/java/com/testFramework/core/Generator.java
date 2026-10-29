@@ -1,6 +1,5 @@
 package com.testFramework.core;
 
-import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Generator {
@@ -25,10 +24,6 @@ public class Generator {
         return alphanumericString(10).toLowerCase() + "@play-qa.com";
     }
 
-    public static String email(String domain) {
-        return alphanumericString(10).toLowerCase() + "@" + domain;
-    }
-
     public static String username() {
         return "user_" + alphanumericString(8).toLowerCase();
     }
@@ -43,10 +38,6 @@ public class Generator {
 
     public static String lastName() {
         return "User" + latinString(6);
-    }
-
-    public static String uuid() {
-        return UUID.randomUUID().toString();
     }
 
     public static String phoneNumber() {
@@ -93,11 +84,10 @@ public class Generator {
         return randomFrom(pool.toString(), length);
     }
 
+    /** A bounded stream rather than a counted loop: a mutated loop bound can only hang, never be killed. */
     private static String randomFrom(String chars, int length) {
-        StringBuilder sb = new StringBuilder(length);
-        for (int i = 0; i < length; i++) {
-            sb.append(chars.charAt(ThreadLocalRandom.current().nextInt(chars.length())));
-        }
-        return sb.toString();
+        return ThreadLocalRandom.current().ints(length, 0, chars.length())
+                .collect(StringBuilder::new, (sb, i) -> sb.append(chars.charAt(i)), StringBuilder::append)
+                .toString();
     }
 }

@@ -1,0 +1,51 @@
+name: Quality Gates — ub-mode
+
+# Offline: unit tests + JaCoCo + CRAP < 10 + CPD + PIT, then Dryer. Never calls the live API,
+# so it is independent of play-qa.com availability (no `needs:` on the API job).
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    name: Unit tests, CRAP, CPD, PIT, Dryer
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Run quality gates
+        run: mvn -B -ntp -Pquality verify
+
+      - name: Set up Python for Dryer
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Dryer (structural duplication >= 0.8)
+        run: tools/dryer/dryer-gate.sh
+
+      - name: Upload gate reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-reports-${{ github.run_number }}
+          path: |
+            target/site/jacoco
+            target/pit-reports
+            target/cpd.xml
+          retention-days: 30
