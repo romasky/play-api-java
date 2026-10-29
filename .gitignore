@@ -40,3 +40,6 @@ docs/
 # Claude Code local settings (agents and skills under .claude/ are committed)
 .claude/settings.json
 .claude/settings.local.json
+
+# Allure Maven plugin: downloaded Node/Allure 3 and local report history
+.allure/
