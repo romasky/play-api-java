@@ -1,1 +1,1 @@
-{"id":"31ed8ac128eb12845ffb9edeb2208790.d41d8cd98f00b204e9800998ecf8427e","fullName":"tests/play_qa_api/LoginTests.feature:29","name":"Login invalidates previous token — old token returns 401 on PATCH","status":"passed","testResultsByEnv":{"default":"8ff8d9466ecc830996a4953ba9e393a2"}}
+{"id":"31ed8ac128eb12845ffb9edeb2208790.d41d8cd98f00b204e9800998ecf8427e","fullName":"tests/play_qa_api/LoginTests.feature:29","name":"Login invalidates previous token — old token returns 401 on PATCH","status":"passed","testResultsByEnv":{"default":"75cb03cd8f1afb7102bc80b7c2288aab"}}
