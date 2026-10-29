@@ -1,0 +1,1 @@
+{"id":"cd6656ca278ce041659facfcc2db685b","fullName":"tests/play_qa_api/LoginTests.feature:88","name":"Login with password shorter than 8 chars returns 400 VALIDATION_ERROR","status":"passed","testResultsByEnv":{"default":"cca18df742fb5cd1370ecd6731283bca"}}

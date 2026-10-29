@@ -1,0 +1,1 @@
+{"id":"1277a985a82f54f7136f549dcf4e076f","fullName":"tests/play_qa_api/CreateUserTests.feature:176","name":"Create user with username longer than 30 chars returns 400 VALIDATION_ERROR","status":"passed","testResultsByEnv":{"default":"e275ee65087788aba608f1c78d5e78de"}}

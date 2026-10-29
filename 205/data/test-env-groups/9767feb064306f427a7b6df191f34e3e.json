@@ -1,0 +1,1 @@
+{"id":"9767feb064306f427a7b6df191f34e3e","fullName":"tests/play_qa_api/TokenSecurityTests.feature:119","name":"PATCH with malformed Authorization header missing Bearer prefix is rejected 401","status":"passed","testResultsByEnv":{"default":"35048de8977eb3702780fbea450f077c"}}

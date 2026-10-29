@@ -1,0 +1,1 @@
+{"id":"a79619bcbdbf6f676954d17bbe270079","fullName":"tests/play_qa_api/LogoutTests.feature:83","name":"Logout with no auth header returns 401 MISSING_TOKEN","status":"passed","testResultsByEnv":{"default":"efcc9aaf71582b903455eb66041511c4"}}

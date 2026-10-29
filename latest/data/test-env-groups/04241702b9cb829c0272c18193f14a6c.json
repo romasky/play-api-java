@@ -1,0 +1,1 @@
+{"id":"04241702b9cb829c0272c18193f14a6c","fullName":"tests/play_qa_api/DeleteUserTests.feature:6","name":"Delete user with valid token returns 204 and subsequent GET returns 404","status":"passed","testResultsByEnv":{"default":"2fcfaa0e827a03b153985e9cf4bf67f5"}}
