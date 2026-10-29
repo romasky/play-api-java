@@ -185,7 +185,7 @@ seem to conflict, the rule wins and the appendix is wrong — fix the appendix.
 | Crapper | `java tools/crap/Crap.java target/site/jacoco/jacoco.xml 10` | every method CRAP < 10 |
 | Dryer | `tools/dryer/dryer-gate.sh` (real unclebob/dryer, pinned; Python 3.11+) | no structural duplicate ≥ 0.8, except pairs of single-statement Cucumber bindings (accepted by rule, count printed) |
 | CPD clone check | `mvn -Pquality pmd:cpd-check` (report: `target/cpd.xml`) | no exact token clone ≥ 85 tokens — an extra check, **not** Dryer |
-| Mutator | part of `verify`; report `target/pit-reports/index.html` | mutation ≥ 90 %, coverage ≥ 90 %, aim for 100 % |
+| Mutator | part of `verify` (`tools/pit/MutationGate.java` over `target/pit-reports/mutations.xml`) | every mutant `KILLED` — SURVIVED / NO_COVERAGE fail at once; RUN_ERROR / TIMED_OUT (PIT failed to analyse) get one PIT re-run, then fail. No allowlist: rewrite code with an equivalent mutant. |
 | Step bindings (no network) | `mvn test -Dcucumber.execution.dry-run=true` | `Tests run: 152` (update the number when scenarios are added on purpose) |
 | One live feature | `mvn test -Dcucumber.features=classpath:tests/play_qa_api/<File>.feature` | green or only known `@Bug`s |
 | Full live suite | `mvn test` | as CI |
@@ -196,6 +196,9 @@ Notes that cost real time to learn:
 * Never put `cucumber.features` back into `junit-platform.properties`: it makes the Cucumber
   engine ignore selectors, so every unit-test and PIT launch would run the live suite.
 * PIT needs `src/main/java/` to exist on disk (it holds only a README). Do not delete it.
+* PIT runs with `threads=1`: with 2+ concurrent minions about every second run lost a minion JVM
+  (a random mutant became RUN_ERROR). PIT's own percentage counts timeouts/errors as detected —
+  trust `MutationGate`, not the `>> Killed (100%)` line.
 * CRAP has a floor: at 100 % coverage CRAP = CC. A method with CC ≥ 10 must be split.
 * Live runs are slow on purpose: `User_Management` suite pauses 2 s, `Login` subSuite 13 s per
   scenario (server rate limits). Prove step refactors offline first (pins, dry-run), then run

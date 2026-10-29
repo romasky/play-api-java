@@ -324,6 +324,30 @@
                                     </arguments>
                                 </configuration>
                             </execution>
+                            <execution>
+                                <!-- every PIT mutation must be KILLED; thresholds alone let survivors and timeouts pass -->
+                                <id>mutation-gate</id>
+                                <phase>verify</phase>
+                                <goals><goal>exec</goal></goals>
+                                <configuration>
+                                    <executable>${java.home}/bin/java</executable>
+                                    <arguments>
+                                        <argument>${project.basedir}/tools/pit/MutationGate.java</argument>
+                                        <argument>${project.build.directory}/pit-reports/mutations.xml</argument>
+                                        <!-- one re-run only when PIT failed to analyse a mutant (see MutationGate) -->
+                                        <argument>--rerun</argument>
+                                        <argument>${maven.home}/bin/mvn</argument>
+                                        <argument>-B</argument>
+                                        <argument>-ntp</argument>
+                                        <argument>-q</argument>
+                                        <argument>-f</argument>
+                                        <argument>${project.basedir}/pom.xml</argument>
+                                        <argument>-Pquality</argument>
+                                        <argument>-Djacoco.skip=true</argument>
+                                        <argument>org.pitest:pitest-maven:mutationCoverage</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
                         </executions>
                     </plugin>
 
@@ -418,12 +442,26 @@
                                 <param>XML</param>
                                 <param>HTML</param>
                             </outputFormats>
-                            <threads>4</threads>
+                            <!--
+                                1, not 4: with 2+ concurrent minions about every second run lost one minion JVM
+                                ("Minion did not start or died during analysis", no output, a random mutant set to
+                                RUN_ERROR) — independent of JDK (17/26), AspectJ agent and PIT version (1.25.7/1.30.1).
+                                9 single-threaded runs: 0 deaths. Costs ~1 extra minute.
+                            -->
+                            <threads>1</threads>
+                            <!--
+                                A fresh minion JVM cold-starts RestAssured/Groovy and the AspectJ weaver; with 4 threads
+                                that exceeded PIT's default 4 s allowance and produced random TIMED_OUT/RUN_ERROR results
+                                (a different set every run), which the mutation-gate rejects. A real infinite loop still
+                                times out — at 20 s instead of 4 s.
+                            -->
+                            <timeoutConstant>20000</timeoutConstant>
                         </configuration>
                         <executions>
                             <execution>
                                 <id>mutation</id>
-                                <phase>verify</phase>
+                                <!-- before verify, so the mutation-gate (exec, verify) reads a fresh report -->
+                                <phase>integration-test</phase>
                                 <goals><goal>mutationCoverage</goal></goals>
                             </execution>
                         </executions>

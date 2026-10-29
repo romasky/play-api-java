@@ -154,7 +154,7 @@ mvn -Pquality verify
 |---|---|---|---|
 | Unit tests | JUnit 5 `*Test` classes next to the code | green | `target/surefire-reports` |
 | Crapper | JaCoCo + `tools/crap/Crap.java` | CRAP < 10 per method | stdout, `target/site/jacoco` |
-| Mutator | PIT | mutation ≥ 90 %, line coverage ≥ 90 % | `target/pit-reports/index.html` |
+| Mutator | PIT + `tools/pit/MutationGate.java` | **every** mutant `KILLED` (no survivor, no uncovered, no timeout/error); line coverage ≥ 90 % | `target/pit-reports/index.html` |
 | CPD clone check | PMD CPD (test sources included) | no exact token clone ≥ 85 tokens | `target/cpd.xml` |
 
 **Dryer** — ub-mode's structural-duplication rule (similarity ≥ 0.8) — is the real
