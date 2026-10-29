@@ -27,4 +27,6 @@ if [ ! -x "$PY" ] || [ "$(git -C "$TOOL/src" rev-parse HEAD 2>/dev/null)" != "$D
   $PIP install --no-deps "$TOOL/src"
 fi
 
+# the wrapper must fail closed on output it cannot parse — prove that before trusting it
+python3 -m unittest -q "$ROOT/tools/dryer/test_dryer_gate.py"
 exec python3 "$ROOT/tools/dryer/dryer_gate.py" "$PY" "${1:-0.8}"

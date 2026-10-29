@@ -26,7 +26,23 @@ STAGE = ROOT / "target" / "dryer" / "stage"
 EXCLUDED = (re.compile(r"Test\.java$"), re.compile(r"/models/"), re.compile(r"/GoldenFile\.java$"),
             re.compile(r"/support/"))
 BINDING = re.compile(r"^\s*@(Given|When|Then|And|But|Before|After|BeforeStep|AfterStep)\b")
-PAIR = re.compile(r"DUPLICATE score=([\d.]+)\n\s+(\S+):(\d+)-(\d+)\n\s+(\S+):(\d+)-(\d+)")
+# dryer's text report (dryer/report.py at the pinned commit): either this exact line ...
+NO_CANDIDATES = "No duplicate candidates found.\n"
+# ... or blocks separated by a blank line, ending with a newline. Nothing else is accepted.
+BLOCK = r"DUPLICATE score=(\d+\.\d+)\n  (\S+):(\d+)-(\d+)\n  (\S+):(\d+)-(\d+)"
+REPORT = re.compile(rf"{BLOCK}(?:\n\n{BLOCK})*\n")
+
+
+def parse_report(text: str) -> list[tuple[str, ...]]:
+    """Every candidate in dryer's text report. Fails closed: raises ValueError unless ALL of it parses."""
+    if text == NO_CANDIDATES:
+        return []
+    if not REPORT.fullmatch(text):
+        raise ValueError("unrecognised dryer output (format changed?):\n" + text[:500])
+    pairs = re.findall(BLOCK, text)
+    if len(pairs) != text.count("DUPLICATE"):
+        raise ValueError(f"parsed {len(pairs)} candidate(s) but the report has {text.count('DUPLICATE')}")
+    return pairs
 
 
 def stage() -> int:
@@ -59,14 +75,23 @@ def is_single_statement_binding(path: Path, start: int, end: int) -> bool:
 
 
 def main(dryer_python: str, threshold: str) -> int:
-    print(f"dryer: staged {stage()} framework sources")
+    staged = stage()
+    print(f"dryer: staged {staged} framework sources")
+    if staged == 0:
+        print("dryer: FAIL — nothing staged; check SOURCES/EXCLUDED", file=sys.stderr)
+        return 2
     run = subprocess.run([dryer_python, "-I", "-m", "dryer", "--threshold", threshold, "--text", str(STAGE)],
                          cwd=STAGE.parent, capture_output=True, text=True)
     if run.returncode != 0:
         sys.stderr.write(run.stdout + run.stderr)
         return 2
+    try:
+        pairs = parse_report(run.stdout)
+    except ValueError as e:
+        print(f"dryer: FAIL — {e}", file=sys.stderr)
+        return 2
     accepted, failing = 0, []
-    for score, lf, ls, le, rf, rs, re_ in PAIR.findall(run.stdout):
+    for score, lf, ls, le, rf, rs, re_ in pairs:
         left, right = (original(lf), int(ls), int(le)), (original(rf), int(rs), int(re_))
         if is_single_statement_binding(*left) and is_single_statement_binding(*right):
             accepted += 1
