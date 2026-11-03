@@ -1,1 +1,1 @@
-{"id":"2cf3e2335f0b9b82306ae00fea1f4bdc.d41d8cd98f00b204e9800998ecf8427e","fullName":"tests/play_qa_api/DeleteUserTests.feature:31","name":"Delete with no Authorization header returns 401 MISSING_TOKEN","status":"passed","testResultsByEnv":{"default":"b6c4ddfcd7d172e5f9028b4a7c69cd6a"}}
+{"id":"2cf3e2335f0b9b82306ae00fea1f4bdc.d41d8cd98f00b204e9800998ecf8427e","fullName":"tests/play_qa_api/DeleteUserTests.feature:31","name":"Delete with no Authorization header returns 401 MISSING_TOKEN","status":"passed","testResultsByEnv":{"default":"8b4c0f25e736ad989468133f57fe2a3b"}}
