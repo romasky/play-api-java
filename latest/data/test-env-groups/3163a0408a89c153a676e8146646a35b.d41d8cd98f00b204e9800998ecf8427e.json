@@ -1,1 +1,1 @@
-{"id":"3163a0408a89c153a676e8146646a35b.d41d8cd98f00b204e9800998ecf8427e","fullName":"tests/play_qa_api/MailboxDeleteTests.feature:6","name":"Delete mailbox returns 204 and subsequent GET returns 404","status":"passed","testResultsByEnv":{"default":"d3c7b5b02fcdb6ef63d1149683276ce3"}}
+{"id":"3163a0408a89c153a676e8146646a35b.d41d8cd98f00b204e9800998ecf8427e","fullName":"tests/play_qa_api/MailboxDeleteTests.feature:6","name":"Delete mailbox returns 204 and subsequent GET returns 404","status":"passed","testResultsByEnv":{"default":"363085badb0d35d0a894c18edd5b53e8"}}
