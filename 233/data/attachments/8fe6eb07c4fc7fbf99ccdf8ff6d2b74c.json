@@ -1,0 +1,44 @@
+{
+    "id": "6afdd8a5e9b2e2de97f179ce",
+    "email": "jg70l1kj7y@play-qa.com",
+    "username": "user_1yzkh8i1",
+    "access_token": "usr_1795020965_4ab3e19589533511b5b90beb95cf326f",
+    "profile": {
+        "first_name": "Testmxqhyu",
+        "last_name": "Userzhjpnu",
+        "interests": [
+            "coding",
+            "travel",
+            "music"
+        ]
+    },
+    "contacts": {
+        "phone_verified": false
+    },
+    "address": {
+        
+    },
+    "employment": {
+        
+    },
+    "settings": {
+        "language": "",
+        "timezone": "",
+        "theme": "",
+        "notifications_enabled": false,
+        "email_notifications": false,
+        "sms_notifications": false,
+        "two_factor_enabled": false,
+        "private_profile": false
+    },
+    "metadata": {
+        "created_at": "2026-11-18T16:56:05.809361777Z",
+        "updated_at": "2026-11-18T16:56:05.809361777Z",
+        "expires_at": "2026-11-19T16:56:05.809361777Z",
+        "login_count": 0,
+        "is_active": true,
+        "is_verified": false,
+        "is_premium": false,
+        "role": "user"
+    }
+}
