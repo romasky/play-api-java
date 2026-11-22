@@ -1,0 +1,39 @@
+{
+    "id": "6b031095e9b2e2de97f1888f",
+    "email": "rma6bazosa@play-qa.com",
+    "username": "user_y1lpp9ts",
+    "access_token": "usr_1795362965_65c51201d56f55ebe4c4d98d9130a97d",
+    "profile": {
+        "first_name": "Testuupraj",
+        "last_name": "Userfysolp"
+    },
+    "contacts": {
+        "phone_verified": false
+    },
+    "address": {
+        
+    },
+    "employment": {
+        
+    },
+    "settings": {
+        "language": "",
+        "timezone": "",
+        "theme": "",
+        "notifications_enabled": false,
+        "email_notifications": false,
+        "sms_notifications": false,
+        "two_factor_enabled": false,
+        "private_profile": false
+    },
+    "metadata": {
+        "created_at": "2026-11-22T15:56:05.595749558Z",
+        "updated_at": "2026-11-22T15:56:05.595749558Z",
+        "expires_at": "2026-11-23T15:56:05.595749558Z",
+        "login_count": 0,
+        "is_active": true,
+        "is_verified": false,
+        "is_premium": false,
+        "role": "user"
+    }
+}
