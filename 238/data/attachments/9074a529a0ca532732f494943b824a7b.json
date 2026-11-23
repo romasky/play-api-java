@@ -1,0 +1,10 @@
+{
+    "success": false,
+    "error": {
+        "code": "VALIDATION_ERROR",
+        "message": "Invalid request body",
+        "details": "status must be one of: employed unemployed student retired freelancer"
+    },
+    "timestamp": "2026-11-23T19:49:57.18466394Z",
+    "request_id": "d7a04f44-526d-4e8d-a4a5-b3132fa87b36"
+}
