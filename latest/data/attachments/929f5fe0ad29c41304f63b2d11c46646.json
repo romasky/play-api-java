@@ -1,0 +1,9 @@
+{
+    "success": false,
+    "error": {
+        "code": "INVALID_CREDENTIALS",
+        "message": "Invalid email or password"
+    },
+    "timestamp": "2026-11-26T18:09:52.898985206Z",
+    "request_id": "58187c6e-3119-457d-8a66-473d79ab52da"
+}
